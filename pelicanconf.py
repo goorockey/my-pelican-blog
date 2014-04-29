@@ -9,12 +9,16 @@ SITEURL = 'http://www.goorockey.com'
 
 PATH = 'content'
 THEME = 'themes/pelican-elegant'
+PAGE_DIR = 'pages'
 
 TIMEZONE = 'Asia/Shanghai'
 DEFAULT_LANG = u'zh'
 LOCALE = ('zh_CN')
 
+USE_FOLDER_AS_CATEGORY = True
 REVERSE_CATEGORY_ORDER = True
+
+SUMMARY_MAX_LENGTH = 50
 
 ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
@@ -46,6 +50,8 @@ PLUGINS = (
             'gzip_cache',
             'extract_toc',
             'tipue_search',
+            'summary',
+            'cjk-auto-spacing',
           )
 
 # Social widget
