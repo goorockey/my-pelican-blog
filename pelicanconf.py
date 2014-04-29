@@ -7,6 +7,9 @@ SITENAME = u"Goorockey's Blog"
 SITEURL = 'http://www.goorockey.com'
 #SITEURL = 'http://127.0.0.1:8000'
 
+# Uncomment following line if you want document-relative URLs when developing
+RELATIVE_URLS = True
+
 PATH = 'content'
 THEME = 'themes/pelican-elegant'
 PAGE_DIR = 'pages'
@@ -20,6 +23,7 @@ REVERSE_CATEGORY_ORDER = True
 
 SUMMARY_MAX_LENGTH = 50
 
+FEED_URL = u"http://feed.goorockey.com"
 ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 PAGE_URL = '{slug}.html'
@@ -61,8 +65,6 @@ SOCIAL = (
 
 DEFAULT_PAGINATION = 6
 
-# Uncomment following line if you want document-relative URLs when developing
-#RELATIVE_URLS = True
 
 ## 配置sitemap 插件
 SITEMAP = {
