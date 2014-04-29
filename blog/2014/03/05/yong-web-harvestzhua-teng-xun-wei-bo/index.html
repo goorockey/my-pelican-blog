@@ -88,21 +88,21 @@
 
             
             
-<p> 好久没更新博客，水一文。</p>
-<p> 前阵子要给别人出试题，偶然发现 <a href=" 下称 WH">Web-Harvest</a> 这个抓网页的工具，它主要应用 xpath 和 xquery 抓网页，内置还定义了一套功能挺多的语法，就出了一道用 WH 抓微博的题目。</p>
-<p> 本来想抓新浪微博的，但发现它的微博内容都是 js 生成的，折腾了一下，还是可以用 WH 的函数提取出内容，但腾讯微博相对还是简单多了。</p>
-<p> 题目其中一个内容是用 WH 抓几页邓紫棋的腾讯微博，排除包含她演唱会广告的和没有图片的微博。</p>
+<p>好久没更新博客，水一文。</p>
+<p>前阵子要给别人出试题，偶然发现<a href="下称WH">Web-Harvest</a>这个抓网页的工具，它主要应用xpath和xquery抓网页，内置还定义了一套功能挺多的语法，就出了一道用WH抓微博的题目。</p>
+<p>本来想抓新浪微博的，但发现它的微博内容都是js生成的，折腾了一下，还是可以用WH的函数提取出内容，但腾讯微博相对还是简单多了。</p>
+<p>题目其中一个内容是用WH抓几页邓紫棋的腾讯微博，排除包含她演唱会广告的和没有图片的微博。</p>
 <!-- more -->
-<p> 其中遇到的坑：</p>
+<p>其中遇到的坑：</p>
 <ul>
 <li>
-<p> 因为是包含中文，写入到文件时要用 gbk 编码 </p>
+<p>因为是包含中文，写入到文件时要用gbk编码</p>
 </li>
 <li>
-<p> 在 xpath 已经用 li[@id] 获取微博节点，但节点传到 xquery 里面时竟然还要再一次用 li[@id] 获取一级 </p>
+<p>在xpath已经用li[@id]获取微博节点，但节点传到xquery里面时竟然还要再一次用li[@id]获取一级</p>
 </li>
 </ul>
-<p> 配置文件如下 </p>
+<p>配置文件如下</p>
 <p><script src="https://gist.github.com/goorockey/9368146.js"></script></p>
             
             <section>
@@ -140,6 +140,14 @@
 </section>
 
             <hr/>
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://www.goorockey.com/blog/2013/09/08/wo-de-firefox/" title="Previous: 我的firefox">我的firefox</a></li>
+                <li class="next-article"><a href="http://www.goorockey.com/blog/2014/04/21/yong-wxwidgetszuo-yi-zhi-de-zong-jie/" title="Next: 用wxWidgets做移植的总结">用wxWidgets做移植的总结</a> »</li>
+            </ul>
+            </nav>
+            </aside>
         </div>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">

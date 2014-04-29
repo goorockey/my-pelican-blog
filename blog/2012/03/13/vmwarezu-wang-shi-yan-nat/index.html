@@ -94,87 +94,87 @@
 
             
             
-<p> 本着 “ 干中学 ” 的精神，看完资料，还是用 VMWare 来练习一下使用 NAT，好加深认识。</p>
-<p> 实验涉及：NAT，iptables，</p>
-<h2 id="_1"> 实验目标 </h2>
-<p> 这次我要用 iptables 实现 NAT 功能（SNAT 和 DNAT）。</p>
-<p> 先上拓扑图（可能有点不规范）：</p>
-<p><img alt=" 拓扑图 " src="http://www.goorockey.com/uploads/2012/03/image_thumb.png"/></p>
-<p> 如图分别有 4 台机子：A、B 在内网，但在不同的网段中，C 做网关，控制网段间的访问。D 在外网。</p>
-<p> 要达到：</p>
+<p>本着“干中学”的精神，看完资料，还是用VMWare来练习一下使用NAT，好加深认识。</p>
+<p>实验涉及：NAT，iptables，</p>
+<h2 id="_1">实验目标</h2>
+<p>这次我要用iptables实现NAT功能（SNAT和DNAT）。</p>
+<p>先上拓扑图（可能有点不规范）：</p>
+<p><img alt="拓扑图" src="http://www.goorockey.com/uploads/2012/03/image_thumb.png"/></p>
+<p>如图分别有4台机子：A、B在内网，但在不同的网段中，C做网关，控制网段间的访问。D在外网。</p>
+<p>要达到：</p>
 <ul>
 <li>
-<p>A、B 能通信（内网不同网段的互访）</p>
+<p>A、B能通信（内网不同网段的互访）</p>
 </li>
 <li>
-<p>A、B 能通过 C 与外网通信 </p>
+<p>A、B能通过C与外网通信</p>
 </li>
 <li>
-<p>D 能通过 C 访问到 A、B 的服务 </p>
+<p>D能通过C访问到A、B的服务</p>
 </li>
 </ul>
-<h2 id="_2"> 环境 </h2>
-<p> 用 VMWare 虚拟出这 4 台机子，VMWare 的版本为 8.0</p>
-<p> 每台机子都跑 CentOS 6.0</p>
-<h2 id="vmware">VMWare 环境配置 </h2>
-<p> 安装 4 个虚拟机，都装上 CentOS，主机名分别定为 hostA、hostB、hostC、hostD，对应 A、B、C、D。</p>
-<p>VMWare 新建几张网卡（菜单栏【edit】-【Virtual Network Editor】），要求一张为 Bridged（NAT 应该也行），两张为 Host-only。</p>
-<p><img alt="VMWare 网卡设置 " src="http://www.goorockey.com/uploads/2012/03/151306312_thumb.png"/></p>
-<p> 设置 A、B 网卡分别为 VMnet1 和 VMnet2，这是为了使它们原始都不能互访。</p>
-<p> 外网的 D 网卡设为 VMnet0</p>
-<p>C 则有三张网卡 VMnet0、VMnet1、VMnet2，这样 C 原始都能访问到 A、B、D。</p>
-<p> 然后进入每个虚拟机，为了方便，我都设置为静态 ip（网段跟上图对应）：</p>
+<h2 id="_2">环境</h2>
+<p>用VMWare虚拟出这4台机子，VMWare的版本为8.0</p>
+<p>每台机子都跑CentOS 6.0</p>
+<h2 id="vmware">VMWare环境配置</h2>
+<p>安装4个虚拟机，都装上CentOS，主机名分别定为hostA、hostB、hostC、hostD，对应A、B、C、D。</p>
+<p>VMWare新建几张网卡（菜单栏【edit】-【Virtual Network Editor】），要求一张为Bridged（NAT应该也行），两张为Host-only。</p>
+<p><img alt="VMWare网卡设置" src="http://www.goorockey.com/uploads/2012/03/151306312_thumb.png"/></p>
+<p>设置A、B网卡分别为VMnet1和VMnet2，这是为了使它们原始都不能互访。</p>
+<p>外网的D网卡设为VMnet0</p>
+<p>C则有三张网卡VMnet0、VMnet1、VMnet2，这样C原始都能访问到A、B、D。</p>
+<p>然后进入每个虚拟机，为了方便，我都设置为静态ip（网段跟上图对应）：</p>
 <div class="highlight"><pre><span class="n">A</span><span class="err">：</span><span class="mf">192.168.149.128</span>
 <span class="n">B</span><span class="err">：</span><span class="mf">192.168.214.128</span>
 <span class="n">C</span><span class="err">：</span><span class="mf">192.168.4.233</span><span class="err">（</span><span class="n">eth0</span><span class="err">），</span><span class="mf">192.168.149.130</span><span class="err">（</span><span class="n">eth1</span><span class="err">），</span><span class="mf">192.168.214.130</span><span class="err">（</span><span class="n">eth2</span><span class="err">）</span>
 <span class="n">D</span><span class="err">：</span><span class="mf">192.168.4.234</span>
 </pre></div>
-<p>CentOS 里面配置网卡方法就是修改 /etc/sysconfig/network-scripts/ifcfg-eth*，没有则自己创建一个。</p>
-<p> 关键项就是 ONBOOT，IPADDR，NETMASK，GATEWAY，DNS1，DNS2，PEERDNS</p>
-<p> 要注意的是，有 PEERDNS 项，当它值为 yes，则会把 DNS1 和 DNS2 覆盖地写入 /etc/resolv.conf。</p>
-<p> 这对于多网卡的 C，如果 ifcfg-eth0、ifcfg-eth1、ifcfg-eth2 都设了 PEERDNS，由于开机是按名字的顺序执行，则会把 ifcfg-eth2 的 DNS 写入 /etc/resolv.conf，前两个文件的 DNS 会无效了的。所以我只在 ifcfg-eth0 配置 PEERDNS=“yes“。</p>
-<p> 好，初步网络环境配置完成。</p>
-<p> 现在情况是：</p>
-<div class="highlight"><pre><span class="n">ABD</span><span class="err"> 都不能互访，因为在不同的网段 </span>
-<span class="n">C</span><span class="err"> 则都能跟它们三个互访 </span>
+<p>CentOS里面配置网卡方法就是修改/etc/sysconfig/network-scripts/ifcfg-eth*，没有则自己创建一个。</p>
+<p>关键项就是ONBOOT，IPADDR，NETMASK，GATEWAY，DNS1，DNS2，PEERDNS</p>
+<p>要注意的是，有PEERDNS项，当它值为yes，则会把DNS1和DNS2覆盖地写入/etc/resolv.conf。</p>
+<p>这对于多网卡的C，如果ifcfg-eth0、ifcfg-eth1、ifcfg-eth2都设了PEERDNS，由于开机是按名字的顺序执行，则会把ifcfg-eth2的DNS写入/etc/resolv.conf，前两个文件的DNS会无效了的。所以我只在ifcfg-eth0配置PEERDNS=“yes“。</p>
+<p>好，初步网络环境配置完成。</p>
+<p>现在情况是：</p>
+<div class="highlight"><pre><span class="n">ABD</span><span class="err">都不能互访，因为在不同的网段</span>
+<span class="n">C</span><span class="err">则都能跟它们三个互访</span>
 </pre></div>
-<h2 id="ciptablesnat"> 配置网关 C 的 iptables，实现 NAT</h2>
-<p> 到关键也是好玩的地方了。</p>
-<p> 接下来配置网关 C 的 iptables，实现不同网络间地址的转换（NAT）。</p>
-<p>iptables 内容比较多，详细可以参考：<a href="http://www.frozentux.net/iptables-tutorial/cn/iptables-tutorial-cn-1.1.19.html">http://www.frozentux.net/iptables-tutorial/cn/iptables-tutorial-cn-1.1.19.html</a></p>
-<p>1.A、B 通过 C 实现通信 </p>
-<p> 这个比较简单，没用到 iptables，把 A 的网关设为 C 的对应网卡的 ip（192.168.149.130），B 的网关设为 C 对应网卡的 ip（192.168.214.130）。</p>
-<p> 然后打开 C 的 ip 转发，在 C 中执行：</p>
+<h2 id="ciptablesnat">配置网关C的iptables，实现NAT</h2>
+<p>到关键也是好玩的地方了。</p>
+<p>接下来配置网关C的iptables，实现不同网络间地址的转换（NAT）。</p>
+<p>iptables内容比较多，详细可以参考：<a href="http://www.frozentux.net/iptables-tutorial/cn/iptables-tutorial-cn-1.1.19.html">http://www.frozentux.net/iptables-tutorial/cn/iptables-tutorial-cn-1.1.19.html</a></p>
+<p>1.A、B通过C实现通信</p>
+<p>这个比较简单，没用到iptables，把A的网关设为C的对应网卡的ip（192.168.149.130），B的网关设为C对应网卡的ip（192.168.214.130）。</p>
+<p>然后打开C的ip转发，在C中执行：</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">net</span><span class="o">/</span><span class="n">ipv4</span><span class="o">/</span><span class="n">ip_forward</span>
 </pre></div>
-<p> 这就把 C 作为了 A、B 的网关。A、B 间通信的数据包会发到 C，靠 C 的网卡间转发来完成通信。AB 就可以相互 ping 通了。</p>
-<p>2.A、B 通过 C 与外网通信（SNAT）</p>
-<p> 现在 A、B 都不能跟 D 通信，因为现在 A、B 发到 D 的数据包源地址（192.168.149.128,192.168.214.128），D 是无法知道的（D 在 C 的同一个网络，网关设为相同的 ip）。则包可以发到 D，但 D 回复不了，因为它的网关不知道 A、B。</p>
-<p> 现在就通过 SNAT 把 A、B 发送的包在经过 C 时，把源地址改为 C 的外网 ip（192.168.4.233），这个 D 是知道的，也就可以顺利回复了。</p>
-<p> 具体在 C 中执行：</p>
+<p>这就把C作为了A、B的网关。A、B间通信的数据包会发到C，靠C的网卡间转发来完成通信。AB就可以相互ping通了。</p>
+<p>2.A、B通过C与外网通信（SNAT）</p>
+<p>现在A、B都不能跟D通信，因为现在A、B发到D的数据包源地址（192.168.149.128,192.168.214.128），D是无法知道的（D在C的同一个网络，网关设为相同的ip）。则包可以发到D，但D回复不了，因为它的网关不知道A、B。</p>
+<p>现在就通过SNAT把A、B发送的包在经过C时，把源地址改为C的外网ip（192.168.4.233），这个D是知道的，也就可以顺利回复了。</p>
+<p>具体在C中执行：</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">iptables</span><span class="err"> –</span><span class="n">t</span> <span class="n">nat</span> <span class="err">–</span><span class="n">A</span><span class="err"> </span><span class="n">POSTROUTING</span><span class="err"> –</span><span class="n">o</span> <span class="n">eth0</span> <span class="err">–</span><span class="n">j</span> <span class="n">SNAT</span><span class="err"> </span><span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">source</span> <span class="mf">192.168.4.233</span>
 </pre></div>
-<p> 这样 A、B 就能 ping 通了。</p>
-<p>SNAT 可以看看我的博文。 嘻嘻 ……</p>
-<p>3.D 通过 C 访问 A、B 的服务（DNAT）</p>
-<p> 现在 A、B 可以跟 D 通信，但 D 不能主动访问 A、B。还是因为 D 只知道 C，不知道 A、B。</p>
-<p> 假如现在 A 开了 19991 口的 sshd：</p>
-<p> 在 A 的 /etc/ssh/sshd_config 中添加：</p>
+<p>这样A、B就能ping通了。</p>
+<p>SNAT可以看看我的博文。 嘻嘻……</p>
+<p>3.D通过C访问A、B的服务（DNAT）</p>
+<p>现在A、B可以跟D通信，但D不能主动访问A、B。还是因为D只知道C，不知道A、B。</p>
+<p>假如现在A开了19991口的sshd：</p>
+<p>在A的/etc/ssh/sshd_config中添加：</p>
 <div class="highlight"><pre><span class="n">ListenAddress</span> <span class="mf">0.0.0.0</span><span class="o">:</span><span class="mi">19991</span>
 </pre></div>
-<p> 重启 sshd</p>
+<p>重启sshd</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">service</span> <span class="n">sshd</span> <span class="n">restart</span>
 </pre></div>
-<p> 在 A 中让 iptables 允许对 19991 口的访问 </p>
+<p>在A中让iptables允许对19991口的访问</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">iptables</span> <span class="err">–</span><span class="n">I</span> <span class="n">INPUT</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">19991</span><span class="err"> </span><span class="o">-</span><span class="n">j</span> <span class="n">ACCEPT</span>
 </pre></div>
-<p> 现在 D 想 ssh 到 A 的 19991，则可以在 C 中执行以下命令，实现 DNAT：</p>
+<p>现在D想ssh到A的19991，则可以在C中执行以下命令，实现DNAT：</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">iptables</span> <span class="o">-</span><span class="n">t</span> <span class="n">nat</span> <span class="o">-</span><span class="n">A</span> <span class="n">PREROUTING</span><span class="err"> </span><span class="o">-</span><span class="n">p</span><span class="err"> </span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span><span class="err"> </span><span class="mi">19991</span> <span class="o">-</span><span class="n">j</span><span class="err"> </span><span class="n">DNAT</span> <span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">destination</span><span class="err"> </span><span class="mf">192.168.149.128</span>
 </pre></div>
-<p> 现在 D 可以通过 ssh 到 C 的 19991 口来 ssh 到 A 了。</p>
-<h2 id="_3"> 小结 </h2>
-<p> 整个实验搞完，对 iptables，NAT 的原理还是深刻了不少。</p>
-<p> 然后，就是 VMWare 是个好东西。</p>
+<p>现在D可以通过ssh到C的19991口来ssh到A了。</p>
+<h2 id="_3">小结</h2>
+<p>整个实验搞完，对iptables，NAT的原理还是深刻了不少。</p>
+<p>然后，就是VMWare是个好东西。</p>
             
             <section>
 <div class="accordion" id="accordion2">
@@ -211,6 +211,14 @@
 </section>
 
             <hr/>
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://www.goorockey.com/blog/2012/03/11/natxue-xi-zong-jie/" title="Previous: NAT学习总结">NAT学习总结</a></li>
+                <li class="next-article"><a href="http://www.goorockey.com/blog/2012/03/15/yong-vmwarezu-wang-shi-yan-dnssui-dao/" title="Next: 用VMWare组网，实验DNS隧道">用VMWare组网，实验DNS隧道</a> »</li>
+            </ul>
+            </nav>
+            </aside>
         </div>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">

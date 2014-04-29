@@ -93,80 +93,80 @@
 
             
             
-<h2 id="_1"> 背景 </h2>
-<p> 之前就试过几次想把 linux 作为宿主来玩，但都因为舍弃不了一些 windows 下的软件而放弃了，例如 wiz，qq 等都是我常用的软件。试过 wine，但总是有点错误，不完美。</p>
-<p> 最近也在微博上收集意见，发现用 linux 做宿主系统的人还是蛮多的。其实仔细想想，归根结底还是自己 linux 的操作还不熟练。</p>
-<p> 还好最近一段时间自己多了在 linux 的工作，这几天又下定决心一次装了 linux 做宿主来玩了。然后就想写个 blog 记录一下。</p>
+<h2 id="_1">背景</h2>
+<p>之前就试过几次想把linux作为宿主来玩，但都因为舍弃不了一些windows下的软件而放弃了，例如wiz，qq等都是我常用的软件。试过wine，但总是有点错误，不完美。</p>
+<p>最近也在微博上收集意见，发现用linux做宿主系统的人还是蛮多的。其实仔细想想，归根结底还是自己linux的操作还不熟练。</p>
+<p>还好最近一段时间自己多了在linux的工作，这几天又下定决心一次装了linux做宿主来玩了。然后就想写个blog记录一下。</p>
 <!-- more -->
-<h2 id="_2"> 系统 </h2>
-<p> 这次选的 linux 的 linux mint(64bit)，一个基于 ubuntu 的 linux 发行版。</p>
-<p> 官方说其目标是成为有 windows 那样市场占有率的 linux 发行版。</p>
-<p> 我不大喜欢 ubuntu 现在的 natty，所以就在虚拟机试用了一下 linux mint，感觉比 ubuntu 方便。</p>
-<h2 id="_3"> 工具 </h2>
+<h2 id="_2">系统</h2>
+<p>这次选的linux的linux mint(64bit)，一个基于ubuntu的linux发行版。</p>
+<p>官方说其目标是成为有windows那样市场占有率的linux发行版。</p>
+<p>我不大喜欢ubuntu现在的natty，所以就在虚拟机试用了一下linux mint，感觉比ubuntu方便。</p>
+<h2 id="_3">工具</h2>
 <ul>
 <li>
-<p><strong> 浏览器 </strong>：firefox。一直用 firefox，插件强大。</p>
+<p><strong>浏览器</strong>：firefox。一直用firefox，插件强大。</p>
 </li>
 <li>
-<p><strong> 知识管理 </strong>：evernote。本地用 nevernote，它是 evernote 的 linux 版；网页摘取用 firefox 的 evernote clip。</p>
+<p><strong>知识管理</strong>：evernote。本地用nevernote，它是evernote的linux版；网页摘取用firefox的evernote clip。</p>
 </li>
 <li>
-<p><strong>X windows</strong>: awesome。一种平铺窗口管理器。本来想用 musca，但我没编译成功。唉 ~~</p>
+<p><strong>X windows</strong>: awesome。一种平铺窗口管理器。本来想用musca，但我没编译成功。唉~~</p>
 </li>
 <li>
-<p><strong>BT 下载 </strong>：utorrent。utorrent 有 linux 版，但是 web gui 版。</p>
+<p><strong>BT下载</strong>：utorrent。utorrent有linux版，但是web gui版。</p>
 </li>
 <li>
-<p><strong> 虚拟机 </strong>：virtualbox。在 virtualbox 装了 xp，感觉比 vmware 快多了。。</p>
+<p><strong>虚拟机</strong>：virtualbox。在virtualbox装了xp，感觉比vmware快多了。。</p>
 </li>
 </ul>
-<h2 id="_4"> 日常应用 </h2>
-<p>1. 网络管理 </p>
-<p>ubuntu( 包括 linux mint) 现在都是默认用 NetworkManager 来管理网络。我用了几次都不适应。这次立刻就把它卸载了，直接用脚本来管理网络。卸载命令：</p>
+<h2 id="_4">日常应用</h2>
+<p>1.网络管理</p>
+<p>ubuntu(包括linux mint)现在都是默认用NetworkManager来管理网络。我用了几次都不适应。这次立刻就把它卸载了，直接用脚本来管理网络。卸载命令：</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="o">--</span><span class="n">purge</span> <span class="n">remove</span> <span class="n">network</span><span class="o">-</span><span class="n">manager</span>
 <span class="err">$</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="o">--</span><span class="n">purge</span> <span class="n">remove</span> <span class="n">network</span><span class="o">-</span><span class="n">manager</span><span class="o">-</span><span class="n">gnome</span>
 </pre></div>
-<p> 然后就直接对 /etc/network/interfaces 和 /etc/resolv.conf 做修改，来配置网络了。</p>
-<p>2.ADSL 连接 </p>
-<p> 寝室是用电信上网，如果不用路由拨号，就要自己电脑直接连到网口，自己拨号。</p>
-<p> 配置命令：</p>
+<p>然后就直接对/etc/network/interfaces和/etc/resolv.conf做修改，来配置网络了。</p>
+<p>2.ADSL连接</p>
+<p>寝室是用电信上网，如果不用路由拨号，就要自己电脑直接连到网口，自己拨号。</p>
+<p>配置命令：</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">sudo</span> <span class="n">pppoeconf</span>
 </pre></div>
-<p> 在弹出的窗口中输入帐号和密码，注意之后有个提示选择是否开机时就自动拨号，如果不时总是直接连网口的，就不选吧。</p>
-<p> 配置完回到命令行，输入拨号命令就可以上网了：</p>
+<p>在弹出的窗口中输入帐号和密码，注意之后有个提示选择是否开机时就自动拨号，如果不时总是直接连网口的，就不选吧。</p>
+<p>配置完回到命令行，输入拨号命令就可以上网了：</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">sudo</span> <span class="n">pon</span> <span class="n">dsl</span><span class="o">-</span><span class="n">provider</span>
 </pre></div>
-<p> 断开链接的命令则是：</p>
+<p>断开链接的命令则是：</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">sudo</span> <span class="n">pppoe</span><span class="o">-</span><span class="n">stop</span>
 </pre></div>
-<p>3. 连 wifi</p>
+<p>3.连wifi</p>
 <p><a href="http://www.jiangmiao.org/blog/1781.html">http://www.jiangmiao.org/blog/1781.html</a></p>
-<p>4. 做 AP，共享 wifi</p>
+<p>4.做AP，共享wifi</p>
 <p><a href="http://blog.csdn.net/feifei454498130/article/details/6642140">http://blog.csdn.net/feifei454498130/article/details/6642140</a></p>
-<p>5. 截图 </p>
+<p>5.截图</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">scrot</span> <span class="o">-</span><span class="n">bst</span> <span class="p">[</span><span class="n">file</span><span class="p">]</span>
 </pre></div>
-<p> 然后用鼠标框主目标即可。如果没有制定输出文件路径 file，默认输出到用户主目录，并以时间命名。</p>
+<p>然后用鼠标框主目标即可。如果没有制定输出文件路径file，默认输出到用户主目录，并以时间命名。</p>
 <hr/>
-<p><strong>2012.7.12 更新 </strong></p>
-<p> 找到一篇介绍自己只使用命令行经验的博文，好正点！</p>
+<p><strong>2012.7.12 更新</strong></p>
+<p>找到一篇介绍自己只使用命令行经验的博文，好正点！</p>
 <p><a href="http://blog.chavezgu.com/2012/03/07/the-command-line-challenge/">http://blog.chavezgu.com/2012/03/07/the-command-line-challenge/</a></p>
-<p> 赞同里面循序渐进脱离 GUI 的方法；</p>
+<p>赞同里面循序渐进脱离GUI的方法；</p>
 <ul>
 <li>
-<p> 坚持一天只使用命令行！</p>
+<p>坚持一天只使用命令行！</p>
 </li>
 <li>
-<p> 坚持一周！！</p>
+<p>坚持一周！！</p>
 </li>
 <li>
-<p> 坚持一个月！！！</p>
+<p>坚持一个月！！！</p>
 </li>
 <li>
-<p> 坚持半年！！！！</p>
+<p>坚持半年！！！！</p>
 </li>
 </ul>
-<p> 呵呵～～</p>
+<p>呵呵～～</p>
             
             <section>
 <div class="accordion" id="accordion2">
@@ -203,6 +203,14 @@
 </section>
 
             <hr/>
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://www.goorockey.com/blog/2012/02/22/sshduan-kou-zhuan-fa/" title="Previous: SSH端口转发">SSH端口转发</a></li>
+                <li class="next-article"><a href="http://www.goorockey.com/blog/2012/03/11/natxue-xi-zong-jie/" title="Next: NAT学习总结">NAT学习总结</a> »</li>
+            </ul>
+            </nav>
+            </aside>
         </div>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">

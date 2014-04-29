@@ -92,42 +92,42 @@
 
             
             
-<p> 今天遇到个问题：</p>
-<div class="highlight"><pre><span class="err"> 想要知道文章里面有多少个单词，要怎么做呢？</span>
+<p>今天遇到个问题：</p>
+<div class="highlight"><pre><span class="err">想要知道文章里面有多少个单词，要怎么做呢？</span>
 </pre></div>
-<h2 id="vim"> 直接用 vim 的命令 </h2>
-<p> 命令模式下按： <code>g &lt;Ctrl-g&gt;</code></p>
-<p> 这样命令行上面就会显示全文总的和当前的：行列数、单词数、字节数。</p>
-<p> 如果是在 visual 模式，选中了部分内容再按 <code>g&lt;C-g&gt;</code>，则显示选择部分的对应信息。</p>
-<p> 更多详见 <code>:h g_ctrl-g</code> 和 <code>:h v_g_ctrl-g</code></p>
+<h2 id="vim">直接用vim的命令</h2>
+<p>命令模式下按： <code>g &lt;Ctrl-g&gt;</code></p>
+<p>这样命令行上面就会显示全文总的和当前的：行列数、单词数、字节数。</p>
+<p>如果是在visual模式，选中了部分内容再按<code>g&lt;C-g&gt;</code>，则显示选择部分的对应信息。</p>
+<p>更多详见<code>:h g_ctrl-g</code> 和<code>:h v_g_ctrl-g</code></p>
 <!--more-->
-<h2 id="_1"> 巧用替换功能 </h2>
-<p>1. 统计字段 </p>
-<p> 先来统计某个字段出现的次数，比如要统计 vim, 就是：<code>:%s/vim//gn</code></p>
-<p> 然后命令行就会显示 vim 匹配的次数和匹配的行数了。。。(=0=)/</p>
-<p> 好，解释一下：</p>
+<h2 id="_1">巧用替换功能</h2>
+<p>1.统计字段</p>
+<p>先来统计某个字段出现的次数，比如要统计vim,就是：<code>:%s/vim//gn</code></p>
+<p>然后命令行就会显示vim匹配的次数和匹配的行数了。。。(=0=)/</p>
+<p>好，解释一下：</p>
 <ul>
-<li><code>%s</code> 全文匹配 </li>
-<li><code>g</code> 匹配行内所有 </li>
-<li><code>n</code> 只显示匹配数，不真正地匹配 </li>
+<li><code>%s</code> 全文匹配</li>
+<li><code>g</code> 匹配行内所有</li>
+<li><code>n</code> 只显示匹配数，不真正地匹配</li>
 </ul>
-<p> 对了，关键就在与参数 <code>n</code> 了，哟！！</p>
-<p>2. 统计更多 </p>
-<p> 好，来用 s 的匹配模式统计更多：</p>
+<p>对了，关键就在与参数<code>n</code>了，哟！！</p>
+<p>2.统计更多</p>
+<p>好，来用s的匹配模式统计更多：</p>
 <ul>
-<li> 统计字符数 <code>:%s/.//gn</code>  (. 指代字符 )</li>
-<li> 统计单词数 <code>:%s/i+//gn</code>  (i 指代英文字母，i+ 就是一个或连续多个英文字母，所以就是单词了 )</li>
-<li> 统计行数 <code>:%s/^//gn</code>  (^ 指代每行第一个非空字符 )</li>
-<li> 精确匹配单词 ( 如 vim) <code>:%s/&lt;vim&gt;//gn</code>  ( 指代单词的开始，指代单词的结束 )</li>
+<li>统计字符数 <code>:%s/.//gn</code>  (. 指代字符)</li>
+<li>统计单词数 <code>:%s/i+//gn</code>  (i指代英文字母，i+就是一个或连续多个英文字母，所以就是单词了)</li>
+<li>统计行数 <code>:%s/^//gn</code>  (^指代每行第一个非空字符)</li>
+<li>精确匹配单词(如vim) <code>:%s/&lt;vim&gt;//gn</code>  (指代单词的开始，指代单词的结束)</li>
 </ul>
-<p>(~0~)/ vim 真强大啊，掌声加鬼吼！！</p>
-<p> 更多详见 
+<p>(~0~)/ vim真强大啊，掌声加鬼吼！！</p>
+<p>更多详见 
 <code>:h count-items</code>
 <code>:h su</code>
 <code>:h search-pattern</code></p>
 <h2 id="ps">P.S.</h2>
-<p> 由于我配置了 set hlsearch，每次匹配完都会高亮匹配，直到下一次匹配。 </p>
-<p> 想清除高亮，可以输入命令 <code>:nohl</code></p>
+<p>由于我配置了set hlsearch，每次匹配完都会高亮匹配，直到下一次匹配。 </p>
+<p>想清除高亮，可以输入命令<code>:nohl</code></p>
             
             <section>
 <div class="accordion" id="accordion2">
@@ -164,6 +164,14 @@
 </section>
 
             <hr/>
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://www.goorockey.com/blog/2011/05/17/shi-yong-windows-live-writerxie-micologbo-wen/" title="Previous: 使用Windows Live Writer写Micolog博文">使用Windows Live Writer写Micolog博文</a></li>
+                <li class="next-article"><a href="http://www.goorockey.com/blog/2011/08/02/stlzhong-yong-copyhe-ostream_iteratorshu-chu-ge-shu-zu/" title="Next: STL中用copy和ostream_iterator输出一个数组">STL中用copy和ostream_iterator输出一个数组</a> »</li>
+            </ul>
+            </nav>
+            </aside>
         </div>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">

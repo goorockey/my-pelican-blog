@@ -80,10 +80,7 @@
         <nav>
         <h4>Contents</h4>
         <div class="toc">
-<ul>
-<li><a href="#1-listpairnulllistpairlist">1. list一定是pair，但只有以null（空list）结尾的pair才是list</a></li>
-<li><a href="#2-pair">2. pair的显示规则</a></li>
-</ul>
+<ul></ul>
 </div>
         </nav>
     </div>
@@ -91,12 +88,12 @@
 
             
             
-<p> 最近学 scheme，总结一下 pair 和 list 的区别，主要是两点：</p>
-<h3 id="1-listpairnulllistpairlist">1. list 一定是 pair，但只有以 null（空 list）结尾的 pair 才是 list</h3>
-<p> 对于 (define list1 (list a b c)),list1 表现为 (a b c), 其实也可以写成 (a . (b . ()))。</p>
-<p> 可以看到 list 其实就是 pair, 而且是以 null 结尾的 pair。</p>
-<p> 对于像 (a.(b.(c.d))) 这样的连续 pair，因为没有以空 list 结尾，所以不是 list</p>
-<p> 所以有：</p>
+<p>最近学scheme，总结一下pair和list的区别，主要是两点：</p>
+<p>1.list一定是pair，但只有以null（空list）结尾的pair才是list</p>
+<p>对于(define list1 (list a b c)),list1表现为(a b c),其实也可以写成(a . (b . ()))。</p>
+<p>可以看到list其实就是pair,而且是以null结尾的pair。</p>
+<p>对于像(a.(b.(c.d)))这样的连续pair，因为没有以空list结尾，所以不是list</p>
+<p>所以有：</p>
 <div class="highlight"><pre><span class="o">&gt;</span> <span class="p">(</span><span class="n">define</span> <span class="n">x</span> <span class="err">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span><span class="p">))</span>
 <span class="o">&gt;</span> <span class="n">x</span>
 <span class="p">(</span><span class="mi">1</span> <span class="mi">2</span><span class="p">)</span>
@@ -104,7 +101,7 @@
 <span class="cp">#t</span>
 <span class="o">&gt;</span> <span class="p">(</span><span class="n">cons</span><span class="o">?</span> <span class="n">x</span><span class="p">)</span>
 <span class="cp">#t</span>
-<span class="o">&gt;</span> <span class="p">(</span><span class="n">cddr</span> <span class="n">x</span><span class="p">)</span> <span class="p">;</span> <span class="err"> 以 </span><span class="n">null</span><span class="err"> 结尾 </span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="n">cddr</span> <span class="n">x</span><span class="p">)</span> <span class="p">;</span> <span class="err">以</span><span class="n">null</span><span class="err">结尾</span>
 <span class="p">()</span>
 
 <span class="o">&gt;</span> <span class="p">(</span><span class="n">define</span> <span class="n">y</span> <span class="p">(</span><span class="n">cons</span> <span class="mi">1</span> <span class="mi">2</span><span class="p">))</span>
@@ -112,21 +109,21 @@
 <span class="cp">#f</span>
 <span class="o">&gt;</span> <span class="p">(</span><span class="n">cons</span><span class="o">?</span> <span class="n">y</span><span class="p">)</span>
 <span class="cp">#f</span>
-<span class="o">&gt;</span> <span class="p">(</span><span class="n">set</span><span class="o">-</span><span class="n">cdr</span><span class="o">!</span> <span class="n">y</span> <span class="err">'</span><span class="p">())</span> <span class="p">;</span> <span class="err"> 把 </span><span class="n">y</span><span class="err"> 的 </span><span class="n">cdr</span><span class="err"> 设为 </span><span class="n">null</span><span class="err">，使 </span><span class="n">y</span><span class="err"> 变成 </span><span class="n">list</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="n">set</span><span class="o">-</span><span class="n">cdr</span><span class="o">!</span> <span class="n">y</span> <span class="err">'</span><span class="p">())</span> <span class="p">;</span> <span class="err">把</span><span class="n">y</span><span class="err">的</span><span class="n">cdr</span><span class="err">设为</span><span class="n">null</span><span class="err">，使</span><span class="n">y</span><span class="err">变成</span><span class="n">list</span>
 <span class="o">&gt;</span> <span class="n">y</span>
 <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">&gt;</span> <span class="p">(</span><span class="n">list</span><span class="o">?</span> <span class="n">y</span><span class="p">)</span> <span class="p">;</span> <span class="err"> 变成了 </span><span class="n">list</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="n">list</span><span class="o">?</span> <span class="n">y</span><span class="p">)</span> <span class="p">;</span> <span class="err">变成了</span><span class="n">list</span>
 <span class="cp">#t</span>
 <span class="o">&gt;</span> <span class="p">(</span><span class="n">cons</span><span class="o">?</span> <span class="n">y</span><span class="p">)</span>
 <span class="cp">#t</span>
 </pre></div>
-<h3 id="2-pair">2. pair 的显示规则 </h3>
-<p> 引用 <a href="http://download.plt-scheme.org/doc/html/guide/Pairs__Lists__and_Scheme_Syntax.html"> 这里 </a> 的解释：</p>
+<p>2.pair的显示规则</p>
+<p>引用<a href="http://download.plt-scheme.org/doc/html/guide/Pairs__Lists__and_Scheme_Syntax.html">这里</a>的解释：</p>
 <blockquote>
 <p>In general, the rule for printing a pair is as follows: use the dot notation always, but if the dot is immediately followed by an open parenthesis, then remove the dot, the open parenthesis, and the    matching close parenthesis. Thus, (0 . (1 . 2)) becomes (0 1 . 2), and (1 . (2 . (3 . ()))) becomes (1 2 3).</p>
 </blockquote>
-<p> 大意就是，如果 pair 的 “ 点 ” 紧接着小括号，则这个点和小括号都可以去掉。</p>
-<p> 所以 (a.(b.c)) 等价于 (a b.c), (a.(b.(c.()))) 等价于 (a b c)。</p>
+<p>大意就是，如果pair的“点”紧接着小括号，则这个点和小括号都可以去掉。</p>
+<p>所以(a.(b.c))等价于(a b.c), (a.(b.(c.())))等价于(a b c)。</p>
             
             <section>
 <div class="accordion" id="accordion2">
@@ -163,6 +160,14 @@
 </section>
 
             <hr/>
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://www.goorockey.com/blog/2012/09/09/cong-wordpresszhuan-dao-octopress/" title="Previous: 从Wordpress转到Octopress">从Wordpress转到Octopress</a></li>
+                <li class="next-article"><a href="http://www.goorockey.com/blog/2012/09/30/pythonfa-you-jian-jiao-ben/" title="Next: python发邮件脚本">python发邮件脚本</a> »</li>
+            </ul>
+            </nav>
+            </aside>
         </div>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">

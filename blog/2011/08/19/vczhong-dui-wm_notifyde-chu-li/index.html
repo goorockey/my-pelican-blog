@@ -89,73 +89,73 @@
             
             
 <p>1.Reflect</p>
-<p> 对于 WM_NOTIFY 消息：</p>
+<p>对于WM_NOTIFY消息：</p>
 <blockquote>
-<p> 子控件没有 Reflect，则由父窗口处理。
-只要子控件（即消息对应最直接的控件）有了 ON_NOTIFY_REFLECT 就会被子控件处理 , 不会被父窗口所处理。</p>
+<p>子控件没有Reflect，则由父窗口处理。
+只要子控件（即消息对应最直接的控件）有了ON_NOTIFY_REFLECT就会被子控件处理,不会被父窗口所处理。</p>
 </blockquote>
-<p><em>Reflect 的意思就是把消息反射给子控件处理。</em></p>
-<p> 大概的就是这样：</p>
+<p><em>Reflect的意思就是把消息反射给子控件处理。</em></p>
+<p>大概的就是这样：</p>
 <table>
 <thead>
 <tr>
-<th> 子控件有 ON_NOTIFY_REFLECT</th>
-<th> 父窗口有 ON_NOTIFY</th>
-<th> 效果 </th>
+<th>子控件有ON_NOTIFY_REFLECT</th>
+<th>父窗口有ON_NOTIFY</th>
+<th>效果</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>WM_NOTIFY 未被处理 </td>
-<td>WM_NOTIFY 只被父窗口处理 </td>
-<td>WM_NOTIFY 只被子控件处理 </td>
+<td>WM_NOTIFY未被处理</td>
+<td>WM_NOTIFY只被父窗口处理</td>
+<td>WM_NOTIFY只被子控件处理</td>
 </tr>
 <tr>
 <td>Y</td>
 <td>Y</td>
-<td>WM_NOTIFY 只被子控件处理 </td>
+<td>WM_NOTIFY只被子控件处理</td>
 </tr>
 </tbody>
 </table>
 <!--more-->
 <p>2.EX</p>
-<p>ON_NOTIFY 和 ON_NOTIFY_EX 以及 ON_NOTIFY_REFLECT 和 ON_NOTIFY_REFLECT_EX</p>
-<p> 区别是：</p>
+<p>ON_NOTIFY和ON_NOTIFY_EX 以及 ON_NOTIFY_REFLECT和ON_NOTIFY_REFLECT_EX</p>
+<p>区别是：</p>
 <blockquote>
-<p>EX 版本的处理函数有 BOOL 型返回值，表示处理的消息是否继续消息传递
-返回 TRUE，表示不继续；
-返回 FALSE，表示继续，即其他控件可以对它做处理。</p>
+<p>EX版本的处理函数有BOOL型返回值，表示处理的消息是否继续消息传递
+返回TRUE，表示不继续；
+返回FALSE，表示继续，即其他控件可以对它做处理。</p>
 </blockquote>
-<p><em> 则 EX 的意思就是把消息重新放到消息循环，继续遍历别的 CmdTargetObject。</em></p>
-<p> 大概是这样：</p>
+<p><em>则EX的意思就是把消息重新放到消息循环，继续遍历别的CmdTargetObject。</em></p>
+<p>大概是这样：</p>
 <table>
 <thead>
 <tr>
-<th> 子控件 ON_NOTIFY_REFLECT_EX 返回值 </th>
-<th> 父窗口有 ON_NOTIFY</th>
-<th> 效果 </th>
+<th>子控件ON_NOTIFY_REFLECT_EX返回值</th>
+<th>父窗口有ON_NOTIFY</th>
+<th>效果</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>TRUE</td>
 <td>N</td>
-<td>WM_NOTIFY 只被子控件处理 </td>
+<td>WM_NOTIFY只被子控件处理</td>
 </tr>
 <tr>
 <td>TRUE</td>
 <td>Y</td>
-<td>WM_NOTIFY 只被子控件处理 </td>
+<td>WM_NOTIFY只被子控件处理</td>
 </tr>
 <tr>
 <td>FALSE</td>
 <td>N</td>
-<td>WM_NOTIFY 只被子控件处理 </td>
+<td>WM_NOTIFY只被子控件处理</td>
 </tr>
 <tr>
 <td>FALSE</td>
 <td>Y</td>
-<td>WM_NOTIFY 被子控件和父窗口处理 </td>
+<td>WM_NOTIFY被子控件和父窗口处理</td>
 </tr>
 </tbody>
 </table>
@@ -195,6 +195,14 @@
 </section>
 
             <hr/>
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://www.goorockey.com/blog/2011/08/15/zhong-yu-ba-bo-ke-gao-dao-qiang-nei-liao/" title="Previous: 终于把博客搞到墙内了！">终于把博客搞到墙内了！</a></li>
+                <li class="next-article"><a href="http://www.goorockey.com/blog/2011/08/22/bu-yong-chu-fa-yun-suan-fu-shi-xian-chu-fa-ji-qi-tui-yan/" title="Next: 不用除法运算符实现除法及其推广">不用除法运算符实现除法及其推广</a> »</li>
+            </ul>
+            </nav>
+            </aside>
         </div>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">

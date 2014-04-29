@@ -88,19 +88,19 @@
 
             
             
-<p> 调研了一下 Apache 和 Tomcat：</p>
-<p>1.apache 只是一个 web 服务器，负责响应客户端的请求。</p>
-<p>2.apache 对于页面请求：</p>
+<p>调研了一下Apache和Tomcat：</p>
+<p>1.apache 只是一个web服务器，负责响应客户端的请求。</p>
+<p>2.apache对于页面请求：</p>
 <!--more-->
-<div class="highlight"><pre><span class="err"> 如果是静态页面请求，会立刻返回相应的页面；</span>
-<span class="err"> 如果是动态页面请求，</span><span class="n">apache</span><span class="err"> 会根据 </span><span class="n">httpd</span><span class="p">.</span><span class="n">conf</span><span class="err"> 中 </span><span class="n">AddType</span><span class="err"> 的配置，把请求提交给合适的动态脚本解析程序来处理，处理后生成的静态页面返回给 </span><span class="n">apache</span><span class="err">，再返回给客户端。所以在配置 </span><span class="n">php</span><span class="err"> 和 </span><span class="n">jsp</span><span class="err"> 这样的环境的时候，都要在 </span><span class="n">httd</span><span class="p">.</span><span class="n">conf</span><span class="err"> 中添加对应的 </span><span class="n">AddTpye</span><span class="err"> 语句。</span>
+<div class="highlight"><pre><span class="err">如果是静态页面请求，会立刻返回相应的页面；</span>
+<span class="err">如果是动态页面请求，</span><span class="n">apache</span><span class="err">会根据</span><span class="n">httpd</span><span class="p">.</span><span class="n">conf</span><span class="err">中</span><span class="n">AddType</span><span class="err">的配置，把请求提交给合适的动态脚本解析程序来处理，处理后生成的静态页面返回给</span><span class="n">apache</span><span class="err">，再返回给客户端。所以在配置</span><span class="n">php</span><span class="err">和</span><span class="n">jsp</span><span class="err">这样的环境的时候，都要在</span><span class="n">httd</span><span class="p">.</span><span class="n">conf</span><span class="err">中添加对应的</span><span class="n">AddTpye</span><span class="err">语句。</span>
 </pre></div>
-<p>3.tomcat 侧重于是一个 Servlet/JSP 的容器，但也能可以独立于 apache 运行，响应 html 请求 </p>
-<p>4.tomcat 响应静态页面较 apache 要慢 </p>
-<p>5. 整合 apache 和 tomcat 可以有三种方法 :JK,http_proxy,ajp_proxy</p>
-<p> 具体介绍见：<a href="http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat">http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat</a></p>
-<p>JK 较老，相对比较稳定，配置比较麻烦 </p>
-<p> 两种 proxy 模式原理都是让 apache 做 tomcat 的代理，配置简单 </p>
+<p>3.tomcat侧重于是一个Servlet/JSP的容器，但也能可以独立于apache运行，响应html请求</p>
+<p>4.tomcat响应静态页面较apache要慢</p>
+<p>5.整合apache和tomcat可以有三种方法:JK,http_proxy,ajp_proxy</p>
+<p>具体介绍见：<a href="http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat">http://www.ibm.com/developerworks/cn/opensource/os-lo-apache-tomcat</a></p>
+<p>JK较老，相对比较稳定，配置比较麻烦</p>
+<p>两种proxy模式原理都是让apache做tomcat的代理，配置简单</p>
             
             <section>
 <div class="accordion" id="accordion2">
@@ -137,6 +137,14 @@
 </section>
 
             <hr/>
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://www.goorockey.com/blog/2011/11/12/centosxia-an-zhuang-apachephpmysql-tomcat/" title="Previous: CentOS下安装Apache+php+mysql Tomcat">CentOS下安装Apache+php+mysql Tomcat</a></li>
+                <li class="next-article"><a href="http://www.goorockey.com/blog/2012/01/28/bo-ke-zhuan-yi-liao-gai-yong-sourceforgewordpress/" title="Next: 博客转移了（改用sourceforge+wordpress）">博客转移了（改用sourceforge+wordpress）</a> »</li>
+            </ul>
+            </nav>
+            </aside>
         </div>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">

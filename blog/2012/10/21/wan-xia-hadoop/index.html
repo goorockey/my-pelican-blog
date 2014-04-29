@@ -93,65 +93,65 @@
 
             
             
-<p> 由于某种原因，今天玩了一下 <a href="http://hadoop.apache.org/" title="Hadoop">Hadoop</a>。正确来说，我是玩 <a href="http://code.google.com/p/hop/" title="HOP">HOP</a>，一个 Hadoop 的修改版本。</p>
+<p>由于某种原因，今天玩了一下<a href="http://hadoop.apache.org/" title="Hadoop">Hadoop</a>。正确来说，我是玩<a href="http://code.google.com/p/hop/" title="HOP">HOP</a>，一个Hadoop的修改版本。</p>
 <blockquote>
 <p>The Hadoop Online Prototype (HOP) is a modified version of Hadoop MapReduce that allows data to be pipelined between tasks and between jobs. This can enable better cluster utilization and increased parallelism, and allows new functionality: online aggregation (approximate answers as a job runs), and stream processing (MapReduce jobs that run continuously, processing new data as it arrives). </p>
 </blockquote>
-<p> 就是多了 pipeline（流水线）的 Hadoop。分布式流水线可以有效加快各 jobs 在各节点的同步运算。</p>
+<p>就是多了pipeline（流水线）的Hadoop。分布式流水线可以有效加快各jobs在各节点的同步运算。</p>
 <!-- more -->
-<h2 id="_1"> 准备 </h2>
-<p> 我是在 linux 上弄的，windows 下用 cygwin 也行。</p>
-<p> 下载 HOP 压缩包后，看里面的 docs 就够了，同时 src/example 还有一些例子。</p>
-<p> 确保 ssh,sshd,rsync,jdk 都有了。同时要保证 ssh localhost 不要输入密码的认证步骤。具体 docs/quickstart 也有说，可以这样：</p>
+<h2 id="_1">准备</h2>
+<p>我是在linux上弄的，windows下用cygwin也行。</p>
+<p>下载HOP压缩包后，看里面的docs就够了，同时src/example还有一些例子。</p>
+<p>确保ssh,sshd,rsync,jdk都有了。同时要保证ssh localhost不要输入密码的认证步骤。具体docs/quickstart也有说，可以这样：</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">ssh</span><span class="o">-</span><span class="n">keygen</span> <span class="o">-</span><span class="n">t</span> <span class="n">dsa</span> <span class="o">-</span><span class="n">P</span> <span class="err">''</span> <span class="o">-</span><span class="n">f</span> <span class="o">~/</span><span class="p">.</span><span class="n">ssh</span><span class="o">/</span><span class="n">id_dsa</span>
 <span class="err">$</span> <span class="n">cat</span> <span class="o">~/</span><span class="p">.</span><span class="n">ssh</span><span class="o">/</span><span class="n">id_dsa</span><span class="p">.</span><span class="n">pub</span> <span class="o">&gt;&gt;</span> <span class="o">~/</span><span class="p">.</span><span class="n">ssh</span><span class="o">/</span><span class="n">authorized_keys</span>
 </pre></div>
-<p> 然后是设置 jdk 的目录，修改 conf/hadoop-env.sh 中 JAVA_HOME。一般为 /usr/lib/jvm/ 下的某个 java 目录，我就直接写成 /usr/lib/jvm/default-java 了。</p>
-<p> 这时候执行 bin/hadoop 就会出现帮助信息了。</p>
-<h2 id="_2"> 跑例程 </h2>
-<p>Hadoop 的文件系统叫 <a href="http://hadoop.apache.org/docs/stable/hdfs_design.html" title="HDFS">HDFS</a>（Hadoop distribution filesystem)，是一个分布式文件系统。每份数据都会在多个节点有备份，以容错、修复。所有数据都要先放进 HDFS 才能 Hadoop 处理。</p>
-<p>Hadoop 的分布式体系中，有一个 NameNode，是 master 的角色，负责主控各节点，有多个 DataNode，是 slave，负责真正存储数据。这些可以在 conf/master 和 conf/slave 设置。
-同时还有一个 JobTracker，负责调度 jobs，默认就是 NameNode 这个主机一起充当 NameNode，这个在 conf/hadoop-site.xml 设置。另外所有 DataNode 都是 TaskTracker，负责执行 jobs。具体更多对 conf/hadoop-site.xml 的配置参看 docs/cluster_setup.html</p>
-<p> 执行 bin/hadoop namenode -format，会创造一个 namenode。文件都已某种格式放在 /tmp/hadoop-"hostname" 那里。</p>
-<p> 执行 bin/start-all.sh 会启动 hadoop，默认通过 http://localhost:50070/ 可以访问 NameNode，http://localhost:50030/ 可以访问 JobTracker。</p>
-<p> 现在执行一个例子 :</p>
+<p>然后是设置jdk的目录，修改conf/hadoop-env.sh中JAVA_HOME。一般为/usr/lib/jvm/下的某个java目录，我就直接写成/usr/lib/jvm/default-java了。</p>
+<p>这时候执行bin/hadoop就会出现帮助信息了。</p>
+<h2 id="_2">跑例程</h2>
+<p>Hadoop的文件系统叫<a href="http://hadoop.apache.org/docs/stable/hdfs_design.html" title="HDFS">HDFS</a>（Hadoop distribution filesystem)，是一个分布式文件系统。每份数据都会在多个节点有备份，以容错、修复。所有数据都要先放进HDFS才能Hadoop处理。</p>
+<p>Hadoop的分布式体系中，有一个NameNode，是master的角色，负责主控各节点，有多个DataNode，是slave，负责真正存储数据。这些可以在conf/master和conf/slave设置。
+同时还有一个JobTracker，负责调度jobs，默认就是NameNode这个主机一起充当NameNode，这个在conf/hadoop-site.xml设置。另外所有DataNode都是TaskTracker，负责执行jobs。具体更多对conf/hadoop-site.xml的配置参看docs/cluster_setup.html</p>
+<p>执行bin/hadoop namenode -format，会创造一个namenode。文件都已某种格式放在/tmp/hadoop-"hostname"那里。</p>
+<p>执行bin/start-all.sh会启动hadoop，默认通过http://localhost:50070/可以访问NameNode，http://localhost:50030/可以访问JobTracker。</p>
+<p>现在执行一个例子:</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">mkdir</span> <span class="n">input</span>
 <span class="err">$</span> <span class="n">cp</span> <span class="n">conf</span><span class="o">/*</span><span class="p">.</span><span class="n">xml</span> <span class="n">input</span><span class="o">/</span>
 
-<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">put</span> <span class="n">intput</span> <span class="n">input</span>   <span class="err">#</span> <span class="err"> 把当前文件系统 </span><span class="n">input</span><span class="err"> 目录复制为 </span><span class="n">HDFS</span><span class="err"> 的 </span><span class="n">input</span>
-<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">jar</span> <span class="n">hadoop</span><span class="o">-*-</span><span class="n">examples</span><span class="p">.</span><span class="n">jar</span> <span class="n">grep</span> <span class="n">input</span> <span class="n">output</span> <span class="err">'</span><span class="n">dfs</span><span class="p">[</span><span class="n">a</span><span class="o">-</span><span class="n">z</span><span class="p">.]</span><span class="o">+</span><span class="err">'</span>  <span class="err">#</span> <span class="err"> 执行所有 </span><span class="n">example</span><span class="p">.</span><span class="n">jar</span><span class="err">，后面的是参数 </span>
+<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">put</span> <span class="n">intput</span> <span class="n">input</span>   <span class="err">#</span> <span class="err">把当前文件系统</span><span class="n">input</span><span class="err">目录复制为</span><span class="n">HDFS</span><span class="err">的</span><span class="n">input</span>
+<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">jar</span> <span class="n">hadoop</span><span class="o">-*-</span><span class="n">examples</span><span class="p">.</span><span class="n">jar</span> <span class="n">grep</span> <span class="n">input</span> <span class="n">output</span> <span class="err">'</span><span class="n">dfs</span><span class="p">[</span><span class="n">a</span><span class="o">-</span><span class="n">z</span><span class="p">.]</span><span class="o">+</span><span class="err">'</span>  <span class="err">#</span> <span class="err">执行所有</span><span class="n">example</span><span class="p">.</span><span class="n">jar</span><span class="err">，后面的是参数</span>
 
 <span class="cp"># 一段时间后，执行完毕 #</span>
-<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">get</span> <span class="n">output</span> <span class="n">output</span> <span class="err">#</span> <span class="err"> 把 </span><span class="n">HDFS</span><span class="err"> 中的 </span><span class="n">output</span><span class="err"> 目录复制为当前文件系统的 </span><span class="n">ouput</span>
-<span class="err">$</span> <span class="n">cat</span> <span class="n">output</span><span class="o">/*</span> <span class="err">#</span> <span class="err"> 打印结果 </span>
+<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">get</span> <span class="n">output</span> <span class="n">output</span> <span class="err">#</span> <span class="err">把</span><span class="n">HDFS</span><span class="err">中的</span><span class="n">output</span><span class="err">目录复制为当前文件系统的</span><span class="n">ouput</span>
+<span class="err">$</span> <span class="n">cat</span> <span class="n">output</span><span class="o">/*</span> <span class="err">#</span> <span class="err">打印结果</span>
 
-<span class="cp"># 或者直接对 HDFS 操作 #</span>
+<span class="cp"># 或者直接对HDFS操作 #</span>
 <span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">ls</span> <span class="n">output</span>
 <span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">cat</span> <span class="n">output</span><span class="o">/*</span>
 </pre></div>
-<h2 id="wordcount">WordCount 例子 </h2>
-<p><a href="http://hadoop.apache.org/docs/stable/mapred_tutorial.html" title="WordCount">WordCount</a> 是 hadoop 中的另一个例子 </p>
-<p>Hadoop 是通过 <a href="http://wiki.apache.org/hadoop/HadoopMapReduce" title="MapReduce">MapReduce</a> 机制来处理大数据的。Map 阶段分割输入的数据，并整合成 \&lt;key,value&gt; 的对应关系。每对 \&lt;key,value&gt; 对送到 Combiner 做每个 key 的整合，当整合出一定数量的 \&lt;key,value&gt; 后，\&lt;key,value&gt; 会送到 Reducer 做处理输出最终的 \&lt;key,value&gt;。</p>
+<h2 id="wordcount">WordCount例子</h2>
+<p><a href="http://hadoop.apache.org/docs/stable/mapred_tutorial.html" title="WordCount">WordCount</a>是hadoop中的另一个例子</p>
+<p>Hadoop是通过<a href="http://wiki.apache.org/hadoop/HadoopMapReduce" title="MapReduce">MapReduce</a>机制来处理大数据的。Map阶段分割输入的数据，并整合成\&lt;key,value&gt;的对应关系。每对\&lt;key,value&gt;对送到Combiner做每个key的整合，当整合出一定数量的\&lt;key,value&gt;后，\&lt;key,value&gt;会送到Reducer做处理输出最终的\&lt;key,value&gt;。</p>
 <div class="highlight"><pre><span class="p">(</span><span class="n">input</span><span class="p">)</span> <span class="o">&lt;</span><span class="n">k1</span><span class="p">,</span> <span class="n">v1</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">map</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">k2</span><span class="p">,</span> <span class="n">v2</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">combine</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">k2</span><span class="p">,</span> <span class="n">v2</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">reduce</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">k3</span><span class="p">,</span> <span class="n">v3</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">output</span><span class="p">)</span>
 </pre></div>
-<p> 按照 <a href="http://hadoop.apache.org/docs/stable/mapred_tutorial.html" title="WordCount">WordCount</a> 中的代码编辑 WordCount.java，然后编译打包生成 wordcount.jar:</p>
+<p>按照<a href="http://hadoop.apache.org/docs/stable/mapred_tutorial.html" title="WordCount">WordCount</a>中的代码编辑WordCount.java，然后编译打包生成wordcount.jar:</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">mkdir</span> <span class="n">wordcount_classes</span>
 <span class="err">$</span> <span class="n">javac</span> <span class="o">-</span><span class="n">classpath</span> <span class="n">hadoop</span><span class="o">-</span><span class="n">hop</span><span class="o">-</span><span class="mf">0.2</span><span class="o">-</span><span class="n">core</span><span class="p">.</span><span class="n">jar</span> <span class="o">-</span><span class="n">d</span> <span class="n">wordcount_classes</span> <span class="n">WordCount</span><span class="p">.</span><span class="n">java</span>
 <span class="err">$</span> <span class="n">jar</span> <span class="o">-</span><span class="n">cvf</span> <span class="n">wordcount</span><span class="p">.</span><span class="n">jar</span> <span class="o">-</span><span class="n">C</span> <span class="n">wordcount_classes</span><span class="o">/</span> <span class="p">.</span>
 </pre></div>
-<p> 然后自行构造一些要统计的文件，放在 input 目录下。这时候注意，在执行了上一次例子后，如果想把输入文件还是放在 HDFS 的 input 下，要先清空原来的文件 :</p>
+<p>然后自行构造一些要统计的文件，放在input目录下。这时候注意，在执行了上一次例子后，如果想把输入文件还是放在HDFS的input下，要先清空原来的文件:</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">rmr</span> <span class="n">input</span><span class="o">/</span>
 <span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">rmr</span> <span class="n">output</span><span class="o">/</span>
 
-<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">put</span> <span class="n">input</span> <span class="n">input</span> <span class="err">#</span> <span class="err"> 把输入文件目录 </span><span class="n">input</span><span class="err"> 重新放到 </span><span class="n">HDFS</span><span class="err"> 中 </span>
-<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">jar</span> <span class="n">wordcount</span><span class="p">.</span><span class="n">jar</span> <span class="n">org</span><span class="p">.</span><span class="n">myorg</span><span class="p">.</span><span class="n">WordCount</span> <span class="n">input</span> <span class="n">output</span>  <span class="err">#</span> <span class="err"> 执行 </span><span class="n">wordcount</span><span class="p">.</span><span class="n">jar</span>
+<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">put</span> <span class="n">input</span> <span class="n">input</span> <span class="err">#</span> <span class="err">把输入文件目录</span><span class="n">input</span><span class="err">重新放到</span><span class="n">HDFS</span><span class="err">中</span>
+<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">jar</span> <span class="n">wordcount</span><span class="p">.</span><span class="n">jar</span> <span class="n">org</span><span class="p">.</span><span class="n">myorg</span><span class="p">.</span><span class="n">WordCount</span> <span class="n">input</span> <span class="n">output</span>  <span class="err">#</span> <span class="err">执行</span><span class="n">wordcount</span><span class="p">.</span><span class="n">jar</span>
 
 <span class="cp"># 执行一段时间后完毕 #</span>
 
-<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">cat</span> <span class="n">output</span><span class="o">/*</span>  <span class="err">#</span> <span class="err"> 打印结果 </span>
+<span class="err">$</span> <span class="n">bin</span><span class="o">/</span><span class="n">hadoop</span> <span class="n">fs</span> <span class="o">-</span><span class="n">cat</span> <span class="n">output</span><span class="o">/*</span>  <span class="err">#</span> <span class="err">打印结果</span>
 </pre></div>
-<h2 id="_3"> 结语 </h2>
-<p> 尝试了一下 Hadoop，还有更多有待研究 </p>
+<h2 id="_3">结语</h2>
+<p>尝试了一下Hadoop，还有更多有待研究</p>
             
             <section>
 <div class="accordion" id="accordion2">
@@ -188,6 +188,14 @@
 </section>
 
             <hr/>
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://www.goorockey.com/blog/2012/10/10/guan-yu-exploit-exercise-nebula-level01/" title="Previous: 关于exploit exercise nebula level01">关于exploit exercise nebula level01</a></li>
+                <li class="next-article"><a href="http://www.goorockey.com/blog/2012/10/29/zhua-wang-ye-bao-cun-wei-pdf/" title="Next: 抓网页保存为pdf">抓网页保存为pdf</a> »</li>
+            </ul>
+            </nav>
+            </aside>
         </div>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">

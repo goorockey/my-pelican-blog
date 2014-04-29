@@ -88,34 +88,34 @@
 
             
             
-<p>1. 普通的成员函数 </p>
+<p>1.普通的成员函数 </p>
 <ul>
 <li>
-<p> 编译器会自动为其添加一个 <code>this 指针 </code> 作为入参 </p>
+<p>编译器会自动为其添加一个<code>this指针</code>作为入参 </p>
 </li>
 <li>
-<p> 该成员函数能修改成员变量 </p>
+<p>该成员函数能修改成员变量</p>
 </li>
 </ul>
-<p>2. 在成员函数后面加 <code>const</code>( 注意是后面！) </p>
+<p>2.在成员函数后面加<code>const</code>(注意是后面！) </p>
 <ul>
 <li>
-<p> 编译器会自动为其添加一个 <code>const *this 指针 </code> 作为入参 </p>
+<p>编译器会自动为其添加一个<code>const *this指针</code>作为入参 </p>
 </li>
 <li>
-<p> 该成员函数不能修改成员变量 </p>
+<p>该成员函数不能修改成员变量</p>
 </li>
 </ul>
-<p>3. 成员函数加 <code>static</code></p>
+<p>3.成员函数加<code>static</code></p>
 <ul>
 <li>
-<p> 编译器不会加 <code>this 指针 </code></p>
+<p>编译器不会加<code>this指针</code></p>
 </li>
 <li>
-<p> 该成员函数不能直接访问成员变量，只能访问静态成员变量 </p>
+<p>该成员函数不能直接访问成员变量，只能访问静态成员变量</p>
 </li>
 </ul>
-<p> 所以在成员函数加 <code>static</code> 和后面加 <code>const</code> 是矛盾的，即不能同时这样修饰一个成员函数 .</p>
+<p>所以在成员函数加<code>static</code>和后面加<code>const</code>是矛盾的，即不能同时这样修饰一个成员函数.</p>
             
             <section>
 <div class="accordion" id="accordion2">
@@ -152,6 +152,14 @@
 </section>
 
             <hr/>
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://www.goorockey.com/blog/2011/08/02/stlzhong-yong-copyhe-ostream_iteratorshu-chu-ge-shu-zu/" title="Previous: STL中用copy和ostream_iterator输出一个数组">STL中用copy和ostream_iterator输出一个数组</a></li>
+                <li class="next-article"><a href="http://www.goorockey.com/blog/2011/08/06/xiao-ji-bu-yong-di-san-ge-bian-liang-jiao-huan-liang-shu/" title="Next: 小记：不用第三个变量交换两数">小记：不用第三个变量交换两数</a> »</li>
+            </ul>
+            </nav>
+            </aside>
         </div>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">

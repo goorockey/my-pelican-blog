@@ -96,8 +96,8 @@
 
             
             
-<h2 id="_1"> 原子操作 </h2>
-<p> 能调用的原子操作 </p>
+<h2 id="_1">原子操作</h2>
+<p>能调用的原子操作</p>
 <div class="highlight"><pre><span class="n">LONG</span> <span class="nf">InterlockedExchangeAdd</span><span class="p">(</span><span class="n">PLONG</span> <span class="n">plAddend</span><span class="p">,</span><span class="n">LONG</span> <span class="n">Increment</span><span class="p">);</span>
 <span class="n">LONG</span> <span class="nf">InterlockedExchange</span><span class="p">(</span><span class="n">PLONG</span> <span class="n">plTarget</span><span class="p">,</span> <span class="n">LONG</span> <span class="n">lValue</span><span class="p">);</span>
 <span class="n">PVOID</span> <span class="nf">InterlockedExchangePointer</span><span class="p">(</span><span class="n">PVOID</span><span class="o">*</span> <span class="n">ppvTarget</span><span class="p">,</span> <span class="n">PVOID</span> <span class="n">pvValue</span><span class="p">);</span>
@@ -105,7 +105,7 @@
 <span class="n">PVOID</span> <span class="nf">InterlockedCompareExchangePointer</span><span class="p">(</span><span class="n">PVOID</span><span class="o">*</span> <span class="n">ppvDestination</span><span class="p">,</span> <span class="n">PVOID</span> <span class="n">pvExchange</span><span class="p">,</span> <span class="n">PVOID</span> <span class="n">pvComparand</span><span class="p">);</span>
 </pre></div>
 <!--more-->
-<h2 id="_2"> 以查询方式同步 </h2>
+<h2 id="_2">以查询方式同步</h2>
 <div class="highlight"><pre><span class="k">volatile</span> <span class="n">BOOL</span> <span class="n">g_fFinishedCalculation</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
 
 <span class="kt">int</span> <span class="n">WINAPI</span> <span class="nf">WinMain</span><span class="p">(</span><span class="err">…</span><span class="p">)</span>
@@ -130,25 +130,25 @@
 </pre></div>
 <ul>
 <li>
-<p> 查询的线程一直处于可调度状态，浪费 CPU 时间 </p>
+<p>查询的线程一直处于可调度状态，浪费CPU时间</p>
 </li>
 <li>
-<p> 如果 WinMain 的线程优先级比 ReclcFunc 的线程要高，则 g_fFinishedCalculation 永远不会被置为 TRUE。</p>
+<p>如果WinMain的线程优先级比ReclcFunc的线程要高，则g_fFinishedCalculation永远不会被置为TRUE。</p>
 </li>
 </ul>
-<h2 id="critical95section"> 关键代码段 Critical_Section</h2>
+<h2 id="critical95section">关键代码段Critical_Section</h2>
 <ul>
 <li>
-<p> 使用前调用 InitializeCriticalSection 进行初始化，使用后用 DeleteCriticalSection 释放资源 </p>
+<p>使用前调用InitializeCriticalSection进行初始化，使用后用DeleteCriticalSection释放资源</p>
 </li>
 <li>
-<p> 在指向同一个 Critical_Section 的 EnterCriticalSection 和 LeaveCriticalSection 之间的代码，不会被多个线程同时调用 </p>
+<p>在指向同一个Critical_Section的EnterCriticalSection和LeaveCriticalSection之间的代码，不会被多个线程同时调用</p>
 </li>
 <li>
-<p> 同一个线程多次重入 EnterCriticalSection 和 LeaveCriticalSection 之间的代码不会发生死锁。</p>
+<p>同一个线程多次重入EnterCriticalSection和LeaveCriticalSection之间的代码不会发生死锁。</p>
 </li>
 </ul>
-<p> 如下面代码不会有死锁：</p>
+<p>如下面代码不会有死锁：</p>
 <div class="highlight"><pre><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">CRITICAL_SECTION</span> <span class="n">cs</span><span class="p">;</span>
@@ -170,57 +170,57 @@
 </pre></div>
 <ul>
 <li>
-<p> 考虑到线程进入等待状态时，要保护现场，这是非常耗时的。这可以用 InitializeCriticalSectionAndSpinCount，它让想进入已被占用的关键代码段的线程先循环判断多次，才进入等待状态。</p>
+<p>考虑到线程进入等待状态时，要保护现场，这是非常耗时的。这可以用InitializeCriticalSectionAndSpinCount，它让想进入已被占用的关键代码段的线程先循环判断多次，才进入等待状态。</p>
 </li>
 <li>
-<p>InitializeCriticalSectionAndSpinCount 只对多个 CPU 起作用，单个 CPU 不起作用。</p>
+<p>InitializeCriticalSectionAndSpinCount只对多个CPU起作用，单个CPU不起作用。</p>
 </li>
 <li>
-<p>SetCriticalSectionSpinCount 可以改变循环判断的次数 </p>
+<p>SetCriticalSectionSpinCount可以改变循环判断的次数</p>
 </li>
 <li>
-<p> 关键代码段是在用户态实现同步的方法，这样比内核态同步要快，因为不用做用户态和内核态之间的往返（往返一次需要占用 x 8 6 平台上的大约 1 0 0 0 个 C P U 周期）。</p>
+<p>关键代码段是在用户态实现同步的方法，这样比内核态同步要快，因为不用做用户态和内核态之间的往返（往返一次需要占用x 8 6平台上的大约1 0 0 0个C P U周期）。</p>
 </li>
 </ul>
-<h2 id="_3"> 内核对象同步 </h2>
+<h2 id="_3">内核对象同步</h2>
 <ul>
 <li>
-<p> 当内核对象是自动设置为有信号时，在所有等待该内核对象的线程中，只会有一个变为可调度，然后该内核对象又自动设为无信号。</p>
+<p>当内核对象是自动设置为有信号时，在所有等待该内核对象的线程中，只会有一个变为可调度，然后该内核对象又自动设为无信号。</p>
 </li>
 <li>
-<p> 当内核对象是手动设置为有信号时，除非手动设置该内核对象的状态，否则一直是有信号，这样所有等待该内核对象的线程都能变为可调度。</p>
+<p>当内核对象是手动设置为有信号时，除非手动设置该内核对象的状态，否则一直是有信号，这样所有等待该内核对象的线程都能变为可调度。</p>
 </li>
 </ul>
 <h2 id="waitabletimer">WaitableTimer</h2>
 <ul>
 <li>
-<p>WaitableTimer 能在规定时候或按规定的时间间隔变为有信号状态，就类似闹钟。</p>
+<p>WaitableTimer能在规定时候或按规定的时间间隔变为有信号状态，就类似闹钟。</p>
 </li>
 <li>
-<p>SetWaitableTimer 设置开始定时的时间（如果传参是负数，则是相对于这个函数被调用的时间）、定时的间隔、定时间隔到时调用的函数 </p>
+<p>SetWaitableTimer设置开始定时的时间（如果传参是负数，则是相对于这个函数被调用的时间）、定时的间隔、定时间隔到时调用的函数</p>
 </li>
 <li>
-<p>CancelWaitableTimer 取消 WaitableTimer 的定时。</p>
+<p>CancelWaitableTimer取消WaitableTimer的定时。</p>
 </li>
 </ul>
-<h2 id="_4"> 其他等待函数 </h2>
+<h2 id="_4">其他等待函数</h2>
 <p>--- | ---
-MsgWaitForMultipleObjects 和 MsgWaitForMultipleObjectsEx | 等待多个内核对象有信号、或指定类型消息到达线程的输入队列
-SingleObjectAndWait | 在一个原子操作完成设置一个内核对象为有信号，并进入等待另一个内核对象 </p>
-<h2 id="_5"> 各同步的内核对象的理解 </h2>
+MsgWaitForMultipleObjects和MsgWaitForMultipleObjectsEx | 等待多个内核对象有信号、或指定类型消息到达线程的输入队列
+SingleObjectAndWait | 在一个原子操作完成设置一个内核对象为有信号，并进入等待另一个内核对象</p>
+<h2 id="_5">各同步的内核对象的理解</h2>
 <ul>
 <li>
-<p> 关键代码段 :</p>
-<p>critical section , 关键代码段之间的代码是原子操作，同一时间只能有一个线程执行该段代码，与别的同步 object 都是内核态的同步相比，它争取用用户态的方式进行同步，如果用户态的用户不行，才用内核态的同步，这样效率更高 , 花费较少 </p>
+<p>关键代码段:</p>
+<p>critical section ,关键代码段之间的代码是原子操作，同一时间只能有一个线程执行该段代码，与别的同步object都是内核态的同步相比，它争取用用户态的方式进行同步，如果用户态的用户不行，才用内核态的同步，这样效率更高,花费较少</p>
 </li>
 <li>
-<p> 锁 :</p>
+<p>锁:</p>
 <p>mutex，只允许一个线程拥有
-semaphore，允许指定数量的线程拥有，创建此 object 时可以指定能拥有的最多的线程数 </p>
+semaphore，允许指定数量的线程拥有，创建此object时可以指定能拥有的最多的线程数</p>
 </li>
 <li>
-<p> 信号：</p>
-<p>event，不同于锁，就如它的名字是 “ 信号 ”，当一个线程拥有锁的时候就会改变锁的状态以达到同步（` 成功拥有 mutex 则使它无信号；成功拥有 semaphore 则使它计数减一，当计数为零，则 semaphore 变成无信号状态），手动设置的 event 的状态只有线程调用 SetEvent 或 ResetEvent 才会改变，线程则通过 WaitForSingleObject 等检测信号状态的函数来达到同步。</p>
+<p>信号：</p>
+<p>event，不同于锁，就如它的名字是“信号”，当一个线程拥有锁的时候就会改变锁的状态以达到同步（`成功拥有mutex则使它无信号；成功拥有semaphore则使它计数减一，当计数为零，则semaphore变成无信号状态），手动设置的event的状态只有线程调用SetEvent或ResetEvent才会改变，线程则通过WaitForSingleObject等检测信号状态的函数来达到同步。</p>
 </li>
 </ul>
             
@@ -259,6 +259,14 @@ semaphore，允许指定数量的线程拥有，创建此 object 时可以指定
 </section>
 
             <hr/>
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://www.goorockey.com/blog/2011/09/03/windowshe-xin-bian-cheng-du-shu-bi-ji-2-jin-cheng-zuo-ye-xian-cheng/" title="Previous: 《Windows核心编程》读书笔记2--进程、作业、线程">《Windows核心编程》读书笔记2--进程、作业、线程</a></li>
+                <li class="next-article"><a href="http://www.goorockey.com/blog/2011/11/12/centosxia-an-zhuang-apachephpmysql-tomcat/" title="Next: CentOS下安装Apache+php+mysql Tomcat">CentOS下安装Apache+php+mysql Tomcat</a> »</li>
+            </ul>
+            </nav>
+            </aside>
         </div>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">
