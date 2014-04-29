@@ -5,21 +5,21 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.goorockey.com/index.html</loc>
-<lastmod>2014-04-29T14:29:25-00:00</lastmod>
+<lastmod>2014-04-29T23:42:56-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.goorockey.com/archives.html</loc>
-<lastmod>2014-04-29T14:29:25-00:00</lastmod>
+<lastmod>2014-04-29T23:42:56-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.goorockey.com/categories.html</loc>
-<lastmod>2014-04-29T14:29:25-00:00</lastmod>
+<lastmod>2014-04-29T23:42:56-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -277,7 +277,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.goorockey.com/category/network.html</loc>
+<loc>http://www.goorockey.com/network/index.html</loc>
 <lastmod>2012-03-15T00:00:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>

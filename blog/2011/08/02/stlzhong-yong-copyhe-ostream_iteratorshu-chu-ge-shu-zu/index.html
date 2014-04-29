@@ -94,11 +94,11 @@
 <span class="nx">int</span> <span class="nx">a</span><span class="err">[</span><span class="cp">]</span> = { 335, 33, 98, 39, 54, 24, 3 };
 int nSize = sizeof(a) / sizeof(a<span class="cp">[</span><span class="mi">0</span><span class="cp">]</span>);
 
-// 输出数组a到标准输出，同时每个元素都以空格为结束（最后一个元素后面也会有空格）
+// 输出数组 a 到标准输出，同时每个元素都以空格为结束（最后一个元素后面也会有空格）
 std::copy(a, a + nSize, std::ostream_iterator<span class="nt">&lt;int&gt;</span>(std::cout, " "));
 </pre></div>
-<p>结果：335 33 98 39 54 24 3</p>
-<p>一个字：妙！！(^0^)/ </p>
+<p> 结果：335 33 98 39 54 24 3</p>
+<p> 一个字：妙！！(^0^)/ </p>
             
             <section>
 <div class="accordion" id="accordion2">

@@ -90,34 +90,34 @@
 
             
             
-<p>最近在刷题，总想把题目保存下来，这样没网的时候也可以做题，放手机里也可以随时做了。所以就想着把题目抓下来保存为比较通用的pdf了。</p>
-<p>一开始想的是先做类似整站下载，把文字和图片都抓下来，然后再做html转pdf。自己写工具抓下来的话，要抓图片、修改网页里面图片的链接，昨天调研了一下，没找到用python有什么方便的办法，就放弃这条路了。</p>
-<p>今天突然找到，网上还是有很多直接网页保存为pdf的工具、网站的。最方便、强大的要数<a href="http://pdfmyrul" title="pdfmyurl">pdfmyurl</a>了。</p>
+<p> 最近在刷题，总想把题目保存下来，这样没网的时候也可以做题，放手机里也可以随时做了。所以就想着把题目抓下来保存为比较通用的 pdf 了。</p>
+<p> 一开始想的是先做类似整站下载，把文字和图片都抓下来，然后再做 html 转 pdf。自己写工具抓下来的话，要抓图片、修改网页里面图片的链接，昨天调研了一下，没找到用 python 有什么方便的办法，就放弃这条路了。</p>
+<p> 今天突然找到，网上还是有很多直接网页保存为 pdf 的工具、网站的。最方便、强大的要数 <a href="http://pdfmyrul" title="pdfmyurl">pdfmyurl</a> 了。</p>
 <!-- more -->
 <h2 id="pdfmyurl">pdfmyurl</h2>
-<p>可以通过http://pdfmyurl.com?url=\&lt;siteurl&gt; ,来把指定链接的网页保存为pdf，而且是直接返回的，即用wget http://pdfmyurl.com?url=\&lt;siteurl&gt;就可以直接得到所需的pdf，不用再按什么按钮之类的了。</p>
-<p>在官网上可以发现，pdfmyurl可以算是个api服务，可以通过传很多get参数来得到需要的pdf结果。比较常用的有：</p>
+<p> 可以通过 http://pdfmyurl.com?url=\&lt;siteurl&gt; , 来把指定链接的网页保存为 pdf，而且是直接返回的，即用 wget http://pdfmyurl.com?url=\&lt;siteurl&gt; 就可以直接得到所需的 pdf，不用再按什么按钮之类的了。</p>
+<p> 在官网上可以发现，pdfmyurl 可以算是个 api 服务，可以通过传很多 get 参数来得到需要的 pdf 结果。比较常用的有：</p>
 <ul>
-<li>--filename    输出的pdf文件名</li>
-<li>--page-size   页面大小，默认是A4</li>
-<li>--proxy       通过制定的代理访问该页面，--username --password还指定用户和密码</li>
-<li>-b            使得到的pdf有目录、书签、页眉等书的样式，不过目录不咋地</li>
+<li>--filename    输出的 pdf 文件名 </li>
+<li>--page-size   页面大小，默认是 A4</li>
+<li>--proxy       通过制定的代理访问该页面，--username --password 还指定用户和密码 </li>
+<li>-b            使得到的 pdf 有目录、书签、页眉等书的样式，不过目录不咋地 </li>
 </ul>
-<p>pdfmyurl已经很强大了，但每次只能完成一个网面的pdf，所以还得想办法做pdf的合并。</p>
+<p>pdfmyurl 已经很强大了，但每次只能完成一个网面的 pdf，所以还得想办法做 pdf 的合并。</p>
 <h2 id="pdftk">pdftk</h2>
-<p><a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/" title="pdftk">pdftk</a>也是一个pdf方面的神奇，可以完成pdf合并、合并多个pdf指定页、分割、加水印等，而且是跨windows、linux、mac多个平台的。不过我也只用来合并pdf:</p>
+<p><a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/" title="pdftk">pdftk</a> 也是一个 pdf 方面的神奇，可以完成 pdf 合并、合并多个 pdf 指定页、分割、加水印等，而且是跨 windows、linux、mac 多个平台的。不过我也只用来合并 pdf:</p>
 <div class="highlight"><pre><span class="err">$</span> <span class="n">pdftk</span> <span class="mf">1.</span><span class="n">pdf</span> <span class="mf">2.</span><span class="n">pdf</span> <span class="n">cat</span> <span class="n">output</span> <span class="mf">12.</span><span class="n">pdf</span>
 </pre></div>
-<p>但弄出来的pdf是没有目录的。</p>
-<p>所以更好的办法其实是用更强大的latex。不过latex还有待系统地研究，现在的再写个bash就已经满足我90%的要求了～</p>
+<p> 但弄出来的 pdf 是没有目录的。</p>
+<p> 所以更好的办法其实是用更强大的 latex。不过 latex 还有待系统地研究，现在的再写个 bash 就已经满足我 90% 的要求了～</p>
 <hr/>
-<p>更新：</p>
+<p> 更新：</p>
 <ol>
 <li>
-<p>今天还是发现了一个用python抓oj的，有空参考一下，自己实现一个。</p>
+<p> 今天还是发现了一个用 python 抓 oj 的，有空参考一下，自己实现一个。</p>
 </li>
 <li>
-<p>今天还发现，pdfmyurl似乎对单个ip一定时间内的请求做了限制，超过限制后，请求都会返回一个错误信息的pdf。我就借cjb的tor解决了这个问题（又用tor干了邪恶的事了）。</p>
+<p> 今天还发现，pdfmyurl 似乎对单个 ip 一定时间内的请求做了限制，超过限制后，请求都会返回一个错误信息的 pdf。我就借 cjb 的 tor 解决了这个问题（又用 tor 干了邪恶的事了）。</p>
 </li>
 </ol>
             

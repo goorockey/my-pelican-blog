@@ -87,34 +87,34 @@
 
             
             
-<p>1.普通的成员函数 </p>
+<p>1. 普通的成员函数 </p>
 <ul>
 <li>
-<p>编译器会自动为其添加一个<code>this指针</code>作为入参 </p>
+<p> 编译器会自动为其添加一个 <code>this 指针 </code> 作为入参 </p>
 </li>
 <li>
-<p>该成员函数能修改成员变量</p>
+<p> 该成员函数能修改成员变量 </p>
 </li>
 </ul>
-<p>2.在成员函数后面加<code>const</code>(注意是后面！) </p>
+<p>2. 在成员函数后面加 <code>const</code>( 注意是后面！) </p>
 <ul>
 <li>
-<p>编译器会自动为其添加一个<code>const *this指针</code>作为入参 </p>
+<p> 编译器会自动为其添加一个 <code>const *this 指针 </code> 作为入参 </p>
 </li>
 <li>
-<p>该成员函数不能修改成员变量</p>
+<p> 该成员函数不能修改成员变量 </p>
 </li>
 </ul>
-<p>3.成员函数加<code>static</code></p>
+<p>3. 成员函数加 <code>static</code></p>
 <ul>
 <li>
-<p>编译器不会加<code>this指针</code></p>
+<p> 编译器不会加 <code>this 指针 </code></p>
 </li>
 <li>
-<p>该成员函数不能直接访问成员变量，只能访问静态成员变量</p>
+<p> 该成员函数不能直接访问成员变量，只能访问静态成员变量 </p>
 </li>
 </ul>
-<p>所以在成员函数加<code>static</code>和后面加<code>const</code>是矛盾的，即不能同时这样修饰一个成员函数.</p>
+<p> 所以在成员函数加 <code>static</code> 和后面加 <code>const</code> 是矛盾的，即不能同时这样修饰一个成员函数 .</p>
             
             <section>
 <div class="accordion" id="accordion2">
