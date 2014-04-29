@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Goorockey's Blog</title><link href="http://www.goorockey.com/" rel="alternate"></link><link href="http://www.goorockey.com/feeds/lisp.atom.xml" rel="self"></link><id>http://www.goorockey.com/</id><updated>2012-09-25T22:41:00+08:00</updated><entry><title>Scheme里面的pair和list</title><link href="http://www.goorockey.com/blog/2012/09/25/schemeli-mian-de-pairhe-list/" rel="alternate"></link><updated>2012-09-25T22:41:00+08:00</updated><author><name>goorockey</name></author><id>tag:www.goorockey.com,2012-09-25:blog/2012/09/25/schemeli-mian-de-pairhe-list/</id><summary type="html">
+&lt;p&gt;最近学scheme，总结一下pair和list的区别，主要是两点：&lt;/p&gt;
+&lt;h3 id="1-listpairnulllistpairlist"&gt;1. list一定是pair，但只有以null（空list）结尾的pair才是list&lt;/h3&gt;
+&lt;p&gt;对于(define list1 (list a b c)),list1表现为(a b c),其实也可以写成(a . (b . ()))。&lt;/p&gt;
+&lt;p&gt;可以看到list其实就是pair,而且是以null结尾的pair。&lt;/p&gt;
+&lt;p&gt;对于像(a.(b.(c.d)))这样的连续pair，因为没有以空list结尾，所以不是list&lt;/p&gt;
+&lt;p&gt;所以有：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;define&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="err"&gt;'&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;list&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="cp"&gt;#t&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cons&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="cp"&gt;#t&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cddr&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="err"&gt;以&lt;/span&gt;&lt;span class="n"&gt;null&lt;/span&gt;&lt;span class="err"&gt;结尾&lt;/span&gt;
+&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;define&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cons&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;list&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="cp"&gt;#f&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cons&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="cp"&gt;#f&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;set&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;cdr&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="err"&gt;'&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="err"&gt;把&lt;/span&gt;&lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="err"&gt;的&lt;/span&gt;&lt;span class="n"&gt;cdr&lt;/span&gt;&lt;span class="err"&gt;设为&lt;/span&gt;&lt;span class="n"&gt;null&lt;/span&gt;&lt;span class="err"&gt;，使&lt;/span&gt;&lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="err"&gt;变成&lt;/span&gt;&lt;span class="n"&gt;list&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;list&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="err"&gt;变成了&lt;/span&gt;&lt;span class="n"&gt;list&lt;/span&gt;
+&lt;span class="cp"&gt;#t&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cons&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="cp"&gt;#t&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="2-pair"&gt;2. pair的显示规则&lt;/h3&gt;
+&lt;p&gt;引用&lt;a href="http://download.plt-scheme.org/doc/html/guide/Pairs__Lists__and_Scheme_Syntax.html"&gt;这里&lt;/a&gt;的解释：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In general, the rule for printing a pair is as follows: use the dot notation always, but if the dot is immediately followed by an open parenthesis, then remove the dot, the open parenthesis, and the    matching close parenthesis. Thus, (0 . (1 . 2)) becomes (0 1 . 2), and (1 . (2 . (3 . ()))) becomes (1 2 3).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;大意就是，如果pair的“点”紧接着小括号，则这个点和小括号都可以去掉。&lt;/p&gt;
+&lt;p&gt;所以(a.(b.c))等价于(a b.c), (a.(b.(c.())))等价于(a b c)。&lt;/p&gt;</summary><category term="lisp"></category><category term="scheme"></category></entry></feed>

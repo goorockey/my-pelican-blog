@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8"> 
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="goorockey" />
+        <meta name="copyright" content="goorockey" />
+
+
+<meta name="keywords" content="windows, programming, windows, " />
+
+<meta property="og:title" content="《Windows核心编程》读书笔记2--进程、作业、线程 "/>
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.goorockey.com/blog/2011/09/03/windowshe-xin-bian-cheng-du-shu-bi-ji-2-jin-cheng-zuo-ye-xian-cheng/" />
+<meta property="og:description" content="" />
+<meta property="og:site_name" content="Goorockey's Blog" />
+<meta property="og:article:author" content="goorockey" />
+<meta property="og:article:published_time" content="2011-09-03T00:00:00" />
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Windows核心编程》读书笔记2--进程、作业、线程 ">
+<meta name="twitter:description" content="">
+
+        <title>《Windows核心编程》读书笔记2--进程、作业、线程  · Goorockey's Blog
+</title>
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/tipuesearch/tipuesearch.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/custom.css" media="screen">
+        <link href="http://www.goorockey.com/feeds/feed.xml" type="application/atom+xml" rel="alternate" title="Goorockey's Blog - Full Atom Feed" />
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-28958629-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+    </head>
+    <body>
+        <div id="content-sans-footer">
+        <div class="navbar navbar-static-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="http://www.goorockey.com/"><span class=site-name>Goorockey's Blog</span></a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav pull-right top-menu">
+                            <li ><a href="http://www.goorockey.com">Home</a></li>
+                            <li ><a href="http://www.goorockey.com/categories.html">Categories</a></li>
+                            <li ><a href="http://www.goorockey.com/tags.html">Tags</a></li>
+                            <li ><a href="http://www.goorockey.com/archives.html">Archives</a></li>
+                            <li><form class="navbar-search" action="http://www.goorockey.com/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span1"></div>
+                <div class="span10">
+<article>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+    <h1><a href="http://www.goorockey.com/blog/2011/09/03/windowshe-xin-bian-cheng-du-shu-bi-ji-2-jin-cheng-zuo-ye-xian-cheng/"> 《Windows核心编程》读书笔记2--进程、作业、线程  </a></h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+    <div class="span2 table-of-content">
+        <nav>
+        <h4>Contents</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">一、摘要：</a></li>
+<li><a href="#_2">二、进程</a></li>
+<li><a href="#_3">三、作业</a></li>
+<li><a href="#_4">四、线程</a></li>
+<li><a href="#_5">五、其他</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="span8 article-content">
+
+            
+            
+<h2 id="_1">一、摘要：</h2>
+<ul>
+<li>
+<p>进程只是线程的容器，存放数据和代码，但不执行代码。</p>
+</li>
+<li>
+<p>线程才是执行代码的实体。</p>
+</li>
+<li>
+<p>作业是对一个或多个进程的统一管理，能添加一般无法添加的限制。</p>
+</li>
+</ul>
+<h2 id="_2">二、进程</h2>
+<p>1.概念</p>
+<p><strong>进程只是线程的容器</strong>，为线程执行代码提供资源、营造运行环境。</p>
+<!--more-->
+<p>2.进程的构成</p>
+<ul>
+<li>关键：</li>
+</ul>
+<blockquote>
+<p>一块内存地址空间，用以存放代码和数据；
+一个内核对象句柄表，记录使用中的内核对象。</p>
+</blockquote>
+<ul>
+<li>更详尽的构成</li>
+</ul>
+<p>(来自MSDN <a href="http://msdn.microsoft.com/zh-cn/library/ms681917(v=vs.85).aspx">http://msdn.microsoft.com/zh-cn/library/ms681917(v=vs.85).aspx</a>):</p>
+<div class="highlight"><pre><span class="n">a</span> <span class="n">virtual</span> <span class="n">address</span> <span class="n">space</span><span class="p">,</span>
+<span class="n">executable</span> <span class="n">code</span><span class="p">,</span>
+<span class="n">open</span> <span class="n">handles</span> <span class="n">to</span> <span class="n">system</span> <span class="n">objects</span><span class="p">,</span>
+<span class="n">a</span> <span class="n">security</span> <span class="n">context</span><span class="p">,</span>
+<span class="n">a</span> <span class="n">unique</span> <span class="n">process</span> <span class="n">identifier</span><span class="p">,</span>
+<span class="n">environment</span> <span class="n">variables</span><span class="p">,</span>
+<span class="n">a</span> <span class="n">priority</span> <span class="n">class</span><span class="p">,</span>
+<span class="n">minimum</span> <span class="n">and</span> <span class="n">maximum</span> <span class="n">working</span> <span class="n">set</span> <span class="n">sizes</span><span class="p">,</span>
+<span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="kr">thread</span> <span class="n">of</span> <span class="n">execution</span><span class="p">.</span>
+</pre></div>
+<p>3.进程的终止</p>
+<ul>
+<li>
+<p>全部线程都结束。即使主线程退出了，如果还有线程存在，该进程仍然不会销毁。</p>
+</li>
+<li>
+<p>ExitProcess，有可能造成内存泄露，因为C/C++ Runtime Library没有被清空，则全局变量等资源就不会被释放。</p>
+</li>
+<li>
+<p>TerminateProcess，跟ExitProcess一样是可能造成内存泄露的。另外它是异步的，即只是通知要终止目标进程，返回后并不代表它已结束。</p>
+</li>
+</ul>
+<h2 id="_3">三、作业</h2>
+<p>1.基本概念</p>
+<ul>
+<li>
+<p><strong>作业是进程的容器</strong>，对一个或多个进程附加一定的限制，进行统一管理。</p>
+</li>
+<li>
+<p>即使作业只包含了一个进程也是有用的，因为这样能做一些普通不能进行的限制</p>
+</li>
+</ul>
+<p>2.主要的API:</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CreateJobObject</td>
+<td>创建作业内核对象</td>
+</tr>
+<tr>
+<td>OpenJobObject</td>
+<td>根据Handle打开作业内核对象</td>
+</tr>
+<tr>
+<td>IsProcessInJob</td>
+<td>验证某一个进程是否存在于作业中</td>
+</tr>
+<tr>
+<td>SetInformationJobObject</td>
+<td>给作业加上各种限制</td>
+</tr>
+<tr>
+<td>QueryInformationJobObject</td>
+<td>查询作业对象的信息</td>
+</tr>
+<tr>
+<td>AssignProcessToJobObject</td>
+<td>将进程放入作业</td>
+</tr>
+<tr>
+<td>TerminateJobObject</td>
+<td>终止作业内所有进程</td>
+</tr>
+</tbody>
+</table>
+<p>3.用于作业对象的基本用户界面限制的位标志</p>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JOB_OBJECT_UILIMIT_EXITWINDOWS</td>
+<td>用于防止进程通过ExitWindowsEx函数退出、关闭、重新引导或关闭系统电源</td>
+</tr>
+<tr>
+<td>JOB_OBJECT_UILIMIT_READCLIPBOARD</td>
+<td>防止进程读取剪贴板的内容</td>
+</tr>
+<tr>
+<td>JOB_OBJECT_UILIMIT_WRITECLIPBOARD</td>
+<td>防止进程删除剪贴板的内容</td>
+</tr>
+<tr>
+<td>JOB_OBJECT_UILIMIT_SYSTEMPARAMETERS</td>
+<td>防止进程通过SystemParametersInfor函数来改变系统参数</td>
+</tr>
+<tr>
+<td>JOB_OBJECT_UILIMIT_DISPLAYSETTINGS</td>
+<td>防止进程通过ChangeDisplaySettings函数来改变显示设置</td>
+</tr>
+<tr>
+<td>JOB_OBJECT_UILIMIT_GLOBALATOMS</td>
+<td>为作业赋予它自己的基本结构表，使作业中的进程只能访问该作业的表</td>
+</tr>
+<tr>
+<td>JOB_OBJECT_UILIMIT_DESKTOP</td>
+<td>防止进程使用CreateDesktop或SwitchDesktop函数创建或转换桌面</td>
+</tr>
+<tr>
+<td>JOB_OBJECT_UILIMIT_HANDLES</td>
+<td>防止作业中的进程使用同一作业外部的进程创建的USER对象（如HWND）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">四、线程</h2>
+<p>1.基本概念</p>
+<ul>
+<li>
+<p>进程不执行代码的，<strong>是线程在进程地址空间内执行代码</strong>，并对进程地址空间内的数据做操作。</p>
+</li>
+<li>
+<p>多个线程共享进程内的地址空间，包括进程的内核对象句柄表，因为句柄表的存在依赖于进程，而不是线程。</p>
+</li>
+</ul>
+<p>2.线程的构成</p>
+<ul>
+<li>
+<p>关键：</p>
+<p>一个堆栈、
+一些用于保护线程的寄存器、
+一个指令寄存器（IP）、
+堆栈指针寄存器（SP）</p>
+</li>
+<li>
+<p>更详尽的构成</p>
+</li>
+</ul>
+<p>（来自MSDN <a href="http://msdn.microsoft.com/zh-cn/library/ms681917(v=vs.85).aspx">http://msdn.microsoft.com/zh-cn/library/ms681917(v=vs.85).aspx</a>）：</p>
+<div class="highlight"><pre><span class="n">All</span> <span class="n">threads</span> <span class="n">of</span> <span class="n">a</span> <span class="n">process</span> <span class="n">share</span> <span class="n">its</span> <span class="n">virtual</span> <span class="n">address</span> <span class="n">space</span> <span class="n">and</span> <span class="n">system</span> <span class="n">resources</span><span class="p">.</span>
+<span class="n">In</span> <span class="n">addition</span><span class="p">,</span> <span class="n">each</span> <span class="kr">thread</span> <span class="n">maintains</span> <span class="n">exception</span> <span class="n">handlers</span><span class="p">,</span> <span class="n">a</span> <span class="n">scheduling</span> <span class="n">priority</span><span class="p">,</span> <span class="kr">thread</span> <span class="n">local</span> <span class="n">storage</span><span class="p">,</span> <span class="n">a</span> <span class="n">unique</span> <span class="kr">thread</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">and</span> <span class="n">a</span> <span class="n">set</span> <span class="n">of</span> <span class="n">structures</span> <span class="n">the</span> <span class="n">system</span> <span class="n">will</span> <span class="n">use</span> <span class="n">to</span> <span class="n">save</span> <span class="n">the</span> <span class="kr">thread</span> <span class="n">context</span> <span class="n">until</span> <span class="n">it</span> <span class="n">is</span> <span class="n">scheduled</span><span class="p">.</span>
+<span class="n">The</span> <span class="kr">thread</span> <span class="n">context</span> <span class="n">includes</span> <span class="n">the</span> <span class="kr">thread</span><span class="err">'</span><span class="n">s</span> <span class="n">set</span> <span class="n">of</span> <span class="n">machine</span> <span class="n">registers</span><span class="p">,</span> <span class="n">the</span> <span class="n">kernel</span> <span class="n">stack</span><span class="p">,</span> <span class="n">a</span> <span class="kr">thread</span> <span class="n">environment</span> <span class="n">block</span><span class="p">,</span> <span class="n">and</span> <span class="n">a</span> <span class="n">user</span> <span class="n">stack</span> <span class="n">in</span> <span class="n">the</span> <span class="n">address</span> <span class="n">space</span> <span class="n">of</span> <span class="n">the</span> <span class="kr">thread</span><span class="err">'</span><span class="n">s</span> <span class="n">process</span><span class="p">.</span>
+<span class="n">Threads</span> <span class="n">can</span> <span class="n">also</span> <span class="n">have</span> <span class="n">their</span> <span class="n">own</span> <span class="n">security</span> <span class="n">context</span><span class="p">,</span> <span class="n">which</span> <span class="n">can</span> <span class="n">be</span> <span class="n">used</span> <span class="k">for</span> <span class="n">impersonating</span> <span class="n">clients</span><span class="p">.</span>
+</pre></div>
+<p>3.线程的启动</p>
+<ul>
+<li>初始化线程时会把 线程函数的入参(pvParam)、线程函数的指针(pfnStartAddrj) 压栈。</li>
+</ul>
+<p><img alt="" src="http://www.goorockey.com/uploads/2011/09/clip_image0011.png"/></p>
+<ul>
+<li>每个线程还有一个指令寄存器（IP）和堆栈指针寄存器（SP）。IP初始指向BaseThreadStart函数，它包含在Kernel32.dll中。</li>
+</ul>
+<p>它主要是调用线程函数，并把函数返回值传给ExitThread：</p>
+<div class="highlight"><pre><span class="n">VOID</span> <span class="nf">BaseThreadStart</span><span class="p">(</span><span class="n">PTHREAD_START_ROUTINE</span> <span class="n">pfnStartAddr</span><span class="p">,</span><span class="n">PVOID</span> <span class="n">pvParam</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kr">__try</span>
+    <span class="p">{</span>
+        <span class="n">ExitThread</span><span class="p">((</span><span class="n">pfnStartAddr</span><span class="p">)(</span><span class="n">pvParam</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="kr">__except</span><span class="p">(</span><span class="n">UnhandledExceptionFilter</span><span class="p">(</span><span class="n">GetExceptionInformation</span><span class="p">()))</span>
+    <span class="p">{</span>
+        <span class="n">ExitProcess</span><span class="p">(</span><span class="n">GetExceptionCode</span><span class="p">());</span>
+    <span class="p">}</span>
+    <span class="c1">//NOTE: We never get here. </span>
+<span class="p">}</span>
+</pre></div>
+<ul>
+<li>之所以pfnStartAddr和pvParam压栈，就是因为线程开始运行时，CPU跳到IP指向BaseThreadStart，然后把pfnStartAddr和pvParam出栈，就把它们当做形参传给BaseThreadStart了。</li>
+</ul>
+<h2 id="_5">五、其他</h2>
+<p>1.C/C++ Runtime Library的多线程版本</p>
+<ul>
+<li>
+<p>在C/C++ Runtime Library中，有一些全局变量。它们有可能同时被多个线程访问，使它们的值无法确定。</p>
+</li>
+<li>
+<p>C/C++ Runtime Library为了适应多线程，出现多线程(MT)版本，改变一些全局变量和函数的特性。</p>
+</li>
+<li>
+<p>主要思路是为每个线程关联一个数据结构<strong>tiddata块</strong>，里面都有各全局变量对于这个线程的副本。即每个线程访问的是属于自己的“全局变量”，有属于自己的独立环境。</p>
+</li>
+<li>
+<p>而相关的函数对这些全局变量的操作也会改为对于<strong>tiddata块</strong>对于值的操作。</p>
+</li>
+</ul>
+<p>例如：</p>
+<div class="highlight"><pre><span class="n">_beginthreadex</span><span class="err">就是在调用</span><span class="n">CreateThread</span><span class="err">来创建线程的基础上，在线程初始化时创建线程关联的</span><span class="o">**</span><span class="n">tiddata</span><span class="err">块</span><span class="o">**</span><span class="err">，并把这些全局变量拷贝到里面。所以</span><span class="n">_beginthreadex</span><span class="err">比</span><span class="n">CreateThread</span><span class="err">要安全。</span>
+<span class="n">_endthreadex</span><span class="err">则是对应多做了清空关联数据结构的操作。</span>
+</pre></div>
+<ul>
+<li>
+<p>如果在多线程版本的C/C++ Runtime Library中，用了CreateThread来创建线程，则线程初始化时不会有<strong>tiddata块</strong>。而当函数要访问<strong>tiddata块</strong>的时候，开始会访问失败，然后会自动生成一个，并把它与线程关联起来。但在一些情况下调用CreateThread就可能出现错误。</p>
+</li>
+<li>
+<p>_beginthread比_beginthreadex、以及_endthread比_endthreadex的参数要少，少了对线程安全访问权的控制。</p>
+</li>
+</ul>
+<p>2.伪句柄</p>
+<ul>
+<li>
+<p>用GetCurrentThread和GetCurrentProcess得到句柄是自己句柄的引用，并不会使线程进程的使用计数加1，它们返回的句柄叫伪句柄。</p>
+</li>
+<li>
+<p>用CloseHandle关闭伪句柄时，会返回FALSE。</p>
+</li>
+</ul>
+<p>3.纤程</p>
+<ul>
+<li>
+<p>UNIX服务器应用程序属于单线程程序（Windows定义），但其内部仿真了多线程工作。为了方便把UNIX服务器应用程序移植到Windows，就推出了纤程。</p>
+</li>
+<li>
+<p>ConvertThreadToFiber 把线程转换为纤程。</p>
+</li>
+<li>
+<p>纤程不应该返回，返回会使线程和该线程所有的纤程都撤销。</p>
+</li>
+<li>
+<p>在单个线程里，每次只能运行一个纤程。可以用SwtichToFiber来切换纤程</p>
+</li>
+</ul>
+            
+            <section>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="http://www.goorockey.com/blog/2011/09/03/windowshe-xin-bian-cheng-du-shu-bi-ji-2-jin-cheng-zuo-ye-xian-cheng/#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'goorockeyslife';
+        var disqus_identifier = 'http://www.goorockey.com/blog/2011/09/03/windowshe-xin-bian-cheng-du-shu-bi-ji-2-jin-cheng-zuo-ye-xian-cheng/';
+    var disqus_url = 'http://www.goorockey.com/blog/2011/09/03/windowshe-xin-bian-cheng-du-shu-bi-ji-2-jin-cheng-zuo-ye-xian-cheng/';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <hr/>
+        </div>
+        <section>
+        <div class="span2" style="float:right;font-size:0.9em;">
+            <h4>Published</h4>
+            <time pubdate="pubdate" datetime="2011-09-03T00:00:00">Sep 3, 2011</time>
+            <h4>Category</h4>
+            <a class="category-link" href="http://www.goorockey.com/categories.html#windows-ref">windows</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="http://www.goorockey.com/tags.html#programming-ref">programming
+                    <span>12</span>
+</a></li>
+                <li><a href="http://www.goorockey.com/tags.html#windows-ref">windows
+                    <span>4</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+    <a href="http://github.com/goorockey" title="My Github Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-github sidebar-social-links"></i></a>
+        </div>
+        </section>
+</div>
+</article>
+                </div>
+                <div class="span1"></div>
+            </div>
+        </div>
+        <div id="push"></div>
+    </div>
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-license">本博客遵循CC协议2.5，即署名-非商业使用-相同方式共享。所有未明确注明转载来源的文章均为本博客原创文章，对于原创文章的转载请注明作者并保持原文链接，否则保留追究法律责任的权利。</li>
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a></li>
+    </ul>
+</div>
+</footer>            <script src="http://code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'goorockeyslife';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+    License : http://oncrashreboot.com/pelican-elegant -->
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8"> 
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="goorockey" />
+        <meta name="copyright" content="goorockey" />
+
+
+<meta name="keywords" content="network, vmware, 隧道, network, " />
+
+<meta property="og:title" content="用VMWare组网，实验DNS隧道 "/>
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.goorockey.com/blog/2012/03/15/yong-vmwarezu-wang-shi-yan-dnssui-dao/" />
+<meta property="og:description" content="" />
+<meta property="og:site_name" content="Goorockey's Blog" />
+<meta property="og:article:author" content="goorockey" />
+<meta property="og:article:published_time" content="2012-03-15T00:00:00" />
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用VMWare组网，实验DNS隧道 ">
+<meta name="twitter:description" content="">
+
+        <title>用VMWare组网，实验DNS隧道  · Goorockey's Blog
+</title>
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/tipuesearch/tipuesearch.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/custom.css" media="screen">
+        <link href="http://www.goorockey.com/feeds/feed.xml" type="application/atom+xml" rel="alternate" title="Goorockey's Blog - Full Atom Feed" />
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-28958629-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+    </head>
+    <body>
+        <div id="content-sans-footer">
+        <div class="navbar navbar-static-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="http://www.goorockey.com/"><span class=site-name>Goorockey's Blog</span></a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav pull-right top-menu">
+                            <li ><a href="http://www.goorockey.com">Home</a></li>
+                            <li ><a href="http://www.goorockey.com/categories.html">Categories</a></li>
+                            <li ><a href="http://www.goorockey.com/tags.html">Tags</a></li>
+                            <li ><a href="http://www.goorockey.com/archives.html">Archives</a></li>
+                            <li><form class="navbar-search" action="http://www.goorockey.com/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span1"></div>
+                <div class="span10">
+<article>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+    <h1><a href="http://www.goorockey.com/blog/2012/03/15/yong-vmwarezu-wang-shi-yan-dnssui-dao/"> 用VMWare组网，实验DNS隧道  </a></h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+    <div class="span2 table-of-content">
+        <nav>
+        <h4>Contents</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">场景</a></li>
+<li><a href="#vmware">VMWare环境模拟</a></li>
+<li><a href="#dns">DNS服务器配置</a></li>
+<li><a href="#iodine">iodine</a></li>
+<li><a href="#_2">小结</a></li>
+<li><a href="#_3">参考资料：</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="span8 article-content">
+
+            
+            
+<p>继续用VMWare来组网，这次要测试我想试很久的DNS隧道，之前碍于没有找到有独立ip的方法（当然是要免费的~~），现在用VMWare就可以了。</p>
+<p>DNS隧道是什么就不解释了。google一下DNS隧道能搜到风河、云风两个大牛相关的blog。这次我用iodine来实现DNS隧道。</p>
+<h2 id="_1">场景</h2>
+<p>现在情况是，用户只能跟外界有DNS通路，想借此进行平常的http、ftp等通信。</p>
+<p>据说平常的CMCC等开放热点，虽然http等要账号和密码，但DNS是通的，然后你懂的了。</p>
+<p>简单的拓扑图如下：</p>
+<p><img alt="" src="http://www.goorockey.com/uploads/2012/03/image_thumb2.png"/></p>
+<p>整个回路就是：</p>
+<ul>
+<li>
+<p>用户把要想跟外网进行通信的数据包用DNS协议封装</p>
+</li>
+<li>
+<p>得到的DNS包发送给DNS服务器，要求做DNS解析</p>
+</li>
+<li>
+<p>DNS服务器根据域名，解析出DNS代理的ip，并把数据包发给它</p>
+</li>
+<li>
+<p>DNS代理把数据包解封，并转发给外网的目标地址</p>
+</li>
+<li>
+<p>外网回复的数据包原路返回，这样就完成通讯了。
+ </p>
+</li>
+</ul>
+<h2 id="vmware">VMWare环境模拟</h2>
+<p>这次我用了三台机子，系统还是CentOS 6.0：</p>
+<p>主机名 角色 网卡ip</p>
+<div class="highlight"><pre><span class="n">HostA</span><span class="err">  </span> <span class="err">用户</span> <span class="mf">192.168.149.128</span> <span class="p">(</span><span class="n">Host</span><span class="o">-</span><span class="n">only</span><span class="p">)</span>
+<span class="n">HostB</span><span class="err">  </span> <span class="n">DNS</span><span class="err">代理</span> <span class="mf">192.168.126.130</span> <span class="p">(</span><span class="n">NAT</span><span class="p">)</span>
+<span class="n">HostC</span><span class="err">  </span> <span class="n">DNS</span><span class="err">服务器</span> <span class="mf">192.168.149.130</span> <span class="p">(</span><span class="n">Host</span><span class="o">-</span><span class="n">only</span><span class="p">)</span><span class="err">、</span><span class="mf">192.168.126.233</span> <span class="p">(</span><span class="n">NAT</span><span class="p">)</span>
+</pre></div>
+<p>要模拟的初始状态就是：</p>
+<div class="highlight"><pre><span class="n">HostA</span><span class="err">（用户）可以跟</span><span class="n">HostC</span><span class="err">做</span><span class="n">DNS</span><span class="err">解析，但不能访问外网</span> <span class="err">。    </span> <span class="err">（所以虚拟网卡用</span><span class="n">Host</span><span class="o">-</span><span class="n">only</span><span class="err">模式）</span>
+<span class="n">HostB</span><span class="err">（</span><span class="n">DNS</span><span class="err">代理）可以跟外网通信。           </span> <span class="err">（用</span><span class="n">NAT</span><span class="err">和</span><span class="n">Bridged</span><span class="err">都可以，这次我选用</span><span class="n">NAT</span><span class="err">）</span>
+<span class="n">HostC</span><span class="err">（</span><span class="n">DNS</span><span class="err">服务器）可以跟</span><span class="n">HostA</span><span class="err">进行</span><span class="n">DNS</span><span class="err">解析，且能跟</span><span class="n">HostB</span><span class="err">通信。  </span> <span class="err">（所以用两张网卡，为了分别跟</span><span class="n">HostA</span><span class="err">和</span><span class="n">HostB</span><span class="err">通信）</span>
+<span class="n">HostA</span><span class="err">的</span><span class="n">iptables</span><span class="err">不允许</span><span class="n">HostA</span><span class="err">和</span><span class="n">HostB</span><span class="err">之间互访</span>
+</pre></div>
+<h2 id="dns">DNS服务器配置</h2>
+<p>刚开始看教程好像很繁琐，感觉conf文件好多啊，而且配置项也多~~</p>
+<p>静下心来看，其实要实现最基本的的DNS解析很简单，主要就是修改两个文件。</p>
+<p>1.安装</p>
+<p>需要在HostC执行以下命令，安装DNS服务器所需的bind和caching-nameserver：</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">yum</span> <span class="n">install</span> <span class="err">–</span><span class="n">y</span> <span class="n">bind</span> <span class="n">bind</span><span class="o">-</span><span class="n">utils</span> <span class="n">bind</span><span class="o">-</span><span class="n">chroot</span> <span class="n">caching</span><span class="o">-</span><span class="n">nameserver</span>
+</pre></div>
+<p>2.修改named的conf文件（/etc/named.conf）</p>
+<p>添加域名goorockey.go域名的配置：</p>
+<div class="highlight"><pre><span class="n">zone</span> <span class="err">“</span><span class="n">goorockey</span><span class="p">.</span><span class="n">go</span><span class="err">”</span> <span class="n">IN</span> <span class="p">{</span>
+    <span class="n">type</span><span class="err">  </span> <span class="n">master</span><span class="p">;</span>
+    <span class="n">file</span><span class="err">     </span> <span class="err">“</span><span class="n">goorockey</span><span class="p">.</span><span class="n">go</span><span class="p">.</span><span class="n">zone</span><span class="err">”</span><span class="p">;</span>
+    <span class="n">allow</span><span class="o">-</span><span class="n">update</span> <span class="p">{</span><span class="n">none</span><span class="p">;</span> <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+<p>大概解释：</p>
+<ul>
+<li>
+<p>zone “ goorockey.go”： 指示要添加goorockey.go这个域名的正向解析。正向解析就是指域名到ip的解析，反向解析是指ip到域名的解析。例如想通过查询DNS服务器，知道192.168.0.1判定了多少域名，则在DNS服务器上配置zone “1.0.168.192.in-addr-arpa”的项。</p>
+</li>
+<li>
+<p>type master：对于goorockey.go这个域名，当前DNS服务器是它的主DNS服务器。type可以还可以使hint和slave。只有zone “.”可以配置type hint。type slave是指对于这个域名，当前DNS服务器是辅助DNS服务器，即它的DNS记录是从主服务器拷贝过来的，目的是为了达到DNS解析的分布式、负载均衡。</p>
+</li>
+<li>
+<p>file “goorockey.go.zone”：这个域名的DNS记录文件在goorockey.go.zone，文件所在目录在/etc/named.conf的options项中的directory来定义。默认是/var/named</p>
+</li>
+<li>
+<p>allow-update：定义时候允许更新</p>
+</li>
+</ul>
+<p>要注意的是，/etc/named.conf中的options项是所有域名的全局配置。默认时，有：</p>
+<ul>
+<li>
+<p><code>allow-query   {   localhost;   };</code> 意思是只允许本机做DNS查询，当然要把它注释掉。</p>
+</li>
+<li>
+<p><code>listen-port    53    {  127.0.0.1;   };</code> 意思是服务端口为53，但监听的ip是127.0.0.1，这样就不能让别的机子访问DNS解析服务了。所以可以把这句话注释掉，或者把ip改为0.0.0.0或指定ip。</p>
+</li>
+</ul>
+<p>3.编辑goorockey.go的DNS记录文件</p>
+<p>根据我们在/etc/named.conf的配置，文件是/var/named/goorockey.go.zone。</p>
+<p>创建此文件，并编辑内容为：</p>
+<div class="highlight"><pre><span class="err">@ </span> <span class="n">IN</span><span class="err"> </span><span class="n">SOA</span> <span class="n">localhost</span><span class="p">.</span><span class="err"> </span><span class="n">root</span><span class="p">.</span><span class="n">localhost</span><span class="p">.</span><span class="err"> </span><span class="p">(</span><span class="mi">20120315</span> <span class="mi">3600</span> <span class="mi">1800</span> <span class="mi">36000</span> <span class="mi">3600</span><span class="p">)</span>
+<span class="err">  </span> <span class="n">IN</span><span class="err"> </span><span class="n">NS</span><span class="err"> </span><span class="n">localhost</span><span class="p">.</span>
+<span class="n">goorockey</span><span class="p">.</span><span class="n">go</span><span class="err"> </span><span class="n">IN</span><span class="err"> </span><span class="n">A</span><span class="err"> </span><span class="mf">192.168.126.130</span>
+</pre></div>
+<p>大概解释：</p>
+<ul>
+<li>
+<p>第一行是一条SOA记录。@指代当前域名，就是/etc/named中的goorockey.go。SOA记录是域名有效性的相关属性。localhost.是主服务器的地址。root.localhost.是邮箱。主要DNS记录文件的地址都用FQDN，每个地址最后的句号“.”表示结束。如果没有句号“.”，会自动追加域名，例如没有句号的localhost会解释成”localhost.goorockey.go“。后面就是具体属性项。</p>
+</li>
+<li>
+<p>第二行开始是两个空格，第一个空格表示继续上一条的内容，这里指”@“，第二个空格就是分割@和IN的。这一行表示域名goorockey.go的域名服务器是本机。</p>
+</li>
+<li>
+<p>第三行是一条A记录，A for address。意思就是域名goorockey.go会解析成ip 192.168.126.130。可以看出，搞这么久，就是为了找到这句话。所以说A记录是DNS服务器的核心，就是它标明DNS解析的。</p>
+</li>
+</ul>
+<p>DNS记录类型还会有：</p>
+<ul>
+<li>
+<p>PTR用在反向解析</p>
+</li>
+<li>
+<p>MX用在邮件服务器</p>
+</li>
+<li>
+<p>TXT就是纯文本，对DNS服务器做标注</p>
+</li>
+</ul>
+<p>4.运行DNS服务</p>
+<p>在HostC执行： <code>$ service  named   start</code> 或者 <code>$ /etc/init.d/named start</code>,这就可以运行DNS服务了。</p>
+<p>对HostC的/etc/resolv.conf添加 <code>nameserver 127.0.0.1</code></p>
+<p>则在HostC用nslookup能成功返回DNS信息：</p>
+<p><img alt="" src="http://www.goorockey.com/uploads/2012/03/20594453_thumb.png"/></p>
+<p>但还要配置iptables，使其他机子可以访问DNS服务的端口。</p>
+<p>对于默认的53端口，在HostC运行：</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">iptables</span> <span class="err">–</span><span class="n">I</span> <span class="n">INPUT</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">53</span><span class="err"> </span><span class="o">-</span><span class="n">j</span> <span class="n">ACCEPT</span>
+<span class="err">$</span> <span class="n">iptables</span> <span class="err">–</span><span class="n">I</span> <span class="n">INPUT</span> <span class="o">-</span><span class="n">p</span> <span class="n">udp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">53</span><span class="err"> </span><span class="o">-</span><span class="n">j</span> <span class="n">ACCEPT</span>
+</pre></div>
+<p>要解释一下的是，DNS包有可能以tcp或者udp方式传输。一般首选是udp方式。但因为udp包长度只能是512字节，也不能分包，所以如果当DNS包长度大于512时，就会选择tcp方式。所以这里要对tcp和udp都设置ACCEPT。</p>
+<p>在HostA和HostB的/etc/resolv.conf添加HostA的ip后，就能正确解析goorockey.go了。</p>
+<h2 id="iodine">iodine</h2>
+<p>iodine是外国人写的开源DNS隧道工具，有linux版、windows版和Mac版的。教程看它的ReadMe或者HowToSetup都比较清楚。</p>
+<p>下载并安装对应自己版本的iodine后就能使用了。</p>
+<p>在DNS隧道的服务器端(HostB)，先执行：</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">iodined</span><span class="err"> </span><span class="o">-</span><span class="n">f</span> <span class="mf">10.0.0.1</span> <span class="n">goorockey</span><span class="p">.</span><span class="n">go</span>
+</pre></div>
+<p>输入密码后，服务端就运行了。注意服务端运行的是iodined，有”d“。</p>
+<p>在客户端（HostA)，执行：</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">iodine</span><span class="err"> </span><span class="o">-</span><span class="n">f</span><span class="err"> </span><span class="o">-</span><span class="n">c</span><span class="err"> </span><span class="mf">192.168.126.130</span> <span class="n">goorockey</span><span class="p">.</span><span class="n">go</span>
+</pre></div>
+<p>其中192.168.126.130是服务端（HostB）的ip。</p>
+<p>然后还要配置一下，HostA，HostB，HostC的iptables，使它们的DNS包可以通过就可以了。</p>
+<p>这时候，HostA的虚拟网卡ip是10.0.0.2，HostB的虚拟网卡ip是10.0.0.1。两台机子已经建立了VPN。</p>
+<p>本来两台不能互访的机子就可以访问了。</p>
+<p>例如在HostA就可以ssh HostB了 ：</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">ssh</span> <span class="mf">10.0.0.1</span>
+</pre></div>
+<p>然后就可以用ssh隧道过去来做代理了~~</p>
+<h2 id="_2">小结</h2>
+<p>那时候看到DNS隧道，真是非常的兴奋，感觉太爽、太妙了。其实协议都可以这样做隧道，只是那时候没有意识到而已。</p>
+<p>之后还继续想实验一下ICMP隧道，看一下iodine的代码。O(∩_∩)O哈哈~</p>
+<h2 id="_3">参考资料：</h2>
+<ul>
+<li>
+<p>【风河的博文】<a href="http://www.nsbeta.info/archives/96">http://www.nsbeta.info/archives/96</a></p>
+</li>
+<li>
+<p>【云风的博文】<a href="http://blog.codingnow.com/2011/06/dns_tunnel.html">http://blog.codingnow.com/2011/06/dns_tunnel.html</a></p>
+</li>
+<li>
+<p>【iodine】<a href="http://code.kryo.se/iodine/">http://code.kryo.se/iodine/</a></p>
+</li>
+</ul>
+            
+            <section>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="http://www.goorockey.com/blog/2012/03/15/yong-vmwarezu-wang-shi-yan-dnssui-dao/#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'goorockeyslife';
+        var disqus_identifier = 'http://www.goorockey.com/blog/2012/03/15/yong-vmwarezu-wang-shi-yan-dnssui-dao/';
+    var disqus_url = 'http://www.goorockey.com/blog/2012/03/15/yong-vmwarezu-wang-shi-yan-dnssui-dao/';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <hr/>
+        </div>
+        <section>
+        <div class="span2" style="float:right;font-size:0.9em;">
+            <h4>Published</h4>
+            <time pubdate="pubdate" datetime="2012-03-15T00:00:00">Mar 15, 2012</time>
+            <h4>Category</h4>
+            <a class="category-link" href="http://www.goorockey.com/categories.html#network-ref">network</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="http://www.goorockey.com/tags.html#network-ref">network
+                    <span>4</span>
+</a></li>
+                <li><a href="http://www.goorockey.com/tags.html#sui-dao-ref">隧道
+                    <span>1</span>
+</a></li>
+                <li><a href="http://www.goorockey.com/tags.html#vmware-ref">vmware
+                    <span>2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+    <a href="http://github.com/goorockey" title="My Github Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-github sidebar-social-links"></i></a>
+        </div>
+        </section>
+</div>
+</article>
+                </div>
+                <div class="span1"></div>
+            </div>
+        </div>
+        <div id="push"></div>
+    </div>
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-license">本博客遵循CC协议2.5，即署名-非商业使用-相同方式共享。所有未明确注明转载来源的文章均为本博客原创文章，对于原创文章的转载请注明作者并保持原文链接，否则保留追究法律责任的权利。</li>
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a></li>
+    </ul>
+</div>
+</footer>            <script src="http://code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'goorockeyslife';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+    License : http://oncrashreboot.com/pelican-elegant -->
+</html>

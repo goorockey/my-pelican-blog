@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Goorockey's Blog</title><link href="http://www.goorockey.com/" rel="alternate"></link><link href="http://www.goorockey.com/feeds/cpp.atom.xml" rel="self"></link><id>http://www.goorockey.com/</id><updated>2011-08-02T00:00:00+08:00</updated><entry><title>不能同时用static和const修饰一个成员函数</title><link href="http://www.goorockey.com/blog/2011/08/02/bu-neng-tong-shi-yong-statiche-constxiu-shi-ge-cheng-yuan-han-shu/" rel="alternate"></link><updated>2011-08-02T00:00:00+08:00</updated><author><name>goorockey</name></author><id>tag:www.goorockey.com,2011-08-02:blog/2011/08/02/bu-neng-tong-shi-yong-statiche-constxiu-shi-ge-cheng-yuan-han-shu/</id><summary type="html">
+&lt;p&gt;1.普通的成员函数 &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;编译器会自动为其添加一个&lt;code&gt;this指针&lt;/code&gt;作为入参 &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;该成员函数能修改成员变量&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;2.在成员函数后面加&lt;code&gt;const&lt;/code&gt;(注意是后面！) &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;编译器会自动为其添加一个&lt;code&gt;const *this指针&lt;/code&gt;作为入参 &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;该成员函数不能修改成员变量&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;3.成员函数加&lt;code&gt;static&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;编译器不会加&lt;code&gt;this指针&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;该成员函数不能直接访问成员变量，只能访问静态成员变量&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以在成员函数加&lt;code&gt;static&lt;/code&gt;和后面加&lt;code&gt;const&lt;/code&gt;是矛盾的，即不能同时这样修饰一个成员函数.&lt;/p&gt;</summary><category term="cpp"></category><category term="programming"></category></entry><entry><title>STL中用copy和ostream_iterator输出一个数组</title><link href="http://www.goorockey.com/blog/2011/08/02/stlzhong-yong-copyhe-ostream_iteratorshu-chu-ge-shu-zu/" rel="alternate"></link><updated>2011-08-02T00:00:00+08:00</updated><author><name>goorockey</name></author><id>tag:www.goorockey.com,2011-08-02:blog/2011/08/02/stlzhong-yong-copyhe-ostream_iteratorshu-chu-ge-shu-zu/</id><summary type="html">
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="vi"&gt;#include&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;iostream&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="vi"&gt;#include&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nb"&gt;iterator&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="vi"&gt;#include&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;algorithm&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+
+&lt;span class="nx"&gt;int&lt;/span&gt; &lt;span class="nx"&gt;a&lt;/span&gt;&lt;span class="err"&gt;[&lt;/span&gt;&lt;span class="cp"&gt;]&lt;/span&gt; = { 335, 33, 98, 39, 54, 24, 3 };
+int nSize = sizeof(a) / sizeof(a&lt;span class="cp"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="cp"&gt;]&lt;/span&gt;);
+
+// 输出数组a到标准输出，同时每个元素都以空格为结束（最后一个元素后面也会有空格）
+std::copy(a, a + nSize, std::ostream_iterator&lt;span class="nt"&gt;&amp;lt;int&amp;gt;&lt;/span&gt;(std::cout, " "));
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;结果：335 33 98 39 54 24 3&lt;/p&gt;
+&lt;p&gt;一个字：妙！！(^0^)/ &lt;/p&gt;</summary><category term="cpp"></category><category term="stl"></category></entry></feed>

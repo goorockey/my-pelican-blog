@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8"> 
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="goorockey" />
+        <meta name="copyright" content="goorockey" />
+
+
+<meta name="keywords" content="programming, 面试, programming, " />
+
+<meta property="og:title" content="面试趣题 "/>
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.goorockey.com/blog/2011/08/24/mian-shi-qu-ti/" />
+<meta property="og:description" content="" />
+<meta property="og:site_name" content="Goorockey's Blog" />
+<meta property="og:article:author" content="goorockey" />
+<meta property="og:article:published_time" content="2011-08-24T00:00:00" />
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="面试趣题 ">
+<meta name="twitter:description" content="">
+
+        <title>面试趣题  · Goorockey's Blog
+</title>
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/tipuesearch/tipuesearch.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/custom.css" media="screen">
+        <link href="http://www.goorockey.com/feeds/feed.xml" type="application/atom+xml" rel="alternate" title="Goorockey's Blog - Full Atom Feed" />
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-28958629-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+    </head>
+    <body>
+        <div id="content-sans-footer">
+        <div class="navbar navbar-static-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="http://www.goorockey.com/"><span class=site-name>Goorockey's Blog</span></a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav pull-right top-menu">
+                            <li ><a href="http://www.goorockey.com">Home</a></li>
+                            <li ><a href="http://www.goorockey.com/categories.html">Categories</a></li>
+                            <li ><a href="http://www.goorockey.com/tags.html">Tags</a></li>
+                            <li ><a href="http://www.goorockey.com/archives.html">Archives</a></li>
+                            <li><form class="navbar-search" action="http://www.goorockey.com/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span1"></div>
+                <div class="span10">
+<article>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+    <h1><a href="http://www.goorockey.com/blog/2011/08/24/mian-shi-qu-ti/"> 面试趣题  </a></h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+    <div class="span2 table-of-content">
+        <nav>
+        <h4>Contents</h4>
+        <div class="toc">
+<ul>
+<li><a href="#_1">题一、有一个整数数组，请求出两两之差绝对值最小的值</a></li>
+<li><a href="#n">题二、平面上N个点，每两个点都确定一条直线，求出斜率最大的那条直线所通过的两个点（斜率不存在的情况不考虑）</a></li>
+<li><a href="#f2ff">题三、一棵排序二叉树，令 f=(最大值+最小值)/2，设计一个算法，找出距离f值最近、大于f值的结点</a></li>
+<li><a href="#_2">题四、找出两个字符串中最大公共子字符串</a></li>
+<li><a href="#_3">题五、检查单向链表中是否有环</a></li>
+<li><a href="#_4">推广一：有环单向链表中环的节点数</a></li>
+<li><a href="#_5">推广二、找到有环单向链表中环首节点</a></li>
+<li><a href="#_6">推广三、破坏有环单向链表的环</a></li>
+<li><a href="#_7">题五、找到有序链表的中位值</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="span8 article-content">
+
+            
+            
+<h3 id="_1">题一、有一个整数数组，请求出两两之差绝对值最小的值</h3>
+<p>方法：先排序，再找差值最小的点对。</p>
+<p>效率：时间复杂度O(nlogn)</p>
+<h3 id="n">题二、平面上N个点，每两个点都确定一条直线，求出斜率最大的那条直线所通过的两个点（斜率不存在的情况不考虑）</h3>
+<p>方法：根据x排序，用图解枚举所有情况，能证明斜率最大的两点肯定是相邻的两点。</p>
+<p>效率：时间复杂度O(nlogn)</p>
+<h3 id="f2ff">题三、一棵排序二叉树，令 f=(最大值+最小值)/2，设计一个算法，找出距离f值最近、大于f值的结点</h3>
+<p>方法：把f插入，中序排序</p>
+<p>效率：时间复杂度O(logn)</p>
+<!--more-->
+<h3 id="_2">题四、找出两个字符串中最大公共子字符串</h3>
+<p>如"abccade","dgcadde"的最大子串为"cad"</p>
+<p><em>方法一：</em></p>
+<p>从字符串一中遍历子串，并在字符串二中匹配。时间复杂度为O(n^3)。</p>
+<p><em>方法二：</em></p>
+<p>矩阵法：用矩阵表示两字符串，横竖字符相同的格置1，则在45度方向连续1最多的就是所求，时间复杂度O(n^2) 。</p>
+<h3 id="_3">题五、检查单向链表中是否有环</h3>
+<p>这算是经典的面试题了，记录一下好的解法和推广。</p>
+<p><em>方法一：</em></p>
+<p>操作：把链表反向，当游标指针回到首节点时表示有环，否则无环。</p>
+<p>解释：如果有环，把链表反向后，游标指针会从环内回到环外，最后回到首节点。</p>
+<p>效率：时间复杂度O(n)，空间复杂度O(1)。</p>
+<p>不足：破坏原链表的结构，需要再遍历一次链表来恢复链表结构。</p>
+<p><em>方法二:</em></p>
+<p>操作：</p>
+<p>两个游标指针,一个慢指针每次移动一个节点，一个快指针每次移动两个节点。如果在快指针遍历到链表结尾前遇到慢指针，则链表有环，否则无环。</p>
+<p>解释：</p>
+<p>如果有环，当慢指针刚进入环时，设快指针与慢指针的距离为n（距离指慢指针不动是，快指针要经过几次节点达到慢指针），由于快指针每次都追上慢指针一个节点，则两者经过n次后总会相遇。</p>
+<p>效率：时间复杂度O(n)， 空间复杂度O(1)。</p>
+<p><script src="https://gist.github.com/goorockey/3712175.js"></script></p>
+<h3 id="_4">推广一：有环单向链表中环的节点数</h3>
+<p>操作：</p>
+<p>还是用快慢指针，当快慢指针在环内相遇后，两指针继续移动，并对慢指针移动的节点计数。当两指针再次相遇时，计数的结果就是环的节点数。</p>
+<p>解释：</p>
+<p>还是题一中的思想。设环的节点数为n，当两指针第一次相遇时，可看做两指针的距离为n，则再慢指针再经过n个节点后，两指针会再次相遇，所以慢指针移动的节点数就是环的节点数。</p>
+<p><script src="https://gist.github.com/goorockey/3712217.js"></script></p>
+<h3 id="_5">推广二、找到有环单向链表中环首节点</h3>
+<p>如以下有环单向链表：</p>
+<div class="highlight"><pre><span class="mi">1</span><span class="o">=&gt;</span><span class="mi">2</span><span class="o">=&gt;</span><span class="mi">3</span><span class="o">=&gt;</span><span class="mi">4</span><span class="o">=&gt;</span><span class="mi">5</span><span class="o">=&gt;</span><span class="mi">6</span><span class="o">=&gt;</span><span class="mi">7</span><span class="o">=&gt;</span><span class="mi">9</span><span class="o">=&gt;</span><span class="mi">4</span>
+</pre></div>
+<p>即第9节点的next指针指向第4节点，则环的首节点为第4节点</p>
+<p>操作：</p>
+<div class="highlight"><pre><span class="err">先计算环的节点数</span><span class="n">n</span><span class="err">。</span>
+<span class="err">两个前后指针，前指针先移动</span><span class="n">n</span><span class="err">个节点，然后两指针一齐移动，每次都只移动一个的节点。</span>
+<span class="err">当两指针相遇时，两指针指向的节点就是所求的环首节点。</span>
+</pre></div>
+<p>解释：因为开始两指针相距n个节点，当后指针刚进入环时，肯定会与前指针在环的首节点相遇。</p>
+<h3 id="_6">推广三、破坏有环单向链表的环</h3>
+<p>操作：</p>
+<p>在上面的基础上，当找到了环首节点和环内节点数n后，只要从环首节点移动n到达环的尾节点，修改环尾节点的next指针即可。</p>
+<p><script src="https://gist.github.com/goorockey/3712226.js"></script></p>
+<h3 id="_7">题五、找到有序链表的中位值</h3>
+<p>常规方法：遍历一次链表得到链表长度length，再遍历一次链表到length/2的位置即为中位值</p>
+<p>更好的方法：用两个指针p1、p2，p1每次走两步，p2每次走一步，等到p1到链表尾时，p2所指即为中位值</p>
+<p><script src="https://gist.github.com/goorockey/3824662.js"></script></p>
+            
+            <section>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="http://www.goorockey.com/blog/2011/08/24/mian-shi-qu-ti/#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'goorockeyslife';
+        var disqus_identifier = 'http://www.goorockey.com/blog/2011/08/24/mian-shi-qu-ti/';
+    var disqus_url = 'http://www.goorockey.com/blog/2011/08/24/mian-shi-qu-ti/';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <hr/>
+        </div>
+        <section>
+        <div class="span2" style="float:right;font-size:0.9em;">
+            <h4>Published</h4>
+            <time pubdate="pubdate" datetime="2011-08-24T00:00:00">Aug 24, 2011</time>
+            <h4>Category</h4>
+            <a class="category-link" href="http://www.goorockey.com/categories.html#programming-ref">programming</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="http://www.goorockey.com/tags.html#mian-shi-ref">面试
+                    <span>1</span>
+</a></li>
+                <li><a href="http://www.goorockey.com/tags.html#programming-ref">programming
+                    <span>12</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+    <a href="http://github.com/goorockey" title="My Github Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-github sidebar-social-links"></i></a>
+        </div>
+        </section>
+</div>
+</article>
+                </div>
+                <div class="span1"></div>
+            </div>
+        </div>
+        <div id="push"></div>
+    </div>
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-license">本博客遵循CC协议2.5，即署名-非商业使用-相同方式共享。所有未明确注明转载来源的文章均为本博客原创文章，对于原创文章的转载请注明作者并保持原文链接，否则保留追究法律责任的权利。</li>
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a></li>
+    </ul>
+</div>
+</footer>            <script src="http://code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'goorockeyslife';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+    License : http://oncrashreboot.com/pelican-elegant -->
+</html>
