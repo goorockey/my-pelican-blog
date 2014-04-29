@@ -55,7 +55,7 @@ PLUGINS = (
             'extract_toc',
             'tipue_search',
             'summary',
-            'cjk-auto-spacing',
+            'neighbors',
           )
 
 # Social widget
@@ -91,7 +91,7 @@ EXTRA_PATH_METADATA = {
         'extra/CNAME': {'path': 'CNAME'},
         }
 
-DISQUS_SITENAME = u"goorockeyslife"  # 设置disque评论插件的帐号
+DISQUS_SITENAME = u"goorockeyslife" 
 GOOGLE_ANALYTICS = 'UA-28958629-1'
 GITHUB_URL = 'http://github.com/goorockey'
 
