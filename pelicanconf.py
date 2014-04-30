@@ -30,9 +30,9 @@ PAGE_URL = '{slug}.html'
 PAGE_SAVE_AS = PAGE_URL
 CATEGORY_URL = '{slug}/index.html'
 CATEGORY_SAVE_AS = CATEGORY_URL
-TAG_URL = 'tags/{slug}.html'
-TAG_SAVE_AS = TAG_URL
-TAGS_SAVE_AS = 'tags/index.html'
+#TAG_URL = 'tags/{slug}.html'
+#TAG_SAVE_AS = TAG_URL
+#TAGS_SAVE_AS = 'tags/index.html'
 
 
 # Feed generation is usually not desired when developing
