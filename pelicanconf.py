@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 AUTHOR = u'goorockey'
-SITENAME = u"Goorockey's Blog"
+SITENAME = u"Goorockey's Life"
 SITEURL = 'http://www.goorockey.com'
 #SITEURL = 'http://127.0.0.1:8000'
 
