@@ -8,7 +8,7 @@ SITEURL = 'http://www.goorockey.com'
 #SITEURL = 'http://127.0.0.1:8000'
 
 # Uncomment following line if you want document-relative URLs when developing
-RELATIVE_URLS = True
+#RELATIVE_URLS = True
 
 PATH = 'content'
 THEME = 'themes/pelican-elegant'
@@ -30,9 +30,9 @@ PAGE_URL = '{slug}.html'
 PAGE_SAVE_AS = PAGE_URL
 CATEGORY_URL = '{slug}/index.html'
 CATEGORY_SAVE_AS = CATEGORY_URL
-TAG_URL = 'tag/{slug}.html'
+TAG_URL = 'tags/{slug}.html'
 TAG_SAVE_AS = TAG_URL
-TAGS_SAVE_AS = 'tag/index.html'
+TAGS_SAVE_AS = 'tags/index.html'
 
 
 # Feed generation is usually not desired when developing
