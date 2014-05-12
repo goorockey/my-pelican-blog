@@ -5,30 +5,37 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.goorockey.com/index.html</loc>
-<lastmod>2014-05-01T00:40:24-00:00</lastmod>
+<lastmod>2014-05-12T19:32:24-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.goorockey.com/archives.html</loc>
-<lastmod>2014-05-01T00:40:24-00:00</lastmod>
+<lastmod>2014-05-12T19:32:24-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.goorockey.com/tags.html</loc>
-<lastmod>2014-05-01T00:40:24-00:00</lastmod>
+<lastmod>2014-05-12T19:32:24-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.goorockey.com/categories.html</loc>
-<lastmod>2014-05-01T00:40:24-00:00</lastmod>
+<lastmod>2014-05-12T19:32:24-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.goorockey.com/blog/2014/05/12/yong-nodejsshi-xian-instapaperhui-gu-you-jian-zi-dong-fa-song/</loc>
+<lastmod>2014-05-12T00:00:00-00:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
 </url>
 
 <url>
@@ -60,7 +67,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.goorockey.com/blog/2012/10/21/wan-xia-hadoop/</loc>
+<loc>http://www.goorockey.com/blog/2012/10/21/wan-yi-xia-hadoop/</loc>
 <lastmod>2012-10-21T23:47:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.7</priority>
@@ -228,14 +235,14 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.goorockey.com/blog/2011/08/02/bu-neng-tong-shi-yong-statiche-constxiu-shi-ge-cheng-yuan-han-shu/</loc>
+<loc>http://www.goorockey.com/blog/2011/08/02/bu-neng-tong-shi-yong-statiche-constxiu-shi-yi-ge-cheng-yuan-han-shu/</loc>
 <lastmod>2011-08-02T00:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.7</priority>
 </url>
 
 <url>
-<loc>http://www.goorockey.com/blog/2011/08/02/stlzhong-yong-copyhe-ostream_iteratorshu-chu-ge-shu-zu/</loc>
+<loc>http://www.goorockey.com/blog/2011/08/02/stlzhong-yong-copyhe-ostream_iteratorshu-chu-yi-ge-shu-zu/</loc>
 <lastmod>2011-08-02T00:00:00-00:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.7</priority>
@@ -256,7 +263,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.goorockey.com/category/windows.html</loc>
+<loc>http://www.goorockey.com/windows/index.html</loc>
 <lastmod>2011-09-05T00:00:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
@@ -270,14 +277,14 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.goorockey.com/category/programming.html</loc>
-<lastmod>2014-04-21T10:41:00-00:00</lastmod>
+<loc>http://www.goorockey.com/programming/index.html</loc>
+<lastmod>2014-05-12T00:00:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://www.goorockey.com/category/others.html</loc>
+<loc>http://www.goorockey.com/others/index.html</loc>
 <lastmod>2013-09-08T01:18:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
@@ -298,28 +305,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>http://www.goorockey.com/category/linux.html</loc>
+<loc>http://www.goorockey.com/linux/index.html</loc>
 <lastmod>2012-10-10T23:26:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://www.goorockey.com/category/hadoop.html</loc>
+<loc>http://www.goorockey.com/hadoop/index.html</loc>
 <lastmod>2012-10-21T23:47:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://www.goorockey.com/category/cpp.html</loc>
+<loc>http://www.goorockey.com/cpp/index.html</loc>
 <lastmod>2011-08-02T00:00:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>http://www.goorockey.com/category/blog.html</loc>
+<loc>http://www.goorockey.com/blog/index.html</loc>
 <lastmod>2012-09-09T20:53:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
@@ -572,7 +579,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.goorockey.com/author/goorockey.html</loc>
-<lastmod>2014-04-21T10:41:00-00:00</lastmod>
+<lastmod>2014-05-12T00:00:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
