@@ -8,7 +8,7 @@ SITEURL = 'http://www.goorockey.com'
 #SITEURL = 'http://127.0.0.1:8000'
 
 # Uncomment following line if you want document-relative URLs when developing
-#RELATIVE_URLS = True
+RELATIVE_URLS = True
 
 PATH = 'content'
 THEME = 'themes/pelican-elegant'
@@ -16,7 +16,7 @@ PAGE_DIR = 'pages'
 
 TIMEZONE = 'Asia/Shanghai'
 DEFAULT_LANG = u'zh'
-LOCALE = ('zh_CN')
+LOCALE = (u'zh_CN.utf8')
 
 USE_FOLDER_AS_CATEGORY = True
 REVERSE_CATEGORY_ORDER = True
