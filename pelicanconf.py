@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- #
+# coding=utf-8
 from __future__ import unicode_literals
 
 AUTHOR = u'goorockey'
@@ -36,7 +36,7 @@ CATEGORY_SAVE_AS = CATEGORY_URL
 
 
 # Feed generation is usually not desired when developing
-FEED_ALL_ATOM = None
+FEED_ALL_ATOM = u'feeds/all.atom.xml'
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 
@@ -66,7 +66,6 @@ SOCIAL = (
 DEFAULT_PAGINATION = 6
 
 
-## 配置sitemap 插件
 SITEMAP = {
         "format": "xml",
         "priorities": {
