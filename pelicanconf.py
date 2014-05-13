@@ -23,7 +23,6 @@ REVERSE_CATEGORY_ORDER = True
 
 SUMMARY_MAX_LENGTH = 50
 
-FEED_URL = u"http://feed.goorockey.com"
 ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 PAGE_URL = '{slug}.html'
@@ -61,6 +60,7 @@ PLUGINS = (
 # Social widget
 SOCIAL = (
             ('Github', 'http://github.com/goorockey'),
+            ('RSS', 'http://feed.goorockey.com'),
          )
 
 DEFAULT_PAGINATION = 6
