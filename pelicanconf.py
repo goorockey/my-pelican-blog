@@ -84,10 +84,12 @@ STATIC_PATHS = [
         "uploads",
         "extra/robots.txt",
         "extra/CNAME",
+        "extra/favicon.ico",
         ]
 EXTRA_PATH_METADATA = {
         'extra/robots.txt': {'path': 'robots.txt'},
         'extra/CNAME': {'path': 'CNAME'},
+        'extra/favicon.ico': {'path': 'favicon.ico'},
         }
 
 DISQUS_SITENAME = u"goorockeyslife" 
