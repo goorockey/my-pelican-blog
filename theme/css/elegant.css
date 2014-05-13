@@ -51,6 +51,9 @@ hr {
 .top-menu li a {
     font-weight: bold;
 }
+.navbar-search {
+    margin:  5px;
+}
 /* Footer */
 #footer {
     border-top: 1px solid  rgba(0, 0, 0, .2);
