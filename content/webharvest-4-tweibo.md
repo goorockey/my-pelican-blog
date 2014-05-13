@@ -3,7 +3,7 @@ Author: goorockey
 Date: 2014-03-05 21:31
 Tags: programming, Web-Harvest
 Category: programming
-Summary: 
+Summary:
 
 
 [TOC]

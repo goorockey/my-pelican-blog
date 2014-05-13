@@ -1,7 +1,7 @@
 Title: 用nodejs实现Instapaper回顾邮件自动发送
 Author: goorockey
 Date: 2014-05-12
-Tag: Instapaper, nodejs, email
+Tags: Instapaper, nodejs, email
 Category: programming
 Summary:
 
