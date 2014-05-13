@@ -11,7 +11,7 @@ Summary:
 [Appfog]: http://www.appfog.com "Appfog"
 [SendGrid]: http://sendgrid.com "SendGrid"
 
-最近在搞nodejs，刚好有个点子，想实现一个对自己这个月在[Instapaper]的已读文章做回顾，通过邮件形式发到自己的邮箱，起到复习的作用。然后上周末就用了两个通宵把这搞出来了:<https://github.com/goorockey/instapaper-review>
+最近在搞nodejs，刚好有个点子，想实现一个对自己这个月在[Instapaper]的已读文章做回顾，通过邮件形式发到自己的邮箱，起到复习的作用。然后上周末就用了两个通宵把这搞出来了，代码放在[Github](https://github.com/goorockey/instapaper-review)上面。
 
 ###总的情况
 
@@ -27,9 +27,9 @@ nodejs抓网页，可以用cheerio，说比传统的JSDOM要快、要方便，�
 
 ###Appfog
 
-Appfog是我挺喜欢的一个SaaS，它是基于Cloudary提供服务的，支持语言多，部署简单。
+Appfog是我挺喜欢的一个PaaS，它是基于Cloudary提供服务的，支持语言多，部署简单。
 
-这次因为要定时发邮件，在Appfog上面要定时执行，需要部署一个standalone app(<http://blog.appfog.com/task-scheduling-support-on-appfog-with-standalone-apps/>)。
+这次因为要定时发邮件，在Appfog上面要定时执行，需要部署一个[standalone app](http://blog.appfog.com/task-scheduling-support-on-appfog-with-standalone-apps/)。
 
 nodejs这边要实现定时，要node-cron很方便就搞定了。
 
@@ -41,6 +41,6 @@ Appfog上面提供SendGrid的插件。SendGrid在全球提供发邮件服务，�
 
 用nodejs的异步回调机制开发，确实要转一下思维。平常的循环都写成递归，很函数式语言的说。
 
-中间遇到一个问题，就是Instapaper上的时间都是用moment.js或者timeago.js之类转成了XX days ago、XX months ago的语义式时间。因为我只想回顾最近这个月的文章，要做判断，所以要做逆过程，恢复成日期的。sugarjs这个模块很强大地解决了这个问题~
+中间遇到一个问题，就是Instapaper上的时间都是用moment.js或者timeago.js之类转成了XXX days ago、XXX months ago的语义式时间。因为我只想回顾最近这个月的文章，要做判断，所以要做逆过程，恢复成日期的。sugarjs这个模块很强大地解决了这个问题~
 
 
