@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Goorockey's Life</title><link>http://www.goorockey.com/</link><description></description><atom:link href="http://www.goorockey.com/feeds/goorockey.rss.xml" rel="self"></atom:link><lastBuildDate>Mon, 12 May 2014 00:00:00 +0800</lastBuildDate><item><title>用nodejs实现Instapaper回顾邮件自动发送</title><link>http://www.goorockey.com/blog/2014/05/12/yong-nodejsshi-xian-instapaperhui-gu-you-jian-zi-dong-fa-song/</link><description>
-&lt;p&gt;最近在搞nodejs，刚好有个点子，想实现一个对自己这个月在&lt;a href="http://www.instapaper.com" title="Instapaper"&gt;Instapaper&lt;/a&gt;的已读文章做回顾，通过邮件形式发到自己的邮箱，起到复习的作用。然后上周末就用了两个通宵把这搞出来了:&lt;a href="https://github.com/goorockey/instapaper-review"&gt;https://github.com/goorockey/instapaper-review&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;最近在搞nodejs，刚好有个点子，想实现一个对自己这个月在&lt;a href="http://www.instapaper.com" title="Instapaper"&gt;Instapaper&lt;/a&gt;的已读文章做回顾，通过邮件形式发到自己的邮箱，起到复习的作用。然后上周末就用了两个通宵把这搞出来了，代码放在&lt;a href="https://github.com/goorockey/instapaper-review"&gt;Github&lt;/a&gt;上面。&lt;/p&gt;
 &lt;h3 id="_1"&gt;总的情况&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;整个服务跑在&lt;a href="http://www.appfog.com" title="Appfog"&gt;Appfog&lt;/a&gt;上&lt;/li&gt;
@@ -11,14 +11,14 @@
 &lt;p&gt;Instapaper提供有API，可以获取到已读文章，但它需要填表、人工审核，感觉不容易通过，索性就自己模拟登录，抓下来算了。F12看了一下，发现Instapaper通信协议极其简单，好抓得很。&lt;/p&gt;
 &lt;p&gt;nodejs抓网页，可以用cheerio，说比传统的JSDOM要快、要方便，用着确实方便。&lt;/p&gt;
 &lt;h3 id="appfog"&gt;Appfog&lt;/h3&gt;
-&lt;p&gt;Appfog是我挺喜欢的一个SaaS，它是基于Cloudary提供服务的，支持语言多，部署简单。&lt;/p&gt;
-&lt;p&gt;这次因为要定时发邮件，在Appfog上面要定时执行，需要部署一个standalone app(&lt;a href="http://blog.appfog.com/task-scheduling-support-on-appfog-with-standalone-apps/"&gt;http://blog.appfog.com/task-scheduling-support-on-appfog-with-standalone-apps/&lt;/a&gt;)。&lt;/p&gt;
+&lt;p&gt;Appfog是我挺喜欢的一个PaaS，它是基于Cloudary提供服务的，支持语言多，部署简单。&lt;/p&gt;
+&lt;p&gt;这次因为要定时发邮件，在Appfog上面要定时执行，需要部署一个&lt;a href="http://blog.appfog.com/task-scheduling-support-on-appfog-with-standalone-apps/"&gt;standalone app&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;nodejs这边要实现定时，要node-cron很方便就搞定了。&lt;/p&gt;
 &lt;h3 id="_3"&gt;发邮件&lt;/h3&gt;
 &lt;p&gt;Appfog上面提供SendGrid的插件。SendGrid在全球提供发邮件服务，为了防止垃圾邮件，其申请时的审核挺严格的。不过在Appfog上面想用SendGrid就简单得多，把插件启动了就好了，赞！&lt;/p&gt;
 &lt;h3 id="nodejs"&gt;nodejs&lt;/h3&gt;
 &lt;p&gt;用nodejs的异步回调机制开发，确实要转一下思维。平常的循环都写成递归，很函数式语言的说。&lt;/p&gt;
-&lt;p&gt;中间遇到一个问题，就是Instapaper上的时间都是用moment.js或者timeago.js之类转成了XX days ago、XX months ago的语义式时间。因为我只想回顾最近这个月的文章，要做判断，所以要做逆过程，恢复成日期的。sugarjs这个模块很强大地解决了这个问题~&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">goorockey</dc:creator><pubDate>Mon, 12 May 2014 00:00:00 +0800</pubDate><guid>tag:www.goorockey.com,2014-05-12:blog/2014/05/12/yong-nodejsshi-xian-instapaperhui-gu-you-jian-zi-dong-fa-song/</guid><category>Instapaper</category><category>nodejs</category><category>email</category></item><item><title>用wxWidgets做移植的总结</title><link>http://www.goorockey.com/blog/2014/04/21/yong-wxwidgetszuo-yi-zhi-de-zong-jie/</link><description>
+&lt;p&gt;中间遇到一个问题，就是Instapaper上的时间都是用moment.js或者timeago.js之类转成了XXX days ago、XXX months ago的语义式时间。因为我只想回顾最近这个月的文章，要做判断，所以要做逆过程，恢复成日期的。sugarjs这个模块很强大地解决了这个问题~&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">goorockey</dc:creator><pubDate>Mon, 12 May 2014 00:00:00 +0800</pubDate><guid>tag:www.goorockey.com,2014-05-12:blog/2014/05/12/yong-nodejsshi-xian-instapaperhui-gu-you-jian-zi-dong-fa-song/</guid><category>Instapaper</category><category>nodejs</category><category>email</category></item><item><title>用wxWidgets做移植的总结</title><link>http://www.goorockey.com/blog/2014/04/21/yong-wxwidgetszuo-yi-zhi-de-zong-jie/</link><description>
 &lt;p&gt;这几个月做的项目是把一个承载在MFC的软件从Windows移植到Mac，现在进入最后验收阶段了。当时网上调研了一下，决定用&lt;a href="http://www.wxwidgets.org" title="wxWidgets"&gt;wxWidgets&lt;/a&gt;这个跨平台的开源库来帮助移植。总的来说，只要把原软件对Windows API的调用都改为对wxWidgets的调用，基本就完成了移植。但基于wxWidgets和MFC一些设计上的差异和原软件特殊的功能，还不是简单的全局替换就能了事的，甚至还得改wxWidgets的源码。&lt;/p&gt;
 &lt;p&gt;wxWidgets库在总的结构上跟MFC相似，比如消息响应、相关类的命名。它现在已经出到了3.0，总体还是比较成熟了，但还是好些不完善的地方，这个在看它源码的时候就会发现挺多TODO comment。不过它的官方论坛和stackoverflow上相关问题还是挺活跃的，在上面提问很快就能得到一些资深程序员的答复。有一次我误以为发现了它的一个bug（其实是我理解错了），在上面提问，回复的人不仅有文字的讲解，还附上了自己写的测试用例，让我真心赞叹对方好负责任啊。&lt;/p&gt;
 &lt;p&gt;现在总结一些项目移植过程中遇到的问题吧。&lt;/p&gt;
