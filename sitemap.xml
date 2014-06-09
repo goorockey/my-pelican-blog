@@ -5,30 +5,37 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.goorockey.com/index.html</loc>
-<lastmod>2014-05-26T12:34:09-00:00</lastmod>
+<lastmod>2014-06-09T15:02:04-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.goorockey.com/archives.html</loc>
-<lastmod>2014-05-26T12:34:09-00:00</lastmod>
+<lastmod>2014-06-09T15:02:04-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.goorockey.com/tags.html</loc>
-<lastmod>2014-05-26T12:34:09-00:00</lastmod>
+<lastmod>2014-06-09T15:02:04-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>http://www.goorockey.com/categories.html</loc>
-<lastmod>2014-05-26T12:34:09-00:00</lastmod>
+<lastmod>2014-06-09T15:02:04-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.goorockey.com/blog/2014/06/09/xiao-xi-dui-lie-fang-an-cu-lue-diao-yan/</loc>
+<lastmod>2014-06-09T14:34:00-00:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
 </url>
 
 <url>
@@ -278,7 +285,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.goorockey.com/programming/index.html</loc>
-<lastmod>2014-05-12T00:00:00-00:00</lastmod>
+<lastmod>2014-06-09T14:34:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -355,7 +362,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.goorockey.com/tag/nodejs.html</loc>
-<lastmod>2014-05-12T00:00:00-00:00</lastmod>
+<lastmod>2014-06-09T14:34:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -419,6 +426,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://www.goorockey.com/tag/octopress.html</loc>
 <lastmod>2012-09-09T20:53:00-00:00</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.goorockey.com/tag/redis.html</loc>
+<lastmod>2014-06-09T14:34:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -558,7 +572,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.goorockey.com/tag/programming.html</loc>
-<lastmod>2014-04-21T10:41:00-00:00</lastmod>
+<lastmod>2014-06-09T14:34:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -566,6 +580,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://www.goorockey.com/tag/email.html</loc>
 <lastmod>2014-05-12T00:00:00-00:00</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>http://www.goorockey.com/tag/queue.html</loc>
+<lastmod>2014-06-09T14:34:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -600,7 +621,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>http://www.goorockey.com/author/goorockey.html</loc>
-<lastmod>2014-05-12T00:00:00-00:00</lastmod>
+<lastmod>2014-06-09T14:34:00-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
