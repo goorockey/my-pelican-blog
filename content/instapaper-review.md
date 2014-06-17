@@ -39,7 +39,7 @@ Appfog上面提供SendGrid的插件。SendGrid在全球提供发邮件服务，�
 
 ###nodejs
 
-用nodejs的异步回调机制开发，确实要转一下思维。平常的循环都写成递归，很函数式语言的说。
+用nodejs的异步回调机制开发，确实要转一下思维。有时候循环还不得不写成递归，很函数式语言。
 
 中间遇到一个问题，就是Instapaper上的时间都是用moment.js或者timeago.js之类转成了XXX days ago、XXX months ago的语义式时间。因为我只想回顾最近这个月的文章，要做判断，所以要做逆过程，恢复成日期的。sugarjs这个模块很强大地解决了这个问题~
 
