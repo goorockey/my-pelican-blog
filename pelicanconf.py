@@ -92,7 +92,7 @@ EXTRA_PATH_METADATA = {
         'extra/favicon.ico': {'path': 'favicon.ico'},
         }
 
-DISQUS_SITENAME = u"goorockeyslife" 
+DISQUS_SITENAME = "goorockeyslife"
 GOOGLE_ANALYTICS = 'UA-28958629-1'
 GITHUB_URL = 'http://github.com/goorockey'
 
