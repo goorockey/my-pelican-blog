@@ -224,6 +224,7 @@ semaphore，允许指定数量的线程拥有，创建此object时可以指定�
 <p>event，不同于锁，就如它的名字是“信号”，当一个线程拥有锁的时候就会改变锁的状态以达到同步（`成功拥有mutex则使它无信号；成功拥有semaphore则使它计数减一，当计数为零，则semaphore变成无信号状态），手动设置的event的状态只有线程调用SetEvent或ResetEvent才会改变，线程则通过WaitForSingleObject等检测信号状态的函数来达到同步。</p>
 </li>
 </ul>
+            <hr/>
             
             <section>
 <div class="accordion" id="accordion2">

@@ -132,6 +132,7 @@
 <p>不要用postinstall脚本连接的方法。由于dotcloud的push，是把原有的全部删除，重新建立一份，这个脚本是把wp-content移出current目录，防止push后把wp-content覆盖了。</p>
 <p>但由于wordpress的bug（其他应用不确定），一些插件会出现路径的错误。例子可见：<a href="http://blog.yangtse.me/2011/10/wordpress-dotcloud-habari-error/">http://blog.yangtse.me/2011/10/wordpress-dotcloud-habari-error/</a></p>
 <p>dotcloud的push我除了第一次上传代码用过，之后都是直接用ssh控制的。所以我就干脆不用postinstall脚本了。</p>
+            <hr/>
             
             <section>
 <div class="accordion" id="accordion2">
