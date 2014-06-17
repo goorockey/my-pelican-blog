@@ -8,23 +8,23 @@
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;code&gt;rabbitMQ&lt;/code&gt;： 之前在学erlang的时候就知道rabbitMQ，它在消息或任务队列里面是主流的方案，成熟稳定。同类的还有ZeroMQ等。&lt;/p&gt;
-&lt;p&gt;优点：成熟放心。&lt;/p&gt;
-&lt;p&gt;缺点：需要开发和运维都充分掌握，学习和维护成本较redis的高。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：成熟放心。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：需要开发和运维都充分掌握，学习和维护成本较redis的高。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;code&gt;redis&lt;/code&gt;：内部的列表支持对队列的操作，其中的blpush,blpop是阻塞式的，满足消息队列的要求。&lt;/p&gt;
-&lt;p&gt;优点：使用和维护简单。自身的内存缓存特点也保证了速度。&lt;/p&gt;
-&lt;p&gt;缺点：因为不是原生设计成对消息队列的应用，有的队列操作还需要补充实现。这个有现成的库可以帮助解决，但可靠性、成熟度需要确认。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;redis&lt;/code&gt;：内部的列表支持对队列的操作，其中List的blpop是阻塞式的，满足消息队列的要求。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：使用和维护简单。自身的内存缓存特点也保证了速度。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：因为不是原生设计成对消息队列的应用，有的队列操作还需要补充实现。这个有现成的库可以帮助解决，但可靠性、成熟度需要确认。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;code&gt;celery&lt;/code&gt;：把rabbiMQ、redis、mongodb等作为后端，进一步的封装。最初是python的，现在也有nodejs版&lt;/p&gt;
-&lt;p&gt;优点：进一步的封装，可以方便把后端切换成不同的方案。python版相对比较成熟。&lt;/p&gt;
-&lt;p&gt;缺点：nodejs版还不够成熟，有点功能还不支持，比如底层现在指支持rabbitMQ，不支持redis&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：进一步的封装，可以方便把后端切换成不同的方案。python版相对比较成熟。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：nodejs版还不够成熟，有点功能还不支持，比如底层现在指支持rabbitMQ，不支持redis&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;code&gt;mongodb&lt;/code&gt;: 其实也有人用mongodb的capped collection来做队列，鉴于它在node.js的应用中广泛被使用，它也是一种选择。&lt;/p&gt;
-&lt;p&gt;优点：如果本来应用就是用mongodb，那可以一并来用&lt;/p&gt;
-&lt;p&gt;缺点：当并发量大的时候，速度不理想&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;：如果本来应用就是用mongodb，那可以一并来用&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：当并发量大的时候，速度不理想&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;我最后选择了用redis。因为系统是用node.js写的，所有用到了node的&lt;a href="https://github.com/LearnBoost/kue"&gt;kue&lt;/a&gt;库。&lt;/p&gt;</summary><category term="nodejs"></category><category term="programming"></category><category term="redis"></category><category term="queue"></category></entry><entry><title>用nodejs实现Instapaper回顾邮件自动发送</title><link href="http://www.goorockey.com/blog/2014/05/12/yong-nodejsshi-xian-instapaperhui-gu-you-jian-zi-dong-fa-song/" rel="alternate"></link><updated>2014-05-12T00:00:00+08:00</updated><author><name>goorockey</name></author><id>tag:www.goorockey.com,2014-05-12:blog/2014/05/12/yong-nodejsshi-xian-instapaperhui-gu-you-jian-zi-dong-fa-song/</id><summary type="html">
@@ -45,7 +45,7 @@
 &lt;h3 id="_3"&gt;发邮件&lt;/h3&gt;
 &lt;p&gt;Appfog上面提供SendGrid的插件。SendGrid在全球提供发邮件服务，为了防止垃圾邮件，其申请时的审核挺严格的。不过在Appfog上面想用SendGrid就简单得多，把插件启动了就好了，赞！&lt;/p&gt;
 &lt;h3 id="nodejs"&gt;nodejs&lt;/h3&gt;
-&lt;p&gt;用nodejs的异步回调机制开发，确实要转一下思维。平常的循环都写成递归，很函数式语言的说。&lt;/p&gt;
+&lt;p&gt;用nodejs的异步回调机制开发，确实要转一下思维。有时候循环还不得不写成递归，很函数式语言。&lt;/p&gt;
 &lt;p&gt;中间遇到一个问题，就是Instapaper上的时间都是用moment.js或者timeago.js之类转成了XXX days ago、XXX months ago的语义式时间。因为我只想回顾最近这个月的文章，要做判断，所以要做逆过程，恢复成日期的。sugarjs这个模块很强大地解决了这个问题~&lt;/p&gt;</summary><category term="Instapaper"></category><category term="nodejs"></category><category term="email"></category></entry><entry><title>用wxWidgets做移植的总结</title><link href="http://www.goorockey.com/blog/2014/04/21/yong-wxwidgetszuo-yi-zhi-de-zong-jie/" rel="alternate"></link><updated>2014-04-21T10:41:00+08:00</updated><author><name>goorockey</name></author><id>tag:www.goorockey.com,2014-04-21:blog/2014/04/21/yong-wxwidgetszuo-yi-zhi-de-zong-jie/</id><summary type="html">
 &lt;p&gt;这几个月做的项目是把一个承载在MFC的软件从Windows移植到Mac，现在进入最后验收阶段了。当时网上调研了一下，决定用&lt;a href="http://www.wxwidgets.org" title="wxWidgets"&gt;wxWidgets&lt;/a&gt;这个跨平台的开源库来帮助移植。总的来说，只要把原软件对Windows API的调用都改为对wxWidgets的调用，基本就完成了移植。但基于wxWidgets和MFC一些设计上的差异和原软件特殊的功能，还不是简单的全局替换就能了事的，甚至还得改wxWidgets的源码。&lt;/p&gt;
 &lt;p&gt;wxWidgets库在总的结构上跟MFC相似，比如消息响应、相关类的命名。它现在已经出到了3.0，总体还是比较成熟了，但还是好些不完善的地方，这个在看它源码的时候就会发现挺多TODO comment。不过它的官方论坛和stackoverflow上相关问题还是挺活跃的，在上面提问很快就能得到一些资深程序员的答复。有一次我误以为发现了它的一个bug（其实是我理解错了），在上面提问，回复的人不仅有文字的讲解，还附上了自己写的测试用例，让我真心赞叹对方好负责任啊。&lt;/p&gt;
