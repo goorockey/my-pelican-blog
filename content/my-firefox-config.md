@@ -14,7 +14,7 @@ Summary:
 
 好久好久没有更新blog了，markdown怎么用都忘了。。写blog总结还是很有用的。今天写一下答应过某人写自己firefox的状况。
 
-##使用感受
+###使用感受
 
 主流的浏览器都用过，坚持用firefox的原因主要是因为[vimperator]，纯键盘地上网很cool很快捷，而且我用的时候会把地址栏、add-on bar等等都去掉，最大化可视范围。 
 虽然现在firefox在内存、响应速度上还是比不上chrome，但谁叫chrome的vim化插件不好用呢～
@@ -23,7 +23,7 @@ Summary:
 
 <!-- more -->
 
-##插件
+###插件
 
 装插件折腾自己的firefox是必须的。当我看到有的人用firefox基本就是原装的，我都觉得他不适合用firefox，倒不如用另外国产标配好的浏览器让自己用得舒服一点。
 
@@ -58,19 +58,19 @@ Summary:
 - **wiznote web clipper** 为知插件
 
 
-##greasemonkey插件
+###greasemonkey插件
 
 - **新浪微博V5 还我漂漂版** 取代weibo_wc
 - **HTTP-to-HTTPS redirector** 本来是用插件版的**http everywhere**和**https finder**的，但可惜前者不能在firefox sync同步，后者发现有时候转不了
 
 
-## 其他
+### 其他
 
 - 主页设成空白页，这样每次打开都是自己主动获取信息，而不会在“自己以为有用的网站“上浪费时间和精力
 - autoproxy+[greatagent]，配合https，科学上网
 
 
-##更新 2014.07.03
+###更新 2014.07.03
 
 firefox29更新界面之后，地址栏默认就不能去掉，虽然可以用**classic theme restorer**来回复以前的界面。现在没用vimperator，改用它的分支**Pentadactyl**。它更新比vimperator要频繁，它默认就能把地址栏去掉。
 
