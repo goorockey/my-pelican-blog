@@ -84,12 +84,12 @@
 &lt;p&gt;配置文件如下&lt;/p&gt;
 &lt;p&gt;&lt;script src="https://gist.github.com/goorockey/9368146.js"&gt;&lt;/script&gt;&lt;/p&gt;</summary><category term="programming"></category><category term="Web-Harvest"></category></entry><entry><title>我的firefox</title><link href="http://www.goorockey.com/blog/2013/09/08/wo-de-firefox/" rel="alternate"></link><updated>2013-09-08T01:18:00+08:00</updated><author><name>goorockey</name></author><id>tag:www.goorockey.com,2013-09-08:blog/2013/09/08/wo-de-firefox/</id><summary type="html">
 &lt;p&gt;好久好久没有更新blog了，markdown怎么用都忘了。。写blog总结还是很有用的。今天写一下答应过某人写自己firefox的状况。&lt;/p&gt;
-&lt;h2 id="_1"&gt;使用感受&lt;/h2&gt;
+&lt;h3 id="_1"&gt;使用感受&lt;/h3&gt;
 &lt;p&gt;主流的浏览器都用过，坚持用firefox的原因主要是因为&lt;a href="http://www.vimperator.org" title="vimperator"&gt;vimperator&lt;/a&gt;，纯键盘地上网很cool很快捷，而且我用的时候会把地址栏、add-on bar等等都去掉，最大化可视范围。 
 虽然现在firefox在内存、响应速度上还是比不上chrome，但谁叫chrome的vim化插件不好用呢～&lt;/p&gt;
 &lt;p&gt;另外用firefox写web的时候也比较方便，现在自带的“Responsive Design View"很方便地调试移动端的web体验。firefox每次升级都会有针对developer的new feature，足以看出它很重视开发者的功能。&lt;/p&gt;
 &lt;!-- more --&gt;
-&lt;h2 id="_2"&gt;插件&lt;/h2&gt;
+&lt;h3 id="_2"&gt;插件&lt;/h3&gt;
 &lt;p&gt;装插件折腾自己的firefox是必须的。当我看到有的人用firefox基本就是原装的，我都觉得他不适合用firefox，倒不如用另外国产标配好的浏览器让自己用得舒服一点。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;s&gt;&lt;strong&gt;vimperator&lt;/strong&gt;    神器&lt;/s&gt;&lt;/li&gt;
@@ -122,17 +122,17 @@
 &lt;li&gt;&lt;strong&gt;wiktionary and google translate&lt;/strong&gt; 翻译&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;wiznote web clipper&lt;/strong&gt; 为知插件&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id="greasemonkey"&gt;greasemonkey插件&lt;/h2&gt;
+&lt;h3 id="greasemonkey"&gt;greasemonkey插件&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;新浪微博V5 还我漂漂版&lt;/strong&gt; 取代weibo_wc&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;HTTP-to-HTTPS redirector&lt;/strong&gt; 本来是用插件版的&lt;strong&gt;http everywhere&lt;/strong&gt;和&lt;strong&gt;https finder&lt;/strong&gt;的，但可惜前者不能在firefox sync同步，后者发现有时候转不了&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id="_3"&gt;其他&lt;/h2&gt;
+&lt;h3 id="_3"&gt;其他&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;主页设成空白页，这样每次打开都是自己主动获取信息，而不会在“自己以为有用的网站“上浪费时间和精力&lt;/li&gt;
 &lt;li&gt;autoproxy+&lt;a href="https://code.google.com/p/greatagent" title="greatagent"&gt;greatagent&lt;/a&gt;，配合https，科学上网&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id="20140703"&gt;更新 2014.07.03&lt;/h2&gt;
+&lt;h3 id="20140703"&gt;更新 2014.07.03&lt;/h3&gt;
 &lt;p&gt;firefox29更新界面之后，地址栏默认就不能去掉，虽然可以用&lt;strong&gt;classic theme restorer&lt;/strong&gt;来回复以前的界面。现在没用vimperator，改用它的分支&lt;strong&gt;Pentadactyl&lt;/strong&gt;。它更新比vimperator要频繁，它默认就能把地址栏去掉。&lt;/p&gt;
 &lt;p&gt;vimperator的一个成员在&lt;a href="http://superuser.com/questions/261174/whats-the-difference-between-vimperator-and-pentadactyl"&gt;网上&lt;/a&gt;回答vimperator和Pentadactyl的区别:&lt;/p&gt;
 &lt;ul&gt;
