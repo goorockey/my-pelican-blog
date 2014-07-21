@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8"> 
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <meta name="author" content="goorockey" />
+        <meta name="copyright" content="goorockey" />
+
+
+<meta name="keywords" content="programming, nodejs, high concurrency, programming, " />
+
+<meta property="og:title" content="Node.js高并发配置 "/>
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.goorockey.com/blog/2014/07/20/high-concurrency-setting-for-nodejs/" />
+<meta property="og:description" content="" />
+<meta property="og:site_name" content="Goorockey's Life" />
+<meta property="og:article:author" content="goorockey" />
+<meta property="og:article:published_time" content="2014-07-20T16:00:00" />
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js高并发配置 ">
+<meta name="twitter:description" content="">
+
+        <title>Node.js高并发配置  · Goorockey's Life
+</title>
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/tipuesearch/tipuesearch.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://www.goorockey.com/theme/css/custom.css" media="screen">
+        <link href="http://www.goorockey.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Goorockey's Life - Full Atom Feed" />
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-28958629-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+    </head>
+    <body>
+        <div id="content-sans-footer">
+        <div class="navbar navbar-static-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="http://www.goorockey.com/"><span class=site-name>Goorockey's Life</span></a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav pull-right top-menu">
+                            <li ><a href="http://www.goorockey.com">Home</a></li>
+                            <li ><a href="http://www.goorockey.com/categories.html">Categories</a></li>
+                            <li ><a href="http://www.goorockey.com/tags.html">Tags</a></li>
+                            <li ><a href="http://www.goorockey.com/archives.html">Archives</a></li>
+                            <li><form class="navbar-search" action="http://www.goorockey.com/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span1"></div>
+                <div class="span10">
+<article>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+    <h1><a href="http://www.goorockey.com/blog/2014/07/20/high-concurrency-setting-for-nodejs/"> Node.js高并发配置  </a></h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+    <div class="span2 table-of-content">
+        <nav>
+        <h4>Contents</h4>
+        <div class="toc">
+<ul>
+<li><a href="#linux">linux系统配置</a></li>
+<li><a href="#nodejs">node.js</a></li>
+<li><a href="#_1">参考资料</a></li>
+</ul>
+</div>
+        </nav>
+    </div>
+    <div class="span8 article-content">
+
+            
+            
+<p>node.js的异步模型让它很擅长实现IO密集型的系统，但是测试发现，当并发真的上到几W的时候，会有处理不过来的情况。除了从整个系统的设计上改进，还需要修改一些配置。这里总结一下为了让node.js应对高并发，需要做的配置。</p>
+<h2 id="linux">linux系统配置</h2>
+<p>修改/etc/sysctl.conf，情况文件内默认的内容，写入以下项，保存后执行<code>sudo sysctl -p</code>使配置生效。注意里面的数值要根据具体情况修改。这些修改当然也适用于除node.js以为的应用。</p>
+<div class="highlight"><pre><span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">ip_local_port_range</span> <span class="o">=</span> <span class="mi">10240</span> <span class="mi">65535</span>
+<span class="n">net</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">rmem_max</span><span class="o">=</span><span class="mi">16777216</span>
+<span class="n">net</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">wmem_max</span><span class="o">=</span><span class="mi">16777216</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_rmem</span><span class="o">=</span><span class="mi">4096</span> <span class="mi">8738</span> <span class="mi">16777216</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_wmem</span><span class="o">=</span><span class="mi">4096</span> <span class="mi">8738</span> <span class="mi">16777216</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_fin_timeout</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_tw_recycle</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_tw_reuse</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_timestamps</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_window_scaling</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_sack</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">net</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">netdev_max_backlog</span> <span class="o">=</span> <span class="mi">30000</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_no_metrics_save</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">net</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">somaxconn</span> <span class="o">=</span> <span class="mi">65535</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_syncookies</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_max_orphans</span> <span class="o">=</span> <span class="mi">262144</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_max_syn_backlog</span> <span class="o">=</span> <span class="mi">819200</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_synack_retries</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_syn_retries</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">tcp_max_tw_buckets</span> <span class="o">=</span> <span class="mi">65535</span>
+</pre></div>
+<ul>
+<li>
+<p><code>net.ipv4.ip_local_port_range</code> 可用端口范围，从第一个值到第二个值。默认的"1024 4999"很容易不够。</p>
+</li>
+<li>
+<p><code>net.ipv4.tcp_tw_reuse</code> 是否让系统在安全情况下重用TIME_WAIT状态的连接。在高并发情况下，有大量的连接建立和关闭，TIME_WAIT的连接是快要关闭、但资源还没有回收的，像内存、端口都会占用着。</p>
+</li>
+<li>
+<p><code>net.ipv4.tcp_max_tw_buckets</code> 维持TIME_WAIT状态最多连接数。当超过这个值时，连接就会立刻关闭，并报错，dmesg可以看到。</p>
+</li>
+<li>
+<p><code>net.ipv4.tcp_fin_timeout</code> TIME_WAIT状态的连接回收时的等待时长。</p>
+</li>
+<li>
+<p><code>net.ipv4.tcp_max_syn_backlog</code> 最多记录接受到多少SYN。</p>
+</li>
+<li>
+<p><code>net.ipv4.tcp_rmem</code> tcp读缓存空间，三个值分别是最小、默认和最大。</p>
+</li>
+<li>
+<p><code>net.ipv4.tcp_wmem</code> tcp写缓存空间，三个值分别是最小、默认和最大。</p>
+</li>
+<li>
+<p><code>net.core.somaxconn</code> 最大连接数</p>
+</li>
+</ul>
+<p>修改/etc/security/limits.conf，提高文件句柄上限:</p>
+<div class="highlight"><pre><span class="n">soft</span> <span class="n">nofile</span> <span class="mi">65536</span>
+<span class="n">hard</span> <span class="n">nofile</span> <span class="mi">65536</span>
+</pre></div>
+<h2 id="nodejs">node.js</h2>
+<ul>
+<li>socket池</li>
+</ul>
+<p>nodejs的http模块内置socket池，默认<a href="http://nodejs.org/api/http.html#http_agent_maxsockets">最多建立5个socket</a></p>
+<div class="highlight"><pre><span class="n">require</span><span class="p">(</span><span class="err">'</span><span class="n">http</span><span class="err">'</span><span class="p">).</span><span class="n">globalAgent</span><span class="p">.</span><span class="n">maxSockets</span> <span class="o">=</span> <span class="mi">40000</span> <span class="err">#</span> <span class="err">也可以设成</span><span class="n">Infinity</span><span class="err">，无限制</span>
+<span class="n">require</span><span class="p">(</span><span class="err">'</span><span class="n">https</span><span class="err">'</span><span class="p">).</span><span class="n">globalAgent</span><span class="p">.</span><span class="n">maxSockets</span> <span class="o">=</span> <span class="mi">40000</span>
+</pre></div>
+<ul>
+<li><code>-–nouse-idle-notification</code></li>
+</ul>
+<p>nodejs会周期性地向V8发出垃圾回收请求，在并发大的时候经常这样会过多地占用CPU。可以通过启动node时加入<code>--nouse-idle-notification</code>选项，关闭这个动作。如:</p>
+<div class="highlight"><pre><span class="n">node</span> <span class="o">--</span><span class="n">nouse</span><span class="o">-</span><span class="n">idle</span><span class="o">-</span><span class="n">notification</span> <span class="n">app</span><span class="p">.</span><span class="n">js</span>
+</pre></div>
+<ul>
+<li>多进程</li>
+</ul>
+<p>nodejs虽然异步可以处理轻松地处理大量请求，但单进程单线程的模型在多核下还没有完全利用硬件资源。亲好nodejs原生的<a href="http://nodejs.org/api/cluster.html">cluster</a>可以很简单地让程序编程多进程。</p>
+<p>cluster是prefork模型的，即前面一个master负责总的接受请求，然后均匀地把请求分发给worker，每个worker是一个独立的进程。
+例如对于express的应用，在程序入口添加以下代码即可：</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="p">...</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nx">cluster</span><span class="p">.</span><span class="nx">isMaster</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// calculate number of proccesses to fork</span>
+  <span class="kd">var</span> <span class="nx">num_cpus</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'os'</span><span class="p">).</span><span class="nx">cpus</span><span class="p">().</span><span class="nx">length</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">num_processes</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">num_cpus</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+
+  <span class="nx">debug</span><span class="p">(</span><span class="s1">'Master starts with %d processes.'</span><span class="p">,</span> <span class="nx">num_processes</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">num_processes</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">cluster</span><span class="p">.</span><span class="nx">fork</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Listen for dying processes</span>
+  <span class="nx">cluster</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'exit'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">worker</span><span class="p">,</span> <span class="nx">code</span><span class="p">,</span> <span class="nx">signal</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">debug</span><span class="p">(</span><span class="s1">'A process(pid=%s) of master died (%s). Restarting...'</span><span class="p">,</span> <span class="nx">worker</span><span class="p">.</span><span class="nx">process</span><span class="p">.</span><span class="nx">pid</span><span class="p">,</span> <span class="nx">signal</span> <span class="o">||</span> <span class="nx">code</span><span class="p">);</span>
+    <span class="nx">cluster</span><span class="p">.</span><span class="nx">fork</span><span class="p">();</span>
+  <span class="p">});</span>
+
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// worker</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="p">...</span>
+</pre></div>
+<p>另外还有如<a href="https://github.com/Unitech/pm2">PM2</a>等外部工具可以让原来单进程的程序变成多进程</p>
+<h2 id="_1">参考资料</h2>
+<ul>
+<li>
+<p><a href="http://www.oschina.net/translate/optimising-nginx-node-js-and-networking-for-heavy-workloads">http://www.oschina.net/translate/optimising-nginx-node-js-and-networking-for-heavy-workloads</a></p>
+</li>
+<li>
+<p><a href="http://blog.caustik.com/2012/04/08/scaling-node-js-to-100k-concurrent-connections/">http://blog.caustik.com/2012/04/08/scaling-node-js-to-100k-concurrent-connections/</a></p>
+</li>
+<li>
+<p><a href="http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile">http://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile</a></p>
+</li>
+<li>
+<p><a href="https://rtcamp.com/tutorials/linux/sysctl-conf/">https://rtcamp.com/tutorials/linux/sysctl-conf/</a></p>
+</li>
+</ul>
+            <hr/>
+            
+            <section>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle disqus-comment-count" data-toggle="collapse" data-parent="#accordion2"
+                href="http://www.goorockey.com/blog/2014/07/20/high-concurrency-setting-for-nodejs/#disqus_thread">
+                Comments
+            </a>
+        </div>
+        <div id="disqus_thread" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="comments">
+                    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'goorockeyslife';
+        var disqus_identifier = 'http://www.goorockey.com/blog/2014/07/20/high-concurrency-setting-for-nodejs/';
+    var disqus_url = 'http://www.goorockey.com/blog/2014/07/20/high-concurrency-setting-for-nodejs/';
+
+    (function() {
+         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+            <aside>
+            <nav>
+            <ul class="articles-timeline">
+                <li class="previous-article">« <a href="http://www.goorockey.com/blog/2014/06/09/xiao-xi-dui-lie-fang-an-cu-lue-diao-yan/" title="Previous: 消息队列方案粗略调研">消息队列方案粗略调研</a></li>
+            </ul>
+            </nav>
+            </aside>
+        </div>
+        <section>
+        <div class="span2" style="float:right;font-size:0.9em;">
+            <h4>Published</h4>
+            <time pubdate="pubdate" datetime="2014-07-20T16:00:00">Jul 20, 2014</time>
+            <h4>Category</h4>
+            <a class="category-link" href="http://www.goorockey.com/categories.html#programming-ref">programming</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="http://www.goorockey.com/tags.html#high-concurrency-ref">high concurrency
+                    <span>1</span>
+</a></li>
+                <li><a href="http://www.goorockey.com/tags.html#nodejs-ref">nodejs
+                    <span>3</span>
+</a></li>
+                <li><a href="http://www.goorockey.com/tags.html#programming-ref">programming
+                    <span>14</span>
+</a></li>
+            </ul>
+<h4>Friends</h4>
+<ul class="friend-link">
+    <li>
+        <a href="http://www.dian.org.cn">Dian</a>
+    </li>
+    <li>
+        <a href="http://www.seedclass.com">SeedClass</a>
+    </li>
+    <li>
+        <a href="http://www.thankcreate.com">ThankCreate</a>
+    </li>
+</ul>
+<h4>Contact</h4>
+    <a href="http://github.com/goorockey" title="My Github Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-github sidebar-social-links"></i></a>
+    <a href="http://feed.goorockey.com" title="Subscribe in a reader" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-rss sidebar-social-links"></i></a>
+        </div>
+        </section>
+</div>
+</article>
+                </div>
+                <div class="span1"></div>
+            </div>
+        </div>
+        <div id="push"></div>
+    </div>
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-license">本博客遵循CC协议2.5，即署名-非商业使用-相同方式共享。所有未明确注明转载来源的文章均为本博客原创文章，对于原创文章的转载请注明作者并保持原文链接，否则保留追究法律责任的权利。</li>
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a></li>
+    </ul>
+</div>
+</footer>            <script src="http://code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+            <script type="text/javascript">
+var disqus_shortname = 'goorockeyslife';
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
+<script  language="javascript" type="text/javascript">
+function uncollapse() {
+    if (window.location.hash.match(/^#comment-\d+$/)) {
+        $('#disqus_thread').collapse('show');
+    }
+}
+</script>
+<script type="text/javascript" language="JavaScript">
+uncollapse();
+window.onhashchange=function(){
+    if (window.location.hash.match(/^#comment-\d+$/))
+        window.location.reload(true);
+}
+</script>
+<script>
+$('#disqus_thread').on('shown', function () {
+    var link = document.getElementsByClassName('accordion-toggle');
+    var old_innerHTML = link[0].innerHTML;
+    $(link[0]).fadeOut(500, function() {
+        $(this).text('Click here to hide comments').fadeIn(500);
+    });
+    $('#disqus_thread').on('hidden', function () {
+        $(link[0]).fadeOut(500, function() {
+            $(this).text(old_innerHTML).fadeIn(500);
+        });
+    })
+})
+</script>
+
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+    License : http://oncrashreboot.com/pelican-elegant -->
+</html>
