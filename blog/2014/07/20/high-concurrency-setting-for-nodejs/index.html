@@ -83,8 +83,10 @@
         <div class="toc">
 <ul>
 <li><a href="#linux">linux系统配置</a></li>
-<li><a href="#nodejs">node.js</a></li>
-<li><a href="#_1">参考资料</a></li>
+<li><a href="#socket">socket池</a></li>
+<li><a href="#-nouse-idle-notification">-–nouse-idle-notification</a></li>
+<li><a href="#_1">多进程</a></li>
+<li><a href="#_2">参考资料</a></li>
 </ul>
 </div>
         </nav>
@@ -94,7 +96,7 @@
             
             
 <p>node.js的异步模型让它很擅长实现IO密集型的系统，但是测试发现，当并发真的上到几W的时候，会有处理不过来的情况。除了从整个系统的设计上改进，还需要修改一些配置。这里总结一下为了让node.js应对高并发，需要做的配置。</p>
-<h2 id="linux">linux系统配置</h2>
+<h3 id="linux">linux系统配置</h3>
 <p>修改/etc/sysctl.conf，情况文件内默认的内容，写入以下项，保存后执行<code>sudo sysctl -p</code>使配置生效。注意里面的数值要根据具体情况修改。这些修改当然也适用于除node.js以为的应用。</p>
 <div class="highlight"><pre><span class="n">net</span><span class="p">.</span><span class="n">ipv4</span><span class="p">.</span><span class="n">ip_local_port_range</span> <span class="o">=</span> <span class="mi">10240</span> <span class="mi">65535</span>
 <span class="n">net</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">rmem_max</span><span class="o">=</span><span class="mi">16777216</span>
@@ -147,23 +149,16 @@
 <div class="highlight"><pre><span class="n">soft</span> <span class="n">nofile</span> <span class="mi">65536</span>
 <span class="n">hard</span> <span class="n">nofile</span> <span class="mi">65536</span>
 </pre></div>
-<h2 id="nodejs">node.js</h2>
-<ul>
-<li>socket池</li>
-</ul>
+<h3 id="socket">socket池</h3>
 <p>nodejs的http模块内置socket池，默认<a href="http://nodejs.org/api/http.html#http_agent_maxsockets">最多建立5个socket</a></p>
 <div class="highlight"><pre><span class="n">require</span><span class="p">(</span><span class="err">'</span><span class="n">http</span><span class="err">'</span><span class="p">).</span><span class="n">globalAgent</span><span class="p">.</span><span class="n">maxSockets</span> <span class="o">=</span> <span class="mi">40000</span> <span class="err">#</span> <span class="err">也可以设成</span><span class="n">Infinity</span><span class="err">，无限制</span>
 <span class="n">require</span><span class="p">(</span><span class="err">'</span><span class="n">https</span><span class="err">'</span><span class="p">).</span><span class="n">globalAgent</span><span class="p">.</span><span class="n">maxSockets</span> <span class="o">=</span> <span class="mi">40000</span>
 </pre></div>
-<ul>
-<li><code>-–nouse-idle-notification</code></li>
-</ul>
+<h3 id="-nouse-idle-notification"><code>-–nouse-idle-notification</code></h3>
 <p>nodejs会周期性地向V8发出垃圾回收请求，在并发大的时候经常这样会过多地占用CPU。可以通过启动node时加入<code>--nouse-idle-notification</code>选项，关闭这个动作。如:</p>
 <div class="highlight"><pre><span class="n">node</span> <span class="o">--</span><span class="n">nouse</span><span class="o">-</span><span class="n">idle</span><span class="o">-</span><span class="n">notification</span> <span class="n">app</span><span class="p">.</span><span class="n">js</span>
 </pre></div>
-<ul>
-<li>多进程</li>
-</ul>
+<h3 id="_1">多进程</h3>
 <p>nodejs虽然异步可以处理轻松地处理大量请求，但单进程单线程的模型在多核下还没有完全利用硬件资源。亲好nodejs原生的<a href="http://nodejs.org/api/cluster.html">cluster</a>可以很简单地让程序编程多进程。</p>
 <p>cluster是prefork模型的，即前面一个master负责总的接受请求，然后均匀地把请求分发给worker，每个worker是一个独立的进程。
 例如对于express的应用，在程序入口添加以下代码即可：</p>
@@ -194,7 +189,7 @@
 <span class="p">...</span>
 </pre></div>
 <p>另外还有如<a href="https://github.com/Unitech/pm2">PM2</a>等外部工具可以让原来单进程的程序变成多进程</p>
-<h2 id="_1">参考资料</h2>
+<h2 id="_2">参考资料</h2>
 <ul>
 <li>
 <p><a href="http://www.oschina.net/translate/optimising-nginx-node-js-and-networking-for-heavy-workloads">http://www.oschina.net/translate/optimising-nginx-node-js-and-networking-for-heavy-workloads</a></p>

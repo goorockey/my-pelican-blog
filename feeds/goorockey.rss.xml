@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Goorockey's Life</title><link>http://www.goorockey.com/</link><description></description><atom:link href="http://www.goorockey.com/feeds/goorockey.rss.xml" rel="self"></atom:link><lastBuildDate>Sun, 20 Jul 2014 16:00:00 +0800</lastBuildDate><item><title>Node.js高并发配置</title><link>http://www.goorockey.com/blog/2014/07/20/high-concurrency-setting-for-nodejs/</link><description>
 &lt;p&gt;node.js的异步模型让它很擅长实现IO密集型的系统，但是测试发现，当并发真的上到几W的时候，会有处理不过来的情况。除了从整个系统的设计上改进，还需要修改一些配置。这里总结一下为了让node.js应对高并发，需要做的配置。&lt;/p&gt;
-&lt;h2 id="linux"&gt;linux系统配置&lt;/h2&gt;
+&lt;h3 id="linux"&gt;linux系统配置&lt;/h3&gt;
 &lt;p&gt;修改/etc/sysctl.conf，情况文件内默认的内容，写入以下项，保存后执行&lt;code&gt;sudo sysctl -p&lt;/code&gt;使配置生效。注意里面的数值要根据具体情况修改。这些修改当然也适用于除node.js以为的应用。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;net&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ipv4&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ip_local_port_range&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10240&lt;/span&gt; &lt;span class="mi"&gt;65535&lt;/span&gt;
 &lt;span class="n"&gt;net&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;core&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rmem_max&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;16777216&lt;/span&gt;
@@ -54,23 +54,16 @@
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;soft&lt;/span&gt; &lt;span class="n"&gt;nofile&lt;/span&gt; &lt;span class="mi"&gt;65536&lt;/span&gt;
 &lt;span class="n"&gt;hard&lt;/span&gt; &lt;span class="n"&gt;nofile&lt;/span&gt; &lt;span class="mi"&gt;65536&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id="nodejs"&gt;node.js&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;socket池&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h3 id="socket"&gt;socket池&lt;/h3&gt;
 &lt;p&gt;nodejs的http模块内置socket池，默认&lt;a href="http://nodejs.org/api/http.html#http_agent_maxsockets"&gt;最多建立5个socket&lt;/a&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;'&lt;/span&gt;&lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="err"&gt;'&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;globalAgent&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;maxSockets&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;40000&lt;/span&gt; &lt;span class="err"&gt;#&lt;/span&gt; &lt;span class="err"&gt;也可以设成&lt;/span&gt;&lt;span class="n"&gt;Infinity&lt;/span&gt;&lt;span class="err"&gt;，无限制&lt;/span&gt;
 &lt;span class="n"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;'&lt;/span&gt;&lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="err"&gt;'&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;globalAgent&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;maxSockets&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;40000&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-–nouse-idle-notification&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h3 id="-nouse-idle-notification"&gt;&lt;code&gt;-–nouse-idle-notification&lt;/code&gt;&lt;/h3&gt;
 &lt;p&gt;nodejs会周期性地向V8发出垃圾回收请求，在并发大的时候经常这样会过多地占用CPU。可以通过启动node时加入&lt;code&gt;--nouse-idle-notification&lt;/code&gt;选项，关闭这个动作。如:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;node&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;nouse&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;idle&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;notification&lt;/span&gt; &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;js&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;多进程&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h3 id="_1"&gt;多进程&lt;/h3&gt;
 &lt;p&gt;nodejs虽然异步可以处理轻松地处理大量请求，但单进程单线程的模型在多核下还没有完全利用硬件资源。亲好nodejs原生的&lt;a href="http://nodejs.org/api/cluster.html"&gt;cluster&lt;/a&gt;可以很简单地让程序编程多进程。&lt;/p&gt;
 &lt;p&gt;cluster是prefork模型的，即前面一个master负责总的接受请求，然后均匀地把请求分发给worker，每个worker是一个独立的进程。
 例如对于express的应用，在程序入口添加以下代码即可：&lt;/p&gt;
@@ -101,7 +94,7 @@
 &lt;span class="p"&gt;...&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;另外还有如&lt;a href="https://github.com/Unitech/pm2"&gt;PM2&lt;/a&gt;等外部工具可以让原来单进程的程序变成多进程&lt;/p&gt;
-&lt;h2 id="_1"&gt;参考资料&lt;/h2&gt;
+&lt;h2 id="_2"&gt;参考资料&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;a href="http://www.oschina.net/translate/optimising-nginx-node-js-and-networking-for-heavy-workloads"&gt;http://www.oschina.net/translate/optimising-nginx-node-js-and-networking-for-heavy-workloads&lt;/a&gt;&lt;/p&gt;
