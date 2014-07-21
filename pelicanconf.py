@@ -8,7 +8,7 @@ SITEURL = 'http://www.goorockey.com'
 #SITEURL = 'http://127.0.0.1:8000'
 
 # Uncomment following line if you want document-relative URLs when developing
-RELATIVE_URLS = False
+RELATIVE_URLS = True
 
 PATH = 'content'
 THEME = 'themes/pelican-elegant'
