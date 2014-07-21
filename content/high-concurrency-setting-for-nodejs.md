@@ -64,7 +64,7 @@ nodejs的http模块内置socket池，默认[最多建立5个socket](http://nodej
     require('http').globalAgent.maxSockets = 40000 # 也可以设成Infinity，无限制
     require('https').globalAgent.maxSockets = 40000
 
-###`-–nouse-idle-notification`
+###垃圾回收
 
 nodejs会周期性地向V8发出垃圾回收请求，在并发大的时候经常这样会过多地占用CPU。可以通过启动node时加入`--nouse-idle-notification`选项，关闭这个动作。如:
 
