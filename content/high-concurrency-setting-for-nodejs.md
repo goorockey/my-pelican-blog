@@ -11,7 +11,7 @@ Summary:
 
 node.js的异步模型让它很擅长实现IO密集型的系统，但是测试发现，当并发真的上到几W的时候，会有处理不过来的情况。除了从整个系统的设计上改进，还需要修改一些配置。这里总结一下为了让node.js应对高并发，需要做的配置。
 
-##linux系统配置
+###linux系统配置
 
 修改/etc/sysctl.conf，情况文件内默认的内容，写入以下项，保存后执行`sudo sysctl -p`使配置生效。注意里面的数值要根据具体情况修改。这些修改当然也适用于除node.js以为的应用。
 
@@ -57,23 +57,20 @@ node.js的异步模型让它很擅长实现IO密集型的系统，但是测试�
     soft nofile 65536
     hard nofile 65536
 
-
-##node.js
-
-- socket池
+###socket池
 
 nodejs的http模块内置socket池，默认[最多建立5个socket](http://nodejs.org/api/http.html#http_agent_maxsockets)
 
     require('http').globalAgent.maxSockets = 40000 # 也可以设成Infinity，无限制
     require('https').globalAgent.maxSockets = 40000
 
-- `-–nouse-idle-notification`
+###`-–nouse-idle-notification`
 
 nodejs会周期性地向V8发出垃圾回收请求，在并发大的时候经常这样会过多地占用CPU。可以通过启动node时加入`--nouse-idle-notification`选项，关闭这个动作。如:
 
     node --nouse-idle-notification app.js
 
-- 多进程
+###多进程
 
 nodejs虽然异步可以处理轻松地处理大量请求，但单进程单线程的模型在多核下还没有完全利用硬件资源。亲好nodejs原生的[cluster](http://nodejs.org/api/cluster.html)可以很简单地让程序编程多进程。
 
