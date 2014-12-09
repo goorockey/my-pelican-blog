@@ -17,7 +17,7 @@
 <meta property="og:description" content="" />
 <meta property="og:site_name" content="Goorockey's Life" />
 <meta property="og:article:author" content="goorockey" />
-<meta property="og:article:published_time" content="2012-09-30T00:40:00" />
+<meta property="og:article:published_time" content="2012-09-30T00:40:00+08:00" />
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python发邮件脚本 ">
 <meta name="twitter:description" content="">
@@ -99,11 +99,11 @@
 <h2 id="_1">发邮件</h2>
 <p>由于服务器是windows系统，google得知，windows下有<a href="http://www.blat.net">blat</a>这发邮件的大杀器，所以刚开始是想用blat+批处理做的。</p>
 <p>执行<code>blat -h</code>或者看官网上的帮助，使用blat发邮件还是很简单的（所以官网特别提醒不要用blat来发SPAM。。)</p>
-<div class="highlight"><pre><span class="n">blat</span> <span class="o">&lt;</span><span class="err">邮件正文文件</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">from</span> <span class="o">&lt;</span><span class="err">发送地址</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">to</span> <span class="o">&lt;</span><span class="err">接受地址</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">subject</span> <span class="o">&lt;</span><span class="err">邮件标题</span><span class="o">&gt;</span> 
-        <span class="o">-</span><span class="n">server</span> <span class="o">&lt;</span><span class="n">smtp</span><span class="err">服务器地址</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">username</span> <span class="o">&lt;</span><span class="err">登录服务器用户名</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">password</span> <span class="o">&lt;</span><span class="err">密码</span><span class="o">&gt;</span>
+<div class="highlight"><pre>blat &lt;邮件正文文件&gt; -from &lt;发送地址&gt; -to &lt;接受地址&gt; -subject &lt;邮件标题&gt; 
+        -server &lt;smtp服务器地址&gt; -username &lt;登录服务器用户名&gt; -password &lt;密码&gt;
 
-<span class="n">blat</span> <span class="o">-</span> <span class="o">-</span><span class="n">body</span> <span class="o">&lt;</span><span class="err">邮件正文</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">from</span> <span class="o">&lt;</span><span class="err">发送地址</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">to</span> <span class="o">&lt;</span><span class="err">接受地址</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">subject</span> <span class="o">&lt;</span><span class="err">邮件标题</span><span class="o">&gt;</span> 
-        <span class="o">-</span><span class="n">server</span> <span class="o">&lt;</span><span class="n">smtp</span><span class="err">服务器地址</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">username</span> <span class="o">&lt;</span><span class="err">登录服务器用户名</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">password</span> <span class="o">&lt;</span><span class="err">密码</span><span class="o">&gt;</span>
+blat - -body &lt;邮件正文&gt; -from &lt;发送地址&gt; -to &lt;接受地址&gt; -subject &lt;邮件标题&gt; 
+        -server &lt;smtp服务器地址&gt; -username &lt;登录服务器用户名&gt; -password &lt;密码&gt;
 </pre></div>
 <p>blat还可以通过-install把参数保存到注册表。blat确实是自动发邮件的大杀器！</p>
 <p>P.S 在linux实现自动发邮件，可以用msmtp,sendmail等～</p>
@@ -120,128 +120,128 @@
 <!-- more -->
 <hr/>
 <p>python有<a href="http://docs.python.org/library/smtplib.html" title="smtplib">smtplib</a>库实现smtp发邮件，核心代码也很简单：</p>
-<div class="highlight"><pre><span class="n">import</span> <span class="n">smtplib</span>
-<span class="cp"># some code ...</span>
-<span class="n">smtp</span> <span class="o">=</span> <span class="n">smtplib</span><span class="p">.</span><span class="n">SMTP</span><span class="p">()</span>
-<span class="n">smtp</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
-<span class="n">smtp</span><span class="p">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
-<span class="n">smtp</span><span class="p">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
-<span class="n">smtp</span><span class="p">.</span><span class="n">quit</span><span class="p">()</span>
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">smtplib</span>
+<span class="c"># some code ...</span>
+<span class="n">smtp</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">()</span>
+<span class="n">smtp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+<span class="n">smtp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+<span class="n">smtp</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+<span class="n">smtp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
 </pre></div>
 <p>而用python计算相差的天数更是简单不过：</p>
-<div class="highlight"><pre><span class="n">import</span> <span class="n">datetime</span>
-<span class="cp"># some code ...</span>
-<span class="n">days</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">30</span><span class="p">)).</span><span class="n">days</span>
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="c"># some code ...</span>
+<span class="n">days</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">30</span><span class="p">))</span><span class="o">.</span><span class="n">days</span>
 </pre></div>
 <h2 id="_2">定时</h2>
 <p>定时在windows可以用计划任务实现</p>
 <p>P.S 在linux可以用cron实现</p>
 <h2 id="_3">整个代码</h2>
-<div class="highlight"><pre><span class="cp">#coding=utf-8</span>
-<span class="n">import</span> <span class="n">smtplib</span>
-<span class="n">import</span> <span class="n">datetime</span>
-<span class="n">import</span> <span class="n">sys</span>
+<div class="highlight"><pre><span class="c">#coding=utf-8</span>
+<span class="kn">import</span> <span class="nn">smtplib</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="n">from</span> <span class="n">email</span><span class="p">.</span><span class="n">mime</span><span class="p">.</span><span class="n">text</span> <span class="n">import</span> <span class="n">MIMEText</span>
-<span class="n">from</span> <span class="n">email</span><span class="p">.</span><span class="n">header</span> <span class="n">import</span> <span class="n">Header</span>
+<span class="kn">from</span> <span class="nn">email.mime.text</span> <span class="kn">import</span> <span class="n">MIMEText</span>
+<span class="kn">from</span> <span class="nn">email.header</span> <span class="kn">import</span> <span class="n">Header</span>
 
 
-<span class="n">member</span> <span class="o">=</span> <span class="p">((</span><span class="err">'</span><span class="n">member1</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">member2</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">member3</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">member4</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">member5</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">member6</span><span class="err">'</span><span class="p">),</span>
-        <span class="p">(</span><span class="err">'</span><span class="n">member7</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">member8</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">member9</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">member10</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">member11</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">member12</span><span class="err">'</span><span class="p">))</span>
+<span class="n">member</span> <span class="o">=</span> <span class="p">((</span><span class="s">'member1'</span><span class="p">,</span> <span class="s">'member2'</span><span class="p">,</span> <span class="s">'member3'</span><span class="p">,</span> <span class="s">'member4'</span><span class="p">,</span> <span class="s">'member5'</span><span class="p">,</span> <span class="s">'member6'</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">'member7'</span><span class="p">,</span> <span class="s">'member8'</span><span class="p">,</span> <span class="s">'member9'</span><span class="p">,</span> <span class="s">'member10'</span><span class="p">,</span> <span class="s">'member11'</span><span class="p">,</span> <span class="s">'member12'</span><span class="p">))</span>
 
-<span class="n">suffix</span> <span class="o">=</span> <span class="err">'@</span><span class="n">abc</span><span class="p">.</span><span class="n">com</span><span class="err">'</span>
+<span class="n">suffix</span> <span class="o">=</span> <span class="s">'@abc.com'</span>
 
-<span class="n">def</span> <span class="n">send_mail</span><span class="p">(</span><span class="n">receiver</span><span class="p">,</span> <span class="n">content_filename</span><span class="p">,</span>
-            <span class="n">sender</span> <span class="o">=</span> <span class="err">'</span><span class="n">admin</span><span class="err">@</span><span class="n">abc</span><span class="p">.</span><span class="n">com</span><span class="err">'</span><span class="p">,</span>
-            <span class="n">server</span> <span class="o">=</span> <span class="err">'</span><span class="mf">192.168.1.1</span><span class="err">'</span><span class="p">,</span>
-            <span class="n">username</span> <span class="o">=</span> <span class="err">'</span><span class="n">admin</span><span class="err">@</span><span class="n">abc</span><span class="p">.</span><span class="n">com</span><span class="err">'</span><span class="p">,</span>
-            <span class="n">password</span> <span class="o">=</span> <span class="err">'</span><span class="n">admin</span><span class="err">'</span><span class="p">)</span><span class="o">:</span>
+<span class="k">def</span> <span class="nf">send_mail</span><span class="p">(</span><span class="n">receiver</span><span class="p">,</span> <span class="n">content_filename</span><span class="p">,</span>
+            <span class="n">sender</span> <span class="o">=</span> <span class="s">'admin@abc.com'</span><span class="p">,</span>
+            <span class="n">server</span> <span class="o">=</span> <span class="s">'192.168.1.1'</span><span class="p">,</span>
+            <span class="n">username</span> <span class="o">=</span> <span class="s">'admin@abc.com'</span><span class="p">,</span>
+            <span class="n">password</span> <span class="o">=</span> <span class="s">'admin'</span><span class="p">):</span>
 
-    <span class="n">subject</span> <span class="o">=</span> <span class="err">''</span>
-    <span class="n">content</span> <span class="o">=</span> <span class="err">''</span>
+    <span class="n">subject</span> <span class="o">=</span> <span class="s">''</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="s">''</span>
 
-    <span class="err">#</span> <span class="err">从文件读取邮件正文</span>
-    <span class="nl">try:</span>
-        <span class="n">content_file</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="n">content_filename</span><span class="p">,</span> <span class="sc">'r'</span><span class="p">)</span>
-        <span class="nl">try:</span>
-            <span class="n">subject</span> <span class="o">=</span> <span class="n">content_file</span><span class="p">.</span><span class="n">readline</span><span class="p">()</span>
-            <span class="n">content</span> <span class="o">=</span> <span class="n">content_file</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="c"># 从文件读取邮件正文</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">content_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">content_filename</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">subject</span> <span class="o">=</span> <span class="n">content_file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
-            <span class="err">#</span> <span class="err">转为</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span>
-            <span class="n">subject</span> <span class="o">=</span> <span class="n">subject</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="err">'</span><span class="n">gbk</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">ignore</span><span class="err">'</span><span class="p">).</span><span class="n">encode</span><span class="p">(</span><span class="err">'</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span><span class="err">'</span><span class="p">)</span>
-            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="err">'</span><span class="n">gbk</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">ignore</span><span class="err">'</span><span class="p">).</span><span class="n">encode</span><span class="p">(</span><span class="err">'</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span><span class="err">'</span><span class="p">)</span>
-        <span class="nl">finally:</span>
-            <span class="n">content_file</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">except</span> <span class="n">IOError</span><span class="p">,</span> <span class="n">e</span><span class="o">:</span>
-        <span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="s">"cannot open file "</span> <span class="o">+</span> <span class="n">content_filename</span><span class="p">)</span>
+            <span class="c"># 转为utf-8</span>
+            <span class="n">subject</span> <span class="o">=</span> <span class="n">subject</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'gbk'</span><span class="p">,</span> <span class="s">'ignore'</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'gbk'</span><span class="p">,</span> <span class="s">'ignore'</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">content_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">"cannot open file "</span> <span class="o">+</span> <span class="n">content_filename</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="n">content</span> <span class="o">=</span> <span class="n">content</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n\n</span><span class="s">系统生成，请勿回复 :)"</span>
-    <span class="err">#</span><span class="n">print</span> <span class="n">content</span>
+    <span class="c">#print content</span>
 
-    <span class="err">#</span> <span class="err">构造邮件</span>
-    <span class="n">msg</span> <span class="o">=</span> <span class="n">MIMEText</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="err">'</span><span class="n">plain</span><span class="err">'</span><span class="p">,</span> <span class="err">'</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span><span class="err">'</span><span class="p">)</span>
-    <span class="n">msg</span><span class="p">[</span><span class="err">'</span><span class="n">Subject</span><span class="err">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="err">'</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span><span class="err">'</span><span class="p">)</span>
-    <span class="n">msg</span><span class="p">[</span><span class="err">'</span><span class="n">From</span><span class="err">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">sender</span>
-    <span class="n">msg</span><span class="p">[</span><span class="err">'</span><span class="n">To</span><span class="err">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">receiver</span>
-
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">:</span>
-        <span class="nl">try:</span>
-            <span class="err">#</span> <span class="n">stmp</span><span class="err">模块发送邮件</span>
-            <span class="n">smtp</span> <span class="o">=</span> <span class="n">smtplib</span><span class="p">.</span><span class="n">SMTP</span><span class="p">()</span>
-            <span class="n">smtp</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
-            <span class="n">smtp</span><span class="p">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
-            <span class="n">smtp</span><span class="p">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">,</span> <span class="n">msg</span><span class="p">.</span><span class="n">as_string</span><span class="p">())</span>
-            <span class="n">smtp</span><span class="p">.</span><span class="n">quit</span><span class="p">()</span>
-
-            <span class="n">print</span> <span class="s">"Success"</span>
-            <span class="k">return</span> <span class="n">True</span>
-
-        <span class="n">except</span> <span class="n">Exception</span><span class="p">,</span> <span class="n">e</span><span class="o">:</span>
-            <span class="n">print</span> <span class="n">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">False</span>
+    <span class="c"># 构造邮件</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">MIMEText</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="s">'plain'</span><span class="p">,</span> <span class="s">'utf-8'</span><span class="p">)</span>
+    <span class="n">msg</span><span class="p">[</span><span class="s">'Subject'</span><span class="p">]</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="s">'utf-8'</span><span class="p">)</span>
+    <span class="n">msg</span><span class="p">[</span><span class="s">'From'</span><span class="p">]</span> <span class="o">=</span> <span class="n">sender</span>
+    <span class="n">msg</span><span class="p">[</span><span class="s">'To'</span><span class="p">]</span> <span class="o">=</span> <span class="n">receiver</span>
 
 
-<span class="n">def</span> <span class="n">get_on_duty</span><span class="p">()</span><span class="o">:</span>
-    <span class="n">receiver</span> <span class="o">=</span> <span class="err">''</span>
-    <span class="n">days</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">)).</span><span class="n">days</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># stmp模块发送邮件</span>
+            <span class="n">smtp</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">()</span>
+            <span class="n">smtp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+            <span class="n">smtp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+            <span class="n">smtp</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">as_string</span><span class="p">())</span>
+            <span class="n">smtp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="n">days</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">:</span>
-        <span class="n">days</span> <span class="o">=</span> <span class="n">days</span> <span class="o">+</span> <span class="mi">1</span> <span class="err">#</span> <span class="err">提前一天提醒</span>
+            <span class="k">print</span> <span class="s">"Success"</span>
+            <span class="k">return</span> <span class="bp">True</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+
+<span class="k">def</span> <span class="nf">get_on_duty</span><span class="p">():</span>
+    <span class="n">receiver</span> <span class="o">=</span> <span class="s">''</span>
+    <span class="n">days</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span><span class="o">.</span><span class="n">days</span>
+
+    <span class="k">if</span> <span class="n">days</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">days</span> <span class="o">=</span> <span class="n">days</span> <span class="o">+</span> <span class="mi">1</span> <span class="c"># 提前一天提醒</span>
         <span class="n">week</span> <span class="o">=</span> <span class="p">(</span><span class="n">days</span> <span class="o">/</span> <span class="mi">7</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
         <span class="n">date</span> <span class="o">=</span> <span class="p">(</span><span class="n">days</span> <span class="o">%</span> <span class="mi">7</span><span class="p">)</span>
 
-        <span class="err">#</span> <span class="err">周六发周一的值日</span>
-        <span class="k">if</span> <span class="n">date</span> <span class="o">==</span> <span class="mi">6</span><span class="o">:</span>
+        <span class="c"># 周六发周一的值日</span>
+        <span class="k">if</span> <span class="n">date</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
             <span class="n">date</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span> <span class="n">week</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">(</span><span class="n">member</span><span class="p">)</span> <span class="n">and</span> <span class="n">date</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">(</span><span class="n">member</span><span class="p">[</span><span class="n">week</span><span class="p">])</span> <span class="n">and</span> <span class="n">len</span><span class="p">(</span><span class="n">member</span><span class="p">[</span><span class="n">week</span><span class="p">][</span><span class="n">date</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">:</span>
+        <span class="k">if</span> <span class="n">week</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">member</span><span class="p">)</span> <span class="ow">and</span> <span class="n">date</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">member</span><span class="p">[</span><span class="n">week</span><span class="p">])</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">member</span><span class="p">[</span><span class="n">week</span><span class="p">][</span><span class="n">date</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">receiver</span> <span class="o">=</span> <span class="n">member</span><span class="p">[</span><span class="n">week</span><span class="p">][</span><span class="n">date</span><span class="p">]</span> <span class="o">+</span> <span class="n">suffix</span>
 
     <span class="k">return</span> <span class="n">receiver</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="err">'</span><span class="n">__main__</span><span class="err">'</span><span class="o">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
 
-    <span class="k">if</span> <span class="n">len</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">:</span>
-        <span class="n">job</span> <span class="o">=</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="err">#</span> <span class="err">值日</span>
-        <span class="k">if</span> <span class="n">job</span> <span class="o">==</span> <span class="err">'</span><span class="n">duty</span><span class="err">'</span><span class="o">:</span>
+        <span class="c"># 值日</span>
+        <span class="k">if</span> <span class="n">job</span> <span class="o">==</span> <span class="s">'duty'</span><span class="p">:</span>
             <span class="n">receiver</span> <span class="o">=</span> <span class="n">get_on_duty</span><span class="p">()</span>
-            <span class="n">print</span> <span class="n">receiver</span>
+            <span class="k">print</span> <span class="n">receiver</span>
 
-            <span class="n">content_filename</span> <span class="o">=</span> <span class="err">'</span><span class="n">duty</span><span class="p">.</span><span class="n">txt</span><span class="err">'</span>
-            <span class="k">if</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="n">now</span><span class="p">().</span><span class="n">weekday</span><span class="p">()</span> <span class="o">==</span> <span class="mi">5</span><span class="o">:</span>
-                <span class="n">content_filename</span> <span class="o">=</span> <span class="err">'</span><span class="n">duty_Sat</span><span class="p">.</span><span class="n">txt</span><span class="err">'</span>
+            <span class="n">content_filename</span> <span class="o">=</span> <span class="s">'duty.txt'</span>
+            <span class="k">if</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">content_filename</span> <span class="o">=</span> <span class="s">'duty_Sat.txt'</span>
 
-            <span class="k">if</span> <span class="n">len</span><span class="p">(</span><span class="n">receiver</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span><span class="o">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">receiver</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">):</span>
                 <span class="n">send_mail</span><span class="p">(</span><span class="n">receiver</span> <span class="o">=</span> <span class="n">receiver</span><span class="p">,</span> <span class="n">content_filename</span> <span class="o">=</span> <span class="n">content_filename</span><span class="p">)</span>
 
-        <span class="err">#</span> <span class="err">每天日报提醒</span>
-        <span class="n">elif</span> <span class="n">job</span> <span class="o">==</span> <span class="err">'</span><span class="n">daily</span><span class="err">'</span><span class="o">:</span>
-            <span class="n">send_mail</span><span class="p">(</span><span class="n">receiver</span> <span class="o">=</span> <span class="err">'</span><span class="n">partner</span><span class="err">'</span><span class="p">,</span> <span class="n">content_filename</span> <span class="o">=</span> <span class="err">'</span><span class="n">daily_alert</span><span class="p">.</span><span class="n">txt</span><span class="err">'</span><span class="p">)</span>
+        <span class="c"># 每天日报提醒</span>
+        <span class="k">elif</span> <span class="n">job</span> <span class="o">==</span> <span class="s">'daily'</span><span class="p">:</span>
+            <span class="n">send_mail</span><span class="p">(</span><span class="n">receiver</span> <span class="o">=</span> <span class="s">'partner'</span><span class="p">,</span> <span class="n">content_filename</span> <span class="o">=</span> <span class="s">'daily_alert.txt'</span><span class="p">)</span>
 </pre></div>
             <hr/>
             
@@ -291,7 +291,7 @@
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">
             <h4>Published</h4>
-            <time pubdate="pubdate" datetime="2012-09-30T00:40:00">Sep 30, 2012</time>
+            <time pubdate="pubdate" datetime="2012-09-30T00:40:00+08:00"> 9月 30, 2012</time>
             <h4>Category</h4>
             <a class="category-link" href="http://www.goorockey.com/categories.html#python-ref">python</a>
             <h4>Tags</h4>

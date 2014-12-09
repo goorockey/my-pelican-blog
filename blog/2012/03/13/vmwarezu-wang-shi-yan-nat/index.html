@@ -17,7 +17,7 @@
 <meta property="og:description" content="" />
 <meta property="og:site_name" content="Goorockey's Life" />
 <meta property="og:article:author" content="goorockey" />
-<meta property="og:article:published_time" content="2012-03-13T00:00:00" />
+<meta property="og:article:published_time" content="2012-03-13T00:00:00+08:00" />
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="VMWare组网实验(NAT) ">
 <meta name="twitter:description" content="">
@@ -125,10 +125,10 @@
 <p>外网的D网卡设为VMnet0</p>
 <p>C则有三张网卡VMnet0、VMnet1、VMnet2，这样C原始都能访问到A、B、D。</p>
 <p>然后进入每个虚拟机，为了方便，我都设置为静态ip（网段跟上图对应）：</p>
-<div class="highlight"><pre><span class="n">A</span><span class="err">：</span><span class="mf">192.168.149.128</span>
-<span class="n">B</span><span class="err">：</span><span class="mf">192.168.214.128</span>
-<span class="n">C</span><span class="err">：</span><span class="mf">192.168.4.233</span><span class="err">（</span><span class="n">eth0</span><span class="err">），</span><span class="mf">192.168.149.130</span><span class="err">（</span><span class="n">eth1</span><span class="err">），</span><span class="mf">192.168.214.130</span><span class="err">（</span><span class="n">eth2</span><span class="err">）</span>
-<span class="n">D</span><span class="err">：</span><span class="mf">192.168.4.234</span>
+<div class="highlight"><pre>A：192.168.149.128
+B：192.168.214.128
+C：192.168.4.233（eth0），192.168.149.130（eth1），192.168.214.130（eth2）
+D：192.168.4.234
 </pre></div>
 <p>CentOS里面配置网卡方法就是修改/etc/sysconfig/network-scripts/ifcfg-eth*，没有则自己创建一个。</p>
 <p>关键项就是ONBOOT，IPADDR，NETMASK，GATEWAY，DNS1，DNS2，PEERDNS</p>
@@ -136,8 +136,8 @@
 <p>这对于多网卡的C，如果ifcfg-eth0、ifcfg-eth1、ifcfg-eth2都设了PEERDNS，由于开机是按名字的顺序执行，则会把ifcfg-eth2的DNS写入/etc/resolv.conf，前两个文件的DNS会无效了的。所以我只在ifcfg-eth0配置PEERDNS=“yes“。</p>
 <p>好，初步网络环境配置完成。</p>
 <p>现在情况是：</p>
-<div class="highlight"><pre><span class="n">ABD</span><span class="err">都不能互访，因为在不同的网段</span>
-<span class="n">C</span><span class="err">则都能跟它们三个互访</span>
+<div class="highlight"><pre>ABD都不能互访，因为在不同的网段
+C则都能跟它们三个互访
 </pre></div>
 <h2 id="ciptablesnat">配置网关C的iptables，实现NAT</h2>
 <p>到关键也是好玩的地方了。</p>
@@ -146,14 +146,14 @@
 <p>1.A、B通过C实现通信</p>
 <p>这个比较简单，没用到iptables，把A的网关设为C的对应网卡的ip（192.168.149.130），B的网关设为C对应网卡的ip（192.168.214.130）。</p>
 <p>然后打开C的ip转发，在C中执行：</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">net</span><span class="o">/</span><span class="n">ipv4</span><span class="o">/</span><span class="n">ip_forward</span>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo </span><span class="m">1</span> &gt; /proc/sys/net/ipv4/ip_forward
 </pre></div>
 <p>这就把C作为了A、B的网关。A、B间通信的数据包会发到C，靠C的网卡间转发来完成通信。AB就可以相互ping通了。</p>
 <p>2.A、B通过C与外网通信（SNAT）</p>
 <p>现在A、B都不能跟D通信，因为现在A、B发到D的数据包源地址（192.168.149.128,192.168.214.128），D是无法知道的（D在C的同一个网络，网关设为相同的ip）。则包可以发到D，但D回复不了，因为它的网关不知道A、B。</p>
 <p>现在就通过SNAT把A、B发送的包在经过C时，把源地址改为C的外网ip（192.168.4.233），这个D是知道的，也就可以顺利回复了。</p>
 <p>具体在C中执行：</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">iptables</span><span class="err"> –</span><span class="n">t</span> <span class="n">nat</span> <span class="err">–</span><span class="n">A</span><span class="err"> </span><span class="n">POSTROUTING</span><span class="err"> –</span><span class="n">o</span> <span class="n">eth0</span> <span class="err">–</span><span class="n">j</span> <span class="n">SNAT</span><span class="err"> </span><span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">source</span> <span class="mf">192.168.4.233</span>
+<div class="highlight"><pre><span class="nv">$ </span>iptables –t nat –A POSTROUTING –o eth0 –j SNAT --to-source 192.168.4.233
 </pre></div>
 <p>这样A、B就能ping通了。</p>
 <p>SNAT可以看看我的博文。 嘻嘻……</p>
@@ -161,16 +161,16 @@
 <p>现在A、B可以跟D通信，但D不能主动访问A、B。还是因为D只知道C，不知道A、B。</p>
 <p>假如现在A开了19991口的sshd：</p>
 <p>在A的/etc/ssh/sshd_config中添加：</p>
-<div class="highlight"><pre><span class="n">ListenAddress</span> <span class="mf">0.0.0.0</span><span class="o">:</span><span class="mi">19991</span>
+<div class="highlight"><pre>ListenAddress 0.0.0.0:19991
 </pre></div>
 <p>重启sshd</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">service</span> <span class="n">sshd</span> <span class="n">restart</span>
+<div class="highlight"><pre><span class="nv">$ </span>service sshd restart
 </pre></div>
 <p>在A中让iptables允许对19991口的访问</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">iptables</span> <span class="err">–</span><span class="n">I</span> <span class="n">INPUT</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">19991</span><span class="err"> </span><span class="o">-</span><span class="n">j</span> <span class="n">ACCEPT</span>
+<div class="highlight"><pre><span class="nv">$ </span>iptables –I INPUT -p tcp --dport 19991 -j ACCEPT
 </pre></div>
 <p>现在D想ssh到A的19991，则可以在C中执行以下命令，实现DNAT：</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">iptables</span> <span class="o">-</span><span class="n">t</span> <span class="n">nat</span> <span class="o">-</span><span class="n">A</span> <span class="n">PREROUTING</span><span class="err"> </span><span class="o">-</span><span class="n">p</span><span class="err"> </span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span><span class="err"> </span><span class="mi">19991</span> <span class="o">-</span><span class="n">j</span><span class="err"> </span><span class="n">DNAT</span> <span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">destination</span><span class="err"> </span><span class="mf">192.168.149.128</span>
+<div class="highlight"><pre><span class="nv">$ </span>iptables -t nat -A PREROUTING -p  tcp --dport 19991 -j DNAT --to-destination 192.168.149.128
 </pre></div>
 <p>现在D可以通过ssh到C的19991口来ssh到A了。</p>
 <h2 id="_3">小结</h2>
@@ -224,7 +224,7 @@
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">
             <h4>Published</h4>
-            <time pubdate="pubdate" datetime="2012-03-13T00:00:00">Mar 13, 2012</time>
+            <time pubdate="pubdate" datetime="2012-03-13T00:00:00+08:00"> 3月 13, 2012</time>
             <h4>Category</h4>
             <a class="category-link" href="http://www.goorockey.com/categories.html#network-ref">network</a>
             <h4>Tags</h4>

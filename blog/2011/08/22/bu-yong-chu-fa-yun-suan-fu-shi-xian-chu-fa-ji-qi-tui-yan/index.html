@@ -17,7 +17,7 @@
 <meta property="og:description" content="" />
 <meta property="og:site_name" content="Goorockey's Life" />
 <meta property="og:article:author" content="goorockey" />
-<meta property="og:article:published_time" content="2011-08-22T00:00:00" />
+<meta property="og:article:published_time" content="2011-08-22T00:00:00+08:00" />
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="不用除法运算符实现除法及其推广 ">
 <meta name="twitter:description" content="">
@@ -92,18 +92,18 @@
 <p>两个正整数x、y，x是y的倍数，不用除法运算符实现x / y。</p>
 <p>1、最简单的方法</p>
 <p>循环用x减y，知道x等于0。</p>
-<div class="highlight"><pre><span class="kt">int</span> <span class="nf">Div</span><span class="p">(</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span> <span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<div class="highlight"><pre>int Div( int x, int y )
+{
+    int result = 0;
 
-    <span class="k">while</span> <span class="p">(</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span> <span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">x</span> <span class="o">-=</span> <span class="n">y</span><span class="p">;</span>
-        <span class="n">result</span><span class="o">++</span><span class="p">;</span>
-    <span class="p">}</span>
+    while ( x &gt; y )
+    {
+        x -= y;
+        result++;
+    }
 
-    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-<span class="p">}</span>
+    return result;
+}
 </pre></div>
 <p>时间复杂度<code>O(n)</code></p>
 <!--more-->
@@ -111,37 +111,37 @@
 <p>与很多优化算法相似，用2次幂实现加速。</p>
 <p>考虑到x是y的倍数，设x = y * k</p>
 <p>因为我们可以用二进制表示任意整数，所以任意整数都可表示成2次幂的和，即：</p>
-<div class="highlight"><pre><span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="o">^</span><span class="n">t1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">^</span><span class="n">t2</span> <span class="o">+</span> <span class="err">…</span><span class="p">.</span> <span class="o">+</span> <span class="mi">2</span><span class="o">^</span><span class="n">tn</span><span class="p">;</span>
+<div class="highlight"><pre>k = 2^t1 + 2^t2 + …. + 2^tn;
 </pre></div>
 <p>所以有x = y * (2^t1 + 2^t2 + … + 2^tn)，即我们要的结果就是2^t1 + 2^t2 + … + 2^tn</p>
 <p>由此，我们可以先找到一个刚好不大于x的s1 = y*(2^t1)，即有<code>y*2^t1 &lt;= x &lt; y*2^(t1+1)</code>,</p>
 <p>然后令x2 = x - s1 = y * (2^t2 + … + 2^tn)，从而继续递归直到xn – sn = 0。</p>
-<div class="highlight"><pre><span class="kt">int</span> <span class="nf">Div</span><span class="p">(</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span> <span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>          <span class="c1">// 2次幂计数器</span>
-    <span class="kt">int</span> <span class="n">product</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>    <span class="c1">// 中间乘积，等于y*2^t，即product = y * i</span>
+<div class="highlight"><pre>int Div( int x, int y )
+{
+    int i = 1;          // 2次幂计数器
+    int product = y;    // 中间乘积，等于y*2^t，即product = y * i
 
-    <span class="c1">// 找到刚好不大于x的product = y*i满足y*i &lt;= x &lt; y*(i+1)</span>
-    <span class="k">while</span> <span class="p">(</span> <span class="n">product</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">i</span>  <span class="o">&lt;&lt;=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">product</span> <span class="o">&lt;&lt;=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
+    // 找到刚好不大于x的product = y*i满足y*i &lt;= x &lt; y*(i+1)
+    while ( product &lt;&lt; 1 &lt;= x )
+    {
+        i  &lt;&lt;= 1;
+        product &lt;&lt;= 1;
+    }
 
-    <span class="c1">// 递归得到结果</span>
-    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span> <span class="p">;</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">product</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span> <span class="p">)</span>
-    <span class="p">{</span>
-        <span class="c1">// product自除2来寻找新的product，满足刚好不大于x</span>
-        <span class="k">if</span> <span class="p">(</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">product</span> <span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">result</span> <span class="o">+=</span> <span class="n">i</span><span class="p">;</span>     <span class="c1">// 累加结果result = 2^t1 + 2^t2 … + 2^t(k-1)</span>
-            <span class="n">x</span> <span class="o">-=</span> <span class="n">product</span><span class="p">;</span>    <span class="c1">// 相减得到新的x = y*(2^tk + … + 2^tn)</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+    // 递归得到结果
+    int result = 0;
+    for ( ; x &gt; 0; i &gt;&gt;= 1, product &gt;&gt;= 1 )
+    {
+        // product自除2来寻找新的product，满足刚好不大于x
+        if ( x &gt;= product )
+        {
+            result += i;     // 累加结果result = 2^t1 + 2^t2 … + 2^t(k-1)
+            x -= product;    // 相减得到新的x = y*(2^tk + … + 2^tn)
+        }
+    }
 
-    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-<span class="p">}</span>
+    return result;
+}
 </pre></div>
 <p>时间复杂度<code>O(logn)</code></p>
 <p>3、推广 - 不用开方运算符求幂数：</p>
@@ -220,7 +220,7 @@
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">
             <h4>Published</h4>
-            <time pubdate="pubdate" datetime="2011-08-22T00:00:00">Aug 22, 2011</time>
+            <time pubdate="pubdate" datetime="2011-08-22T00:00:00+08:00"> 8月 22, 2011</time>
             <h4>Category</h4>
             <a class="category-link" href="http://www.goorockey.com/categories.html#programming-ref">programming</a>
             <h4>Tags</h4>

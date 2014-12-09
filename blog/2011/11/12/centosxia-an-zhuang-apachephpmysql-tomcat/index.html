@@ -17,7 +17,7 @@
 <meta property="og:description" content="" />
 <meta property="og:site_name" content="Goorockey's Life" />
 <meta property="og:article:author" content="goorockey" />
-<meta property="og:article:published_time" content="2011-11-12T00:00:00" />
+<meta property="og:article:published_time" content="2011-11-12T00:00:00+08:00" />
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS下安装Apache+php+mysql Tomcat ">
 <meta name="twitter:description" content="">
@@ -114,7 +114,7 @@
 </ul>
 <!--more-->
 <p>或者一次性粘贴安装:</p>
-<div class="highlight"><pre><span class="n">yum</span> <span class="o">-</span><span class="n">y</span> <span class="n">install</span> <span class="n">httpd</span> <span class="n">php</span> <span class="n">mysql</span> <span class="n">mysql</span><span class="o">-</span><span class="n">server</span> <span class="n">php</span><span class="o">-</span><span class="n">mysql</span> <span class="n">httpd</span><span class="o">-</span><span class="n">manual</span> <span class="n">mod_ssl</span> <span class="n">mod_perl</span> <span class="n">mod_auth_mysql</span> <span class="n">php</span><span class="o">-</span><span class="n">mcrypt</span> <span class="n">php</span><span class="o">-</span><span class="n">gd</span> <span class="n">php</span><span class="o">-</span><span class="n">xml</span> <span class="n">php</span><span class="o">-</span><span class="n">mbstring</span> <span class="n">php</span><span class="o">-</span><span class="n">ldap</span> <span class="n">php</span><span class="o">-</span><span class="n">pear</span> <span class="n">php</span><span class="o">-</span><span class="n">xmlrpc</span> <span class="n">mysql</span><span class="o">-</span><span class="n">connector</span><span class="o">-</span><span class="n">odbc</span> <span class="n">mysql</span><span class="o">-</span><span class="n">devel</span> <span class="n">libdbi</span><span class="o">-</span><span class="n">dbd</span><span class="o">-</span><span class="n">mysql</span>
+<div class="highlight"><pre>yum -y install httpd php mysql mysql-server php-mysql httpd-manual mod_ssl mod_perl mod_auth_mysql php-mcrypt php-gd php-xml php-mbstring php-ldap php-pear php-xmlrpc mysql-connector-odbc mysql-devel libdbi-dbd-mysql
 </pre></div>
 <p>2.配置Apache+php+mysql</p>
 <ul>
@@ -140,53 +140,53 @@
 <ul>
 <li>
 <p>查看:</p>
-<div class="highlight"><pre><span class="p">[</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span> <span class="o">~</span> <span class="p">]</span><span class="err">#</span><span class="n">rpm</span> <span class="err">–</span><span class="n">qa</span> <span class="o">|</span><span class="n">grep</span> <span class="n">gcj</span>
-<span class="n">java</span><span class="o">-</span><span class="mf">1.5.0</span><span class="o">-</span><span class="n">gcj</span><span class="o">-</span><span class="mf">1.5.0.0</span><span class="o">-</span><span class="mf">29.1</span><span class="p">.</span><span class="n">el6</span><span class="p">.</span><span class="n">i686</span>
-<span class="n">libgcj</span><span class="o">-</span><span class="mf">4.4.4</span><span class="o">-</span><span class="mf">13.</span><span class="n">el6</span><span class="p">.</span><span class="n">i686</span>
+<div class="highlight"><pre>[root@localhost ~ ]#rpm –qa |grep gcj
+java-1.5.0-gcj-1.5.0.0-29.1.el6.i686
+libgcj-4.4.4-13.el6.i686
 </pre></div>
 </li>
 <li>
 <p>卸载</p>
-<div class="highlight"><pre><span class="p">[</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span> <span class="o">~</span> <span class="p">]</span><span class="err">#</span><span class="n">rpm</span> <span class="err">–</span><span class="n">e</span> <span class="n">java</span><span class="o">-</span><span class="mf">1.5.0</span><span class="o">-</span><span class="n">gcj</span><span class="o">-</span><span class="mf">1.5.0.0</span><span class="o">-</span><span class="mf">29.1</span><span class="p">.</span><span class="n">el6</span><span class="p">.</span><span class="n">i686</span> <span class="o">--</span><span class="n">nodeps</span>
-<span class="p">[</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span> <span class="o">~</span> <span class="p">]</span><span class="err">#</span><span class="n">rpm</span> <span class="err">–</span><span class="n">e</span> <span class="n">libgcj</span><span class="o">-</span><span class="mf">4.4.4</span><span class="o">-</span><span class="mf">13.</span><span class="n">el6</span><span class="p">.</span><span class="n">i686</span> <span class="o">--</span><span class="n">nodeps</span>
+<div class="highlight"><pre>[root@localhost ~ ]#rpm –e java-1.5.0-gcj-1.5.0.0-29.1.el6.i686 --nodeps
+[root@localhost ~ ]#rpm –e libgcj-4.4.4-13.el6.i686 --nodeps
 </pre></div>
 </li>
 <li>
 <p>检测</p>
-<div class="highlight"><pre><span class="p">[</span><span class="n">root</span><span class="err">@</span><span class="n">localhost</span> <span class="o">~</span><span class="p">]</span><span class="err">#</span> <span class="n">java</span> <span class="o">--</span><span class="n">version</span>
+<div class="highlight"><pre>[root@localhost ~]# java --version
 </pre></div>
 </li>
 </ul>
 <p>会出现</p>
-<div class="highlight"><pre>    <span class="o">-</span><span class="n">bash</span><span class="o">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">java</span><span class="o">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="n">or</span> <span class="n">directory</span>
+<div class="highlight"><pre>    -bash: /usr/bin/java: No such file or directory
 </pre></div>
 <p>表示卸载成功</p>
 <ul>
 <li>安装jdk</li>
 </ul>
 <p>从Jdk官网下载安装包，如:<code>jdk-6u27-linux-i586-rpm.bin</code></p>
-<div class="highlight"><pre><span class="n">P</span><span class="p">.</span><span class="n">S</span><span class="p">.</span>
-<span class="err">由于我的</span><span class="n">CentOS</span><span class="err">没有图形界面，下载不方便，</span>
-<span class="err">我是先在</span><span class="n">Windows</span><span class="err">上访问</span><span class="n">JDK</span><span class="err">官网下载安装包，</span>
-<span class="err">然后再用</span><span class="n">Winscp</span><span class="err">传到</span><span class="n">CentOS</span><span class="err">的</span>
+<div class="highlight"><pre>P.S.
+由于我的CentOS没有图形界面，下载不方便，
+我是先在Windows上访问JDK官网下载安装包，
+然后再用Winscp传到CentOS的
 </pre></div>
 <p>比如安装包保存在/opt/tmp</p>
 <p>跳到该目录添加可执行的权限，并执行</p>
-<div class="highlight"><pre><span class="n">chmod</span> <span class="mi">777</span> <span class="n">jdk</span><span class="o">-</span><span class="mi">6u27</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">i586</span><span class="o">-</span><span class="n">rpm</span><span class="p">.</span><span class="n">bin</span>
-<span class="p">.</span><span class="o">/</span><span class="n">jdk</span><span class="o">-</span><span class="mi">6u27</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">i586</span><span class="o">-</span><span class="n">rpm</span><span class="p">.</span><span class="n">bin</span>
+<div class="highlight"><pre>chmod 777 jdk-6u27-linux-i586-rpm.bin
+./jdk-6u27-linux-i586-rpm.bin
 </pre></div>
 <ul>
 <li>添加环境变量</li>
 </ul>
 <p>vim /etc/profile</p>
 <p>添加以下内容：</p>
-<div class="highlight"><pre><span class="n">export</span> <span class="n">JAVA_HOME</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">java</span><span class="o">/</span><span class="n">jdk1</span><span class="mf">.6.0</span><span class="n">_27</span>
-<span class="n">export</span> <span class="n">JAVA_BIN</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">java</span><span class="o">/</span><span class="n">jdk1</span><span class="mf">.6.0</span><span class="n">_27</span><span class="o">/</span><span class="n">bin</span>
-<span class="n">export</span> <span class="n">PATH</span><span class="o">=</span><span class="err">$</span><span class="n">PATH</span><span class="o">:</span><span class="err">$</span><span class="n">JAVA_HOME</span><span class="o">/</span><span class="n">bin</span>
-<span class="n">export</span> <span class="n">CLASSPATH</span><span class="o">=</span><span class="p">.</span><span class="o">:</span><span class="err">$</span><span class="n">JAVA_HOME</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dt</span><span class="p">.</span><span class="n">jar</span><span class="o">:</span><span class="err">$</span><span class="n">JAVA_HOME</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">tools</span><span class="p">.</span><span class="n">jar</span>
+<div class="highlight"><pre><span class="x">export JAVA_HOME=/usr/java/jdk1.6.0_27</span>
+<span class="x">export JAVA_BIN=/usr/java/jdk1.6.0_27/bin</span>
+<span class="x">export PATH=</span><span class="p">$</span><span class="nv">PATH</span><span class="x">:</span><span class="p">$</span><span class="nv">JAVA_HOME</span><span class="x">/bin</span>
+<span class="x">export CLASSPATH=.:</span><span class="p">$</span><span class="nv">JAVA_HOME</span><span class="x">/lib/dt.jar:</span><span class="p">$</span><span class="nv">JAVA_HOME</span><span class="x">/lib/tools.jar</span>
 </pre></div>
 <p>保存后，执行java -version 如果有类似以下显示，则表示安装成功：</p>
-<div class="highlight"><pre><span class="n">java</span> <span class="n">version</span> <span class="s">"1.6.0_27"</span>
+<div class="highlight"><pre>java version "1.6.0_27"
 </pre></div>
 <p>2.安装Tomcat：</p>
 <ul>
@@ -195,18 +195,18 @@
 </li>
 <li>
 <p>把该压缩包拷贝到/usr/local</p>
-<div class="highlight"><pre><span class="n">cp</span> <span class="n">apache</span><span class="o">-</span><span class="n">tomcat</span><span class="o">-</span><span class="mf">7.0.22</span><span class="p">.</span><span class="n">tar</span><span class="p">.</span><span class="n">gz</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span>
+<div class="highlight"><pre>cp apache-tomcat-7.0.22.tar.gz /usr/local
 </pre></div>
 </li>
 <li>
 <p>跳转到/usr/local，并解压压缩包</p>
-<div class="highlight"><pre><span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span>
-<span class="n">tar</span> <span class="o">-</span><span class="n">zxvf</span> <span class="n">apache</span><span class="o">-</span><span class="n">tomcat</span><span class="o">-</span><span class="mf">7.0.22</span><span class="p">.</span><span class="n">tar</span><span class="p">.</span><span class="n">gz</span>
+<div class="highlight"><pre>cd /usr/local
+tar -zxvf apache-tomcat-7.0.22.tar.gz
 </pre></div>
 </li>
 <li>
 <p>把解压出来的目录改名为tomcat,并删除拷贝过来的压缩包</p>
-<div class="highlight"><pre><span class="n">rm</span> <span class="n">apache</span><span class="o">-</span><span class="n">tomcat</span><span class="o">-</span><span class="mf">7.0.22</span> <span class="n">tomcat</span>
+<div class="highlight"><pre>rm apache-tomcat-7.0.22 tomcat
 </pre></div>
 </li>
 <li>
@@ -222,7 +222,7 @@
 <li>添加开机daomon脚本</li>
 </ul>
 <p>把/usr/local/tomcat/bin/catalina.sh拷贝到/etc/init.d，并命名为tomcat</p>
-<div class="highlight"><pre><span class="n">cp</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">tomcat</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">catalina</span><span class="p">.</span><span class="n">sh</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">tomcat</span>
+<div class="highlight"><pre>cp /usr/local/tomcat/bin/catalina.sh /etc/init.d/tomcat
 </pre></div>
 <ul>
 <li>
@@ -314,7 +314,7 @@ chkconfig tomcat on</p>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">
             <h4>Published</h4>
-            <time pubdate="pubdate" datetime="2011-11-12T00:00:00">Nov 12, 2011</time>
+            <time pubdate="pubdate" datetime="2011-11-12T00:00:00+08:00">11月 12, 2011</time>
             <h4>Category</h4>
             <a class="category-link" href="http://www.goorockey.com/categories.html#linux-ref">linux</a>
             <h4>Tags</h4>

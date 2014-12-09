@@ -17,7 +17,7 @@
 <meta property="og:description" content="" />
 <meta property="og:site_name" content="Goorockey's Life" />
 <meta property="og:article:author" content="goorockey" />
-<meta property="og:article:published_time" content="2011-08-02T00:00:00" />
+<meta property="og:article:published_time" content="2011-08-02T00:00:00+08:00" />
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="STL中用copy和ostream_iterator输出一个数组 ">
 <meta name="twitter:description" content="">
@@ -89,15 +89,15 @@
 
             
             
-<div class="highlight"><pre><span class="vi">#include</span> <span class="o">&lt;</span><span class="nx">iostream</span><span class="o">&gt;</span>
-<span class="vi">#include</span> <span class="o">&lt;</span><span class="nb">iterator</span><span class="o">&gt;</span>
-<span class="vi">#include</span> <span class="o">&lt;</span><span class="nx">algorithm</span><span class="o">&gt;</span>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;iterator&gt;</span>
+<span class="cp">#include &lt;algorithm&gt;</span>
 
-<span class="nx">int</span> <span class="nx">a</span><span class="err">[</span><span class="cp">]</span> = { 335, 33, 98, 39, 54, 24, 3 };
-int nSize = sizeof(a) / sizeof(a<span class="cp">[</span><span class="mi">0</span><span class="cp">]</span>);
+<span class="kt">int</span> <span class="n">a</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">335</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">98</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">3</span> <span class="p">};</span>
+<span class="kt">int</span> <span class="n">nSize</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
 
-// 输出数组a到标准输出，同时每个元素都以空格为结束（最后一个元素后面也会有空格）
-std::copy(a, a + nSize, std::ostream_iterator<span class="nt">&lt;int&gt;</span>(std::cout, " "));
+<span class="c1">// 输出数组a到标准输出，同时每个元素都以空格为结束（最后一个元素后面也会有空格）</span>
+<span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">nSize</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">,</span> <span class="s">" "</span><span class="p">));</span>
 </pre></div>
 <p>结果：335 33 98 39 54 24 3</p>
 <p>一个字：妙！！(^0^)/ </p>
@@ -149,7 +149,7 @@ std::copy(a, a + nSize, std::ostream_iterator<span class="nt">&lt;int&gt;</span>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">
             <h4>Published</h4>
-            <time pubdate="pubdate" datetime="2011-08-02T00:00:00">Aug 2, 2011</time>
+            <time pubdate="pubdate" datetime="2011-08-02T00:00:00+08:00"> 8月 2, 2011</time>
             <h4>Category</h4>
             <a class="category-link" href="http://www.goorockey.com/categories.html#cpp-ref">cpp</a>
             <h4>Tags</h4>

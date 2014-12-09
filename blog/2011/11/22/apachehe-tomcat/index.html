@@ -17,7 +17,7 @@
 <meta property="og:description" content="" />
 <meta property="og:site_name" content="Goorockey's Life" />
 <meta property="og:article:author" content="goorockey" />
-<meta property="og:article:published_time" content="2011-11-22T00:00:00" />
+<meta property="og:article:published_time" content="2011-11-22T00:00:00+08:00" />
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Apache和Tomcat ">
 <meta name="twitter:description" content="">
@@ -93,8 +93,8 @@
 <p>1.apache 只是一个web服务器，负责响应客户端的请求。</p>
 <p>2.apache对于页面请求：</p>
 <!--more-->
-<div class="highlight"><pre><span class="err">如果是静态页面请求，会立刻返回相应的页面；</span>
-<span class="err">如果是动态页面请求，</span><span class="n">apache</span><span class="err">会根据</span><span class="n">httpd</span><span class="p">.</span><span class="n">conf</span><span class="err">中</span><span class="n">AddType</span><span class="err">的配置，把请求提交给合适的动态脚本解析程序来处理，处理后生成的静态页面返回给</span><span class="n">apache</span><span class="err">，再返回给客户端。所以在配置</span><span class="n">php</span><span class="err">和</span><span class="n">jsp</span><span class="err">这样的环境的时候，都要在</span><span class="n">httd</span><span class="p">.</span><span class="n">conf</span><span class="err">中添加对应的</span><span class="n">AddTpye</span><span class="err">语句。</span>
+<div class="highlight"><pre>如果是静态页面请求，会立刻返回相应的页面；
+如果是动态页面请求，apache会根据httpd.conf中AddType的配置，把请求提交给合适的动态脚本解析程序来处理，处理后生成的静态页面返回给apache，再返回给客户端。所以在配置php和jsp这样的环境的时候，都要在httd.conf中添加对应的AddTpye语句。
 </pre></div>
 <p>3.tomcat侧重于是一个Servlet/JSP的容器，但也能可以独立于apache运行，响应html请求</p>
 <p>4.tomcat响应静态页面较apache要慢</p>
@@ -150,7 +150,7 @@
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">
             <h4>Published</h4>
-            <time pubdate="pubdate" datetime="2011-11-22T00:00:00">Nov 22, 2011</time>
+            <time pubdate="pubdate" datetime="2011-11-22T00:00:00+08:00">11月 22, 2011</time>
             <h4>Category</h4>
             <a class="category-link" href="http://www.goorockey.com/categories.html#linux-ref">linux</a>
             <h4>Tags</h4>

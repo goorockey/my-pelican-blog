@@ -17,7 +17,7 @@
 <meta property="og:description" content="" />
 <meta property="og:site_name" content="Goorockey's Life" />
 <meta property="og:article:author" content="goorockey" />
-<meta property="og:article:published_time" content="2012-03-15T00:00:00" />
+<meta property="og:article:published_time" content="2012-03-15T00:00:00+08:00" />
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用VMWare组网，实验DNS隧道 ">
 <meta name="twitter:description" content="">
@@ -125,30 +125,30 @@
 <h2 id="vmware">VMWare环境模拟</h2>
 <p>这次我用了三台机子，系统还是CentOS 6.0：</p>
 <p>主机名 角色 网卡ip</p>
-<div class="highlight"><pre><span class="n">HostA</span><span class="err">  </span> <span class="err">用户</span> <span class="mf">192.168.149.128</span> <span class="p">(</span><span class="n">Host</span><span class="o">-</span><span class="n">only</span><span class="p">)</span>
-<span class="n">HostB</span><span class="err">  </span> <span class="n">DNS</span><span class="err">代理</span> <span class="mf">192.168.126.130</span> <span class="p">(</span><span class="n">NAT</span><span class="p">)</span>
-<span class="n">HostC</span><span class="err">  </span> <span class="n">DNS</span><span class="err">服务器</span> <span class="mf">192.168.149.130</span> <span class="p">(</span><span class="n">Host</span><span class="o">-</span><span class="n">only</span><span class="p">)</span><span class="err">、</span><span class="mf">192.168.126.233</span> <span class="p">(</span><span class="n">NAT</span><span class="p">)</span>
+<div class="highlight"><pre>HostA   用户 192.168.149.128 (Host-only)
+HostB   DNS代理 192.168.126.130 (NAT)
+HostC   DNS服务器 192.168.149.130 (Host-only)、192.168.126.233 (NAT)
 </pre></div>
 <p>要模拟的初始状态就是：</p>
-<div class="highlight"><pre><span class="n">HostA</span><span class="err">（用户）可以跟</span><span class="n">HostC</span><span class="err">做</span><span class="n">DNS</span><span class="err">解析，但不能访问外网</span> <span class="err">。    </span> <span class="err">（所以虚拟网卡用</span><span class="n">Host</span><span class="o">-</span><span class="n">only</span><span class="err">模式）</span>
-<span class="n">HostB</span><span class="err">（</span><span class="n">DNS</span><span class="err">代理）可以跟外网通信。           </span> <span class="err">（用</span><span class="n">NAT</span><span class="err">和</span><span class="n">Bridged</span><span class="err">都可以，这次我选用</span><span class="n">NAT</span><span class="err">）</span>
-<span class="n">HostC</span><span class="err">（</span><span class="n">DNS</span><span class="err">服务器）可以跟</span><span class="n">HostA</span><span class="err">进行</span><span class="n">DNS</span><span class="err">解析，且能跟</span><span class="n">HostB</span><span class="err">通信。  </span> <span class="err">（所以用两张网卡，为了分别跟</span><span class="n">HostA</span><span class="err">和</span><span class="n">HostB</span><span class="err">通信）</span>
-<span class="n">HostA</span><span class="err">的</span><span class="n">iptables</span><span class="err">不允许</span><span class="n">HostA</span><span class="err">和</span><span class="n">HostB</span><span class="err">之间互访</span>
+<div class="highlight"><pre>HostA（用户）可以跟HostC做DNS解析，但不能访问外网 。     （所以虚拟网卡用Host-only模式）
+HostB（DNS代理）可以跟外网通信。            （用NAT和Bridged都可以，这次我选用NAT）
+HostC（DNS服务器）可以跟HostA进行DNS解析，且能跟HostB通信。   （所以用两张网卡，为了分别跟HostA和HostB通信）
+HostA的iptables不允许HostA和HostB之间互访
 </pre></div>
 <h2 id="dns">DNS服务器配置</h2>
 <p>刚开始看教程好像很繁琐，感觉conf文件好多啊，而且配置项也多~~</p>
 <p>静下心来看，其实要实现最基本的的DNS解析很简单，主要就是修改两个文件。</p>
 <p>1.安装</p>
 <p>需要在HostC执行以下命令，安装DNS服务器所需的bind和caching-nameserver：</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">yum</span> <span class="n">install</span> <span class="err">–</span><span class="n">y</span> <span class="n">bind</span> <span class="n">bind</span><span class="o">-</span><span class="n">utils</span> <span class="n">bind</span><span class="o">-</span><span class="n">chroot</span> <span class="n">caching</span><span class="o">-</span><span class="n">nameserver</span>
+<div class="highlight"><pre><span class="nv">$ </span>yum install –y <span class="nb">bind bind</span>-utils <span class="nb">bind</span>-chroot caching-nameserver
 </pre></div>
 <p>2.修改named的conf文件（/etc/named.conf）</p>
 <p>添加域名goorockey.go域名的配置：</p>
-<div class="highlight"><pre><span class="n">zone</span> <span class="err">“</span><span class="n">goorockey</span><span class="p">.</span><span class="n">go</span><span class="err">”</span> <span class="n">IN</span> <span class="p">{</span>
-    <span class="n">type</span><span class="err">  </span> <span class="n">master</span><span class="p">;</span>
-    <span class="n">file</span><span class="err">     </span> <span class="err">“</span><span class="n">goorockey</span><span class="p">.</span><span class="n">go</span><span class="p">.</span><span class="n">zone</span><span class="err">”</span><span class="p">;</span>
-    <span class="n">allow</span><span class="o">-</span><span class="n">update</span> <span class="p">{</span><span class="n">none</span><span class="p">;</span> <span class="p">};</span>
-<span class="p">}</span>
+<div class="highlight"><pre>zone “goorockey.go” IN {
+    type   master;
+    file      “goorockey.go.zone”;
+    allow-update {none; };
+}
 </pre></div>
 <p>大概解释：</p>
 <ul>
@@ -177,9 +177,9 @@
 <p>3.编辑goorockey.go的DNS记录文件</p>
 <p>根据我们在/etc/named.conf的配置，文件是/var/named/goorockey.go.zone。</p>
 <p>创建此文件，并编辑内容为：</p>
-<div class="highlight"><pre><span class="err">@ </span> <span class="n">IN</span><span class="err"> </span><span class="n">SOA</span> <span class="n">localhost</span><span class="p">.</span><span class="err"> </span><span class="n">root</span><span class="p">.</span><span class="n">localhost</span><span class="p">.</span><span class="err"> </span><span class="p">(</span><span class="mi">20120315</span> <span class="mi">3600</span> <span class="mi">1800</span> <span class="mi">36000</span> <span class="mi">3600</span><span class="p">)</span>
-<span class="err">  </span> <span class="n">IN</span><span class="err"> </span><span class="n">NS</span><span class="err"> </span><span class="n">localhost</span><span class="p">.</span>
-<span class="n">goorockey</span><span class="p">.</span><span class="n">go</span><span class="err"> </span><span class="n">IN</span><span class="err"> </span><span class="n">A</span><span class="err"> </span><span class="mf">192.168.126.130</span>
+<div class="highlight"><pre>@  IN SOA localhost. root.localhost. (20120315 3600 1800 36000 3600)
+   IN NS localhost.
+goorockey.go IN A 192.168.126.130
 </pre></div>
 <p>大概解释：</p>
 <ul>
@@ -212,8 +212,8 @@
 <p><img alt="DNS信息" src="http://www.goorockey.com/uploads/2012/03/20594453_thumb.png"/></p>
 <p>但还要配置iptables，使其他机子可以访问DNS服务的端口。</p>
 <p>对于默认的53端口，在HostC运行：</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">iptables</span> <span class="err">–</span><span class="n">I</span> <span class="n">INPUT</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">53</span><span class="err"> </span><span class="o">-</span><span class="n">j</span> <span class="n">ACCEPT</span>
-<span class="err">$</span> <span class="n">iptables</span> <span class="err">–</span><span class="n">I</span> <span class="n">INPUT</span> <span class="o">-</span><span class="n">p</span> <span class="n">udp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">53</span><span class="err"> </span><span class="o">-</span><span class="n">j</span> <span class="n">ACCEPT</span>
+<div class="highlight"><pre><span class="nv">$ </span>iptables –I INPUT -p tcp --dport 53 -j ACCEPT
+<span class="nv">$ </span>iptables –I INPUT -p udp --dport 53 -j ACCEPT
 </pre></div>
 <p>要解释一下的是，DNS包有可能以tcp或者udp方式传输。一般首选是udp方式。但因为udp包长度只能是512字节，也不能分包，所以如果当DNS包长度大于512时，就会选择tcp方式。所以这里要对tcp和udp都设置ACCEPT。</p>
 <p>在HostA和HostB的/etc/resolv.conf添加HostA的ip后，就能正确解析goorockey.go了。</p>
@@ -221,18 +221,18 @@
 <p>iodine是外国人写的开源DNS隧道工具，有linux版、windows版和Mac版的。教程看它的ReadMe或者HowToSetup都比较清楚。</p>
 <p>下载并安装对应自己版本的iodine后就能使用了。</p>
 <p>在DNS隧道的服务器端(HostB)，先执行：</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">iodined</span><span class="err"> </span><span class="o">-</span><span class="n">f</span> <span class="mf">10.0.0.1</span> <span class="n">goorockey</span><span class="p">.</span><span class="n">go</span>
+<div class="highlight"><pre><span class="nv">$ </span>iodined -f 10.0.0.1 goorockey.go
 </pre></div>
 <p>输入密码后，服务端就运行了。注意服务端运行的是iodined，有”d“。</p>
 <p>在客户端（HostA)，执行：</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">iodine</span><span class="err"> </span><span class="o">-</span><span class="n">f</span><span class="err"> </span><span class="o">-</span><span class="n">c</span><span class="err"> </span><span class="mf">192.168.126.130</span> <span class="n">goorockey</span><span class="p">.</span><span class="n">go</span>
+<div class="highlight"><pre><span class="nv">$ </span>iodine -f -c 192.168.126.130 goorockey.go
 </pre></div>
 <p>其中192.168.126.130是服务端（HostB）的ip。</p>
 <p>然后还要配置一下，HostA，HostB，HostC的iptables，使它们的DNS包可以通过就可以了。</p>
 <p>这时候，HostA的虚拟网卡ip是10.0.0.2，HostB的虚拟网卡ip是10.0.0.1。两台机子已经建立了VPN。</p>
 <p>本来两台不能互访的机子就可以访问了。</p>
 <p>例如在HostA就可以ssh HostB了 ：</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">ssh</span> <span class="mf">10.0.0.1</span>
+<div class="highlight"><pre><span class="nv">$ </span>ssh 10.0.0.1
 </pre></div>
 <p>然后就可以用ssh隧道过去来做代理了~~</p>
 <h2 id="_2">小结</h2>
@@ -298,7 +298,7 @@
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">
             <h4>Published</h4>
-            <time pubdate="pubdate" datetime="2012-03-15T00:00:00">Mar 15, 2012</time>
+            <time pubdate="pubdate" datetime="2012-03-15T00:00:00+08:00"> 3月 15, 2012</time>
             <h4>Category</h4>
             <a class="category-link" href="http://www.goorockey.com/categories.html#network-ref">network</a>
             <h4>Tags</h4>
