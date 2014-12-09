@@ -12,7 +12,6 @@ RELATIVE_URLS = False
 
 PATH = 'content'
 THEME = 'themes/pelican-elegant'
-PAGE_DIR = 'pages'
 
 TIMEZONE = 'Asia/Shanghai'
 DEFAULT_LANG = u'zh'
@@ -25,6 +24,7 @@ SUMMARY_MAX_LENGTH = 50
 
 ARTICLE_URL = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
+PAGE_PATHS = ['pages',]
 PAGE_URL = '{slug}.html'
 PAGE_SAVE_AS = PAGE_URL
 CATEGORY_URL = '{slug}/index.html'
@@ -46,11 +46,12 @@ LINKS = (
             ('ThankCreate', 'http://www.thankcreate.com'),
         )
 
-PLUGIN_PATH = ['plugins/',]
+PLUGIN_PATHS = ['pelican-plugins/',]
 PLUGINS = (
-            'gist',
+            'pelican_gist',
             'sitemap',
             'gzip_cache',
+            'gravatar',
             'extract_toc',
             'tipue_search',
             'summary',
